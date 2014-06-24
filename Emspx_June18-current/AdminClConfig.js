@@ -77,7 +77,7 @@ function authenticateUser(name, password, callback)
 
 //152.48.2.245
 //ComponentConfiguration
-var db     = new mongo.Db('ComponentConfiguration', new mongo.Server("127.0.0.1", 27017), { safe : false });
+var db     = new mongo.Db('AdimUI', new mongo.Server("127.0.0.1", 27017), { safe : false });
 //var db = new mongo.Db("AdminUI" , new mongo.Server("127.0.0.1", 27017), { safe : false });
 
 
