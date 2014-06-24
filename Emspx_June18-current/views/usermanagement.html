@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>CISCO</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+	<!--link rel="stylesheet/less" href="less/bootstrap.less" type="text/css" /-->
+	<!--link rel="stylesheet/less" href="less/responsive.less" type="text/css" /-->
+	<!--script src="js/less-1.3.3.min.js"></script-->
+	<!--append ‘#!watch’ to the browser URL, then refresh the page. -->
+	
+	<link href="../css_boot/bootstrap.min.css" rel="stylesheet">
+	<link href="../css_boot/style.css" rel="stylesheet">
+	<link href="../css/basic.css" rel="stylesheet">
+	
+
+
+  <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+  <!--[if lt IE 9]>
+    <script src="js_boot/html5shiv.js"></script>
+  <![endif]-->
+
+  <!-- Fav and touch icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../img_boot/apple-touch-icon-144-precomposed.png">
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../img_boot/apple-touch-icon-114-precomposed.png">
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../img_boot/apple-touch-icon-72-precomposed.png">
+  <link rel="apple-touch-icon-precomposed" href="../img_boot/apple-touch-icon-57-precomposed.png">
+  <link rel="shortcut icon" href="../img_boot/favicon.png">
+  
+	<script type="text/javascript" src="../js_boot/jquery.min.js"></script>
+	<script type="text/javascript" src="../js_boot/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../js_boot/scripts.js"></script>
+	<script type='text/javascript' src='../js/jquery.simplemodal.js'></script>
+	<script type='text/javascript' src='../js/basic.js'></script>
+<script type="text/javascript">
+
+    var jq = jQuery.noConflict();
+	var keylist="abcdefghijklmnopqrstuvwxyz123456789";
+	var temp='';
+	
+	function generatepass(plength){
+	temp='';
+	for (i=0;i<plength;i++)
+		temp+=keylist.charAt(Math.floor(Math.random()*keylist.length));
+		return temp;
+	}
+
+
+	var jqueryFunction;
+	var id;
+	// DISPLAYING USER FINFORMATION
+	jq(window).load(function() {
+		userInformation();
+		//jq(".adminpanlsubmit").hide();
+		//jq(".adminpanlcancel").hide();
+		
+	});
+	
+	function userInformation() { 
+  		var i;
+  			jq.ajax({
+      		type: "GET",
+     	// url: "http://152.48.2.245:80/retriveData",
+      		url: "http://152.48.2.245:80/usermanagementInfo",
+      		dataType: "json",
+      		async:false,
+      			success: function (data) { 
+    	  			//console.log(data);
+    	  			var result = JSON.stringify(data); 
+    	  			var result1=JSON.parse(result);
+    	  				jq.each(result1.userInformation,function(i){ 
+    	  				//console.log(result1.userInformation[0].usernrole);
+				    	  	var userrole = result1.userInformation[i].userrole;
+						    console.log(userrole);
+				    	 	var firstname = result1.userInformation[i].firstname;
+				    	 	var lastname = result1.userInformation[i].lastname;
+				    	 	var department = result1.userInformation[i].department;
+				    	 	var designation = result1.userInformation[i].designation;
+				    	 	var email = result1.userInformation[i].email;
+			    	    	id = result1.userInformation[i]._id;
+    	 	
+            				jq("tbody").append("<tr>" + "<td>" + firstname + "</td>" + "<td>" + lastname + "</td>" + "<td>" + userrole + "</td>" + "<td>" + department + "</td>" + "<td>" + designation + "</td>" + "<td>" + email + "</td>" +"<td><a href= '/delete_usermanagement/"+id +"' class='delete'>   </a>   <a href= '#' class='edit' value="+id+"></a></td>"+ "</tr>"); 
+    	 			});
+    		}
+		});
+	}
+
+	jq(document).ready(function(){
+	
+	 
+	//jq(document).on('click', '.basic', function () { alert("test"); 
+		jq('#usernrole,#firstname,#lastname,#username,#department,#designation,#email').on("blur", function() {
+		
+		  if(jq("#usernrole").val() =='-1' ||  jq('#firstname').val().length == 0  || jq('#lastname').val().length == 0   ||
+				  jq('#username').val().length == 0  || jq("#department").val() =='-1' ||
+				  jq('#designation').val().length == 0  ||  jq('#email').val().length == 0 ) {
+			  		
+			  		jq(".adminpanlsubmit").hide();
+			  		jq(".adminpanlcancel").hide();
+			 		return false;
+		  }
+		  	jq(".adminpanlsubmit").show();
+		  	jq(".adminpanlcancel").show();
+			return true;
+		  
+	  });
+ 
+	// });	
+		
+		// DELETE USER INFORMATION
+		var userDetailsJson={};
+		jq(document).on('click', '.delete', function () {
+			var x;
+    			if (confirm("Are you sure you wish to Delete this User Information?") == true) {
+        			x = "The User Information has Deleted!";
+        				jq.ajax({
+        	      		type: "GET",
+        	     	// url: "http://152.48.2.245:80/login",
+        	       		url: "http://152.48.2.245:80/delete_usermanagement",
+        	      		dataType: "json",
+        	      		data:  userDetailsJson,
+        	      			success: function (data) {
+        	    	  			console.log(data);
+        	    	  			var result = JSON.stringify(data);
+        	    	  			var parseResult=JSON.parse(result);
+        	    	  		}
+        			}); 
+    			} else {
+       					x = "You pressed Cancel!";
+       					return false;
+    			}
+    			document.getElementById("deleteErrorMsg").innerHTML = x;
+		});
+		
+		
+		jq(document).on('click', '#register', function () { 
+			var enterlength = 9;
+			var pwd = document.login.password.value=generatepass(enterlength); 
+			jq('#password').html(pwd);
+			
+		});
+
+		function isEmpty(str) {
+		    return (!str || 0 === str.length);
+		}
+
+		function isBlank(str) {
+		    return (!str || /^\s*$/.test(str));
+		}
+		
+		// EDIT USER INFORMATION
+		jq(document).on('click', '#update', function () { 
+			
+			var enterlength = 9;
+			var pwd = document.login.password.value=generatepass(enterlength); 
+			jq('#password').html(pwd);
+			
+			
+				var objectId= jq(this).attr('value1'); //alert(objectId);
+				var userDetailsJson={};
+				userDetailsJson.userrole 	= jq('#usernrole').val();
+				userDetailsJson.firstname 	= jq('#firstname').val();
+				userDetailsJson.lastname  	= jq('#lastname').val();
+				userDetailsJson.username  	= jq('#username').val();
+				userDetailsJson.password  	= jq('#password').val();
+				userDetailsJson.department 	= jq('#department').val();
+				userDetailsJson.designation = jq('#designation').val();
+				userDetailsJson.email 		= jq('#email').val();
+				var message = "The User was Informaion updated";
+				document.getElementById("errorMsg").innerHTML = message;
+				
+				jq('#simplemodal-container', window.parent.document).remove();
+				location.reload();
+    	  		jq.ajax({
+			      	type	: "POST",
+			      	dataType: "json",
+			      	data	:  userDetailsJson,
+			        // url: "http://152.48.2.245:80/login",
+			       	url: "http://152.48.2.245:80/update_usermanagement/"+objectId,
+		          		success: function (res) {
+			    	  		//console.log(res);
+			    	  		var result = JSON.stringify(res);
+			    	  		alert(result);
+			    	  		console.log(result);
+			    	  		var parseResult=JSON.parse(result);
+		          		}
+	 			}); 
+			
+		});
+	
+		
+	jq(document).on('click', '.edit', function () { 
+		var className = jq('.edit').attr('class'); 
+		if(className == 'edit'){
+		jq("#register").hide();	
+		jq(".adminpanlcancel").hide();
+		
+		jq('#usernrole,#firstname,#lastname,#username,#department,#designation,#email').on("blur", function() {
+			
+			  if(jq("#usernrole").val() =='-1' ||  jq('#firstname').val().length == 0  || jq('#lastname').val().length == 0   ||
+					  jq('#username').val().length == 0 || jq("#department").val() =='-1' ||
+					   jq('#designation').val().length == 0  ||  jq('#email').val().length == 0 ) {
+				  		
+				  		jq("#register").hide();
+				  		jq(".adminpanlupdate").hide();
+				  		jq(".adminpanlcancel").hide();
+				 		return false;
+			  }
+			  	jq(".adminpanlupdate").show();
+			  	jq("#register").hide();
+			  	jq(".adminpanlcancel").show();
+				return true;
+			  
+		  });
+		/*jq(".adminpanlcancel").hide();
+		jq("#register").hide();
+		jq(".adminpanlupdate").show();*/
+		}
+		
+	   // console.log('now object is'+jq(this).attr('value'));
+	   	var objectId= jq(this).attr('value');
+	   	jq("#update").attr("value1",objectId );
+	   	jq('#createuser_window').modal();
+		
+		//return false;
+	   			jq.ajax({
+        	      	type: "GET",
+        	     // url: "http://152.48.2.245:80/login",
+        	       	url: "http://152.48.2.245:80/edit_usermanagement/"+objectId,
+        	          		success: function (res) {
+	        	    	  		//console.log(res);
+	        	    	  		var result = JSON.stringify(res);
+	        	    	  		//console.log(result);
+	        	    	  			        	    	  		
+	        	    	  		var parseResult=JSON.parse(result);
+	        	    	  		var firstName = parseResult.data.firstname;
+	        	    	  		var lastName  = parseResult.data.lastname; 
+	        	    	  		var usernRole = parseResult.data.userrole;
+	        	    	  		var deptName  = parseResult.data.department; 
+	        	    	  		var Designation  = parseResult.data.designation;
+	        	    	  		var Email  = parseResult.data.email; 
+	        	    	  		var Username  = parseResult.data.username; 
+	        	    	  		//var Password  = parseResult.data.password;
+								var Password  ="";
+	        	    	  	    jq("#firstname").val(firstName);
+	        	    	  	    jq("#lastname").val(lastName);
+	        	    	  	    jq("#usernrole").val(usernRole);
+	        	    	  	  	jq("#department").val(deptName);
+	        	    	  	  	jq("#designation").val(Designation);
+	        	    	  		jq("#email").val(Email);
+	        	    	  		jq("#username").val(Username);
+	        	    	  		jq("#password").val(Password);
+	        	    	  		//console.log(parseResult.message);
+        	    	  	}
+        		}); 
+    		
+	});
+	
+	// CANCEL FUNCTION
+	jq("#cancel").click(function(){ 
+		jq('#superadmin').each(function(){
+ 			this.reset();  
+	 	}); 
+	});
+	// SAVE USER INFORMATION
+    jqueryFunction=function(){
+	
+	        
+	    	var userDetailsJson={};
+			userDetailsJson.userrole 	= jq('#usernrole').val();
+			userDetailsJson.firstname 	= jq('#firstname').val();
+			userDetailsJson.lastname 	= jq('#lastname').val();
+			userDetailsJson.password 	= jq('#password').val();
+			userDetailsJson.department 	= jq('#department').val();
+			userDetailsJson.designation = jq('#designation').val();
+			userDetailsJson.email 		= jq('#email').val();
+			
+			console.log(jq("#firstname").text());
+		
+			jq.ajax({
+		      	type	: "POST",
+		     // url: "http://152.48.2.245:80/login",
+		       	url		: "http://152.48.2.245:80/usermanagement",
+		      	dataType: "json",
+		      	data	:  userDetailsJson,
+		      		success: function (data) {
+		    	  		console.log(data);
+		    	  		var result = JSON.stringify(data);
+		    	  		var parseResult=JSON.parse(result);
+		    	  		//console.log('response'+parseResult.sessionuser);
+		    	  		//console.log('response'+parseResult.userrole);
+		    	  		//jq('.statusmessage ').html('<b>Thank you!! We have received New user Registeration Information</b>');
+		    	     },
+			       	complete:function(){
+	           			jq('#superadmin').each(function(){
+	               	 			this.reset();  
+	            		 });
+	       			}
+			}); 
+		}
+	
+});
+</script>
+<style type="text/css">
+.table>thead>tr>th {
+color:#FFFFFF;
+}
+</style>
+</head>
+<body>
+<header>
+	<div class="row clearfix">
+		<div class="col-md-8 nopadding">
+			<div id="cisco_logo_white"></div>
+		</div>
+		<div class="col-md-4 nopadding">
+			<div class="user_details">
+					<div class="user_image"></div>
+					<div class="user_name">Welcome <%= username %></div>
+					 <div class="logout" ><a href='../logout' id='logout'>Logout</a></div>
+					<div class="settings">Settings</div>
+				</div>
+			</div>
+	</div>
+</header>
+<nav class="navbar navbar-default" role="navigation">
+	<div class="navbar-header">
+	
+		 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> 
+		 <a class="navbar-brand" href="#">Menu</a>
+	</div>
+				
+	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		<ul class="nav navbar-nav">
+			<li>
+				<a href="/">HOME</a>
+			</li>
+			<li class="active">
+				<a href="/usermanagement">USER MANAGEMENT</a>
+			</li>
+			<li>
+				<a href="/review">REVIEW</a>
+			</li>
+			<li>
+				<a href="/status">STATUS</a>
+			</li>
+		</ul>
+	</div>
+</nav>
+<!-- <article> -->
+	<div id="createuser_window">
+		<span class="titleuser">Create User</span> <p id="errorMsg" style="color:red; width:275px; float:right;"> </p>
+			<form id="superadmin" name="login" method="post"  action="http://152.48.2.245:80/usermanagement">
+				<div class="crateuser">	
+					<label for="userrole" class="usernrole">Role</label> 
+					<select id='usernrole' class="usernrole" name="userrole" required="required"> 
+						<option value="-1">Choose User Role</option>
+						<option value="IT">IT</option>
+						<option value="NON-IT">NON-IT</option>
+					</select>
+				</div>
+				<div class="crateuser">		
+					<label for="firstname" class="firstname">First Name</label> 
+					<input id="firstname" type="text" name="firstname" value="" placeholder="Please Enter the Firstname"  data-mini="true" required />
+				</div>
+				<div class="crateuser">		
+					<label for="lastname" class="lastname">Last Name</label> 
+					<input id="lastname"  type="text" name="lastname" value="" placeholder="Please Enter the Lastname"  data-mini="true" required />
+				</div>
+				<div class="crateuser">		
+					<label for="username" class="username">UserName</label> 
+					<input id="username" type="text" name="username" value="" placeholder="Create the UserName"  data-mini="true" required/>
+				</div>	
+				<!-- <div class="crateuser">	 -->							
+					<!-- <label for="password" class="password">Password</label>  -->
+					<input type="hidden" id="password"  name="password"placeholder="Create the Password"  data-mini="true" required />
+				<!-- </div> -->
+				<div class="crateuser">	
+					<label for="department" class="department">Department</label> 
+					<select id='department' class="department"   name="department" required="required">
+						<option value="-1">Select any Department</option>
+						<option value="HealthCare">HealthCare</option>
+						<option value="Finance">Finance</option>
+						<option value="Retail">Retail</option>
+						<option value="Hotel">Hotel</option>
+					</select>
+				</div>
+				<div class="crateuser">	
+					<label for="designation" class="designation">Designation</label> 
+					<input id="designation" type="text" name="designation" value="" placeholder="Please Enter the Designation"  data-mini="true" required/>
+				</div>
+				<div class="crateuser">		
+					<label for="email" class="email">Email ID</label> 
+					<input type="email" id="email"  name="email"  placeholder="Please Enter valid Email"  data-mini="true" required/>
+				</div>	
+				<div class="submit_Area">
+					<div class="adminpanlupdate" style="display:none">
+						<!-- <input id="update" type="submit" value="UPDATE"> -->
+						<!-- <input id="update" type="button" value="UPDATE">  -->
+						<a href="#" id="update">UPDATE</a>
+					</div>
+					<div class="adminpanlcancel">
+						<a href="#" class="savebt" id="cancel">CANCEL</a>
+					</div>
+					<div class="adminpanlsubmit">
+						<input id="register" type="submit" value="ADD">
+					</div>
+				</div>					
+			</form>
+		</div>
+	<div class="container">
+	<h6>USER MANAGEMENT</h6>
+	<h5><a href='#' class='basic'>Create User</a></h5><div id="deleteErrorMsg"></div>
+	
+	<div class="row clearfix"  style=" border-top: 1px solid green;">
+		<div class="col-md-12 column" style=" margin-top:30px;">
+			<table class="table">
+				<thead class="label_list">
+					<tr>
+						<th class="borderlabel">
+							First Name
+						</th>
+						<th class="borderlabel">
+							Last Name
+						</th>
+						<th class="borderlabel">
+							Role
+						</th>
+						<th class="borderlabel">
+							Dept.Name
+						</th>
+						<th class="borderlabel">
+							Designation
+						</th>
+						<th class="borderlabel">
+							Email ID
+						</th>
+						<th>
+							Action
+						</th>
+					</tr>
+				</thead>
+				<tbody>	</tbody> 
+			</table>
+		</div>
+	</div>
+</div>
+<!--</article> -->
+</body>
+</html>

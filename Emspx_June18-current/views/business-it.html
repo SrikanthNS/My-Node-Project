@@ -1,0 +1,1697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CISCO</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="">
+
+<!--link rel="stylesheet/less" href="less/bootstrap.less" type="text/css" /-->
+<!--link rel="stylesheet/less" href="less/responsive.less" type="text/css" /-->
+<!--script src="js/less-1.3.3.min.js"></script-->
+<!--append ‘#!watch’ to the browser URL, then refresh the page. -->
+
+<link href="../css_boot/bootstrap.min.css" rel="stylesheet">
+
+
+<link href="../css_boot/style.css" rel="stylesheet">
+
+
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+    <script src="js_boot/html5shiv.js"></script>
+  <![endif]-->
+
+<!-- Fav and touch icons -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144"
+	href="../img_boot/apple-touch-icon-144-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="114x114"
+	href="../img_boot/apple-touch-icon-114-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="72x72"
+	href="../img_boot/apple-touch-icon-72-precomposed.png">
+<link rel="apple-touch-icon-precomposed"
+	href="../img_boot/apple-touch-icon-57-precomposed.png">
+<link rel="shortcut icon" href="../img_boot/favicon.png">
+
+<script type="text/javascript" src="../js_boot/jquery.min.js"></script>
+
+<script type="text/javascript" src="../js_boot/scripts.js"></script>
+
+
+	
+	<link href="../css_boot/bootstrap-datetimepicker.min.css" rel="stylesheet">
+
+<style>
+#approval{
+margin-right: 30px;
+float: left;
+}
+</style>
+
+
+
+<script type="text/javascript">
+	
+	var selectedKitName;
+	
+var defaultWFDetails = {};
+var componentsTitle={};
+
+     String.prototype.isEmpty = function() {
+			return (this.length === 0 || !this.trim());
+		};
+
+var getWaitingToConfigureKitNames;
+
+	  
+$(window).load(function() {
+
+   
+
+	getWaitingToConfigureKitNames=function(){
+    $('.WFName').remove();
+		
+    $.ajax({
+	      type: "GET",
+	       url: "http://152.48.2.245:80/retrieveModifiedWFKitNamesWithStatus/WAITINGTOCONFIGURE",
+	     dataType: "json",
+	      async:false,
+	    success: function (data) {
+	    	  console.log(data);
+	   	  var result = JSON.stringify(data);
+	    	  var result1=JSON.parse(result);
+			  switch(result1.statusCode){
+	    	  case 200:
+			  {
+			     if (result1.kitItems.length>0)
+					{
+					$.each(result1.kitItems,function(i){
+					$("#toolkitNames").append('<li id="waiting'+result1.kitItems[i].kitName+'" class=WFName><a id="selected" href="#">'+result1.kitItems[i].kitName+'</a></li>');
+					});
+					}
+					break;
+			 }
+			 case 404:
+			 {
+			  $('#toolkitNames').empty();
+			  $('#toolkitNames').hide();
+			  break;
+			 }
+	    	}
+	     }
+		
+	  });
+	  }
+	  
+	  
+	   getWaitingToConfigureKitNames();
+	  
+	 
+		   //$(".kitName li").children('a:first').css('background-color','red');
+	//  $(".kitName li").children('a:first').click();
+	   
+
+	  
+	   $.ajax({
+	      type: "GET",
+	      //url: "http://152.48.2.245:3050/retrieveKitNames",
+	      url: "http://152.48.2.245:80/retrieveComponentList",
+	      dataType: "json",
+	      async:false,
+	      success: function (data) {
+	    	  console.log(data);
+	    	  var result = JSON.stringify(data);
+	    	  var result1=JSON.parse(result);
+			  
+	    	  $.each(result1.component,function(i){
+					if (result1.component[i].componentName == 'PatientIdentified'){
+						$("#PatientIdentified").append('<img src="../images/PatientIdentified.png" class="img-rounded " alt=""/>');
+						//$("#PatientIdentified").append('<div id="one" class="img-responsive timage" style="background: '+result1.component[i].imageUrl+' no-repeat;"></div>');
+						$(".node_one_label").append('<label class="label1">'+result1.component[i].title+'</label>');
+					} else if (result1.component[i].componentName == 'AutoCheckin'){
+						$("#AutoCheckin").append('<img src="../images/AutoCheckin.png" class="img-rounded " alt=""/>');
+						//$("#AutoCheckin").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat;"></div>');
+						$(".node_two_label").append('<label class="label2">'+result1.component[i].title+'</label>');
+					} else if (result1.component[i].componentName == 'PersonalizedWelcome'){
+						$("#PersonalizedWelcome").append('<img src="../images/PersonalizedWelcome.png" class="img-rounded " alt=""/>');
+						//$("#PersonalizedWelcome").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat;"></div>');
+						$(".node_three_label").append('<label class="label3">'+result1.component[i].title+'</label>');
+					} else if (result1.component[i].componentName == 'PatSchedularSys'){
+						$("#PatSchedularSys").append('<img src="../images/PatSchedularSys.png" class="img-rounded " alt=""/>');
+						//$("#PatSchedularSys").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat;"></div>');
+						$(".node_four_label").append('<label class="label4">'+result1.component[i].title+'</label>');
+					} else if (result1.component[i].componentName == 'PatArrivalNotify'){
+						$("#PatArrivalNotify").append('<img src="../images/PatArrivalNotify.png" class="img-rounded " alt=""/>');
+						//$("#PatArrivalNotify").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat;"></div>');
+						$(".node_five_label").append('<label class="label5">'+result1.component[i].title+'</label>');
+					} else if (result1.component[i].componentName == 'ApptWaitTimeNotify'){
+						$("#ApptWaitTimeNotify").append('<img src="../images/ApptWaitTimeNotify.png" class="img-rounded " alt=""/>');
+						//$("#ApptWaitTimeNotify").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat;"></div>');
+						$(".node_six_label").append('<label class="label6">'+result1.component[i].title+'</label>');
+					} else if (result1.component[i].componentName == 'IntrctnComptdDr'){
+						$("#IntrctnComptdDr").append('<img src="../images/PatientIdentified.png" class="img-rounded " alt=""/>');
+						//$("#IntrctnComptdDr").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat;"></div>');
+						$(".node_eight_label").append('<label class="label8">'+result1.component[i].title+'</label>');
+					} else if (result1.component[i].componentName == 'DoctorNotify'){
+						$("#DoctorNotify").append('<img src="../images/PatientIdentified.png" class="img-rounded " alt=""/>');
+						//$("#DoctorNotify").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat;"></div>');
+						$(".node_seven_label").append('<label class="label7">'+result1.component[i].title+'</label>');
+					} else if (result1.component[i].componentName == 'PharmacySystem'){
+						$("#PharmacySystem").append('<img src="../images/PharmacySystem.png" class="img-rounded " alt=""/>');
+						//$("#PharmacySystem").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat;"></div>');
+						$(".node_nine_label").append('<label class="label9">'+result1.component[i].title+'</label>');
+					} else if (result1.component[i].componentName == 'PntArvlNfyPharmacist'){
+						$("#PntArvlNfyPharmacist").append('<img src="../images/PatArrivalNotify.png" class="img-rounded " alt=""/>');
+						//$("#PntArvlNfyPharmacist").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat;"></div>');
+						$(".node_ten_label").append('<label class="label10">'+result1.component[i].title+'</label>');
+					} else if (result1.component[i].componentName == 'PrescriptionStsNotify'){
+						$("#PrescriptionStsNotify").append('<img src="../images/AutoCheckin.png" class="img-rounded " alt=""/>');
+						//$("#PrescriptionStsNotify").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat;"></div>');
+						$(".node_11_label").append('<label class="label11">'+result1.component[i].title+'</label>');
+					} else if (result1.component[i].componentName == 'PharmacistNotify'){
+						$("#PharmacistNotify").append('<img src="../images/PharmacistNotify.png" class="img-rounded " alt=""/>');
+						//$("#PharmacistNotify").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat;"></div>');
+						$(".node_12_label").append('<label class="label12">'+result1.component[i].title+'</label>');
+					} else if (result1.component[i].componentName == 'MedicinesReceivd'){
+						$("#MedicinesReceivd").append('<img src="../images/MedicinesReceivd.png" class="img-rounded " alt=""/>');
+						//$("#MedicinesReceivd").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat;"></div>');
+						$(".node_13_label").append('<label class="label13">'+result1.component[i].title+'</label>');
+					}
+				});
+	      }
+	  });  
+
+	});
+	
+	
+
+	
+	$(document).ready(function() { 
+	
+	
+	  
+	  $('#workflowheading').hide();
+	
+	   $('#autocheckinpanel').hide();
+	   $('#personalizedwelcomepanel').hide();
+	   $('#patientschedularlistpanel').hide();
+	   $('#patientarrivalnotificationtodoctorpanel').hide();
+	   $('#pharmacysystempanel').hide();
+	   $('#appointmentwaittimenotificationpanel').hide();
+	   $('#prescriptionstatusnotificationpanel').hide();
+	   
+	   
+	   
+	   
+	      $('#appointmentdate').datetimepicker({
+          
+        });
+		
+		   $('#appointmentwaittime').datetimepicker({
+          
+        });
+		
+		   $('#pharamacySystemtime').datetimepicker({
+          
+        });
+		
+		
+		
+
+
+		    
+
+	 $('#approval').hide();
+	
+	 
+	
+	    var result1 = {};
+		var kitImg = [];
+		var kitDetails = {};
+		var typeWF, kitNm, kitDesc;
+	$('#collapsePanel').on('click', '.WFName', function () { 
+	
+	   
+	   $(".circular").addClass('context-menu-disabled');
+	   
+	    $(".list-group-item").remove();
+	   
+		$("#node13").hide();
+		$("#arrow12").hide();
+		$("#node12").hide();
+		$("#arrow11").hide();
+		$("#node11").hide();
+		$("#arrow10").hide();
+		$("#node10").hide();
+		$("#arrow9").hide();
+		$("#node9").hide();
+		$("#arrow8").hide();
+		$("#node8").hide();
+		$("#arrow7").hide();
+		$("#node7").hide();
+		$("#arrow6").hide();
+		$("#node6").hide();
+		$("#arrow5").hide();
+		$("#node5").hide();
+		$("#arrow4").hide();
+		$("#node4").hide();
+		$("#arrow3").hide();
+		$("#node3").hide();
+		$("#arrow2").hide();
+		$("#node2").hide();
+		$("#arrow1").hide();
+		
+		
+		
+		 var title = $(this).text();
+		
+		 selectedKitName=title;
+		  $('#displaykitnameIT').html(selectedKitName);
+	      $('#titletopexpandablepanel').text(title);
+		  $('.featuresList').remove();
+		  typeWF = $(this).attr("id");
+       
+		  $.ajax({
+	      type: "GET",
+	      url: "http://152.48.2.245:80/retrieveKitDetails/"+title,
+	      dataType: "json",
+	      async:false,
+	      success: function (data) {
+		  
+		      $('#approval').show();
+	    	  var result = JSON.stringify(data);
+	    	  result1=JSON.parse(result);
+			  var kitImages = result1.images;
+			  kitImg = result1.images;
+			  kitNm = result1.kitName;
+			  kitDesc = result1.description;
+			  var featuresName='';
+			  var formActionValue;
+			  
+			  
+			  if (kitImages.length>0)
+			  {
+			
+			  
+			  $.each(kitImages,function(i){
+			    var panelId;
+				
+				if (kitImages[i] == 'PatientIdentified'){
+				  	$("#node1").show();
+				} else if (kitImages[i] == 'AutoCheckin') {
+					$("#arrow1").show();
+					$("#node2").show();
+					featuresName= $('#'+kitImages[i]).parent().next().find('label').text().trim();
+					formActionValue='autoCheckInNotification';
+					panelId='autocheckin';
+					
+				} else if (kitImages[i] == 'PersonalizedWelcome') {
+					$("#arrow2").show();
+					$("#node3").show();
+					featuresName= $('#'+kitImages[i]).parent().next().find('label').text().trim();
+					formActionValue='personalizedWelcome';
+					panelId='personalizedwelcome';
+					
+				
+				} else if (kitImages[i] == 'PatSchedularSys') {
+					$("#arrow3").show();
+					$("#node4").show();
+					panelId='patientschedularlist';
+					featuresName= $('#'+kitImages[i]).parent().next().find('label').text().trim();
+					formActionValue='patientSchedularSystem';
+				} else if (kitImages[i] == 'PatArrivalNotify') {
+					$("#arrow4").show();
+					$("#node5").show();
+					featuresName= $('#'+kitImages[i]).parent().next().find('label').text().trim();
+					formActionValue='patientArrivalNotificationToDoctor';
+					panelId='patientarrivalnotificationtodoctor';
+					
+				} else if (kitImages[i] == 'ApptWaitTimeNotify') {
+					$("#arrow5").show();
+					$("#node6").show();
+					featuresName= $('#'+kitImages[i]).parent().next().find('label').text().trim();
+					formActionValue='appointmentAndWaitTimeNotification';
+					panelId='appointmentwaittimenotification';
+				} else if (kitImages[i] == 'DoctorNotify') {
+					$("#arrow6").show();
+					$("#node7").show();
+					featuresName= $('#'+kitImages[i]).parent().next().find('label').text().trim();
+					} else if (kitImages[i] == 'IntrctnComptdDr') {
+					$("#arrow7").show();
+					$("#node8").show();
+					featuresName= $('#'+kitImages[i]).parent().next().find('label').text().trim();
+					formActionValue='#';
+				} else if (kitImages[i] == 'PharmacySystem') {
+					$("#arrow8").show();
+					$("#node9").show();
+					panelId='pharmacysystem';
+					featuresName= $('#'+kitImages[i]).parent().next().find('label').text().trim();
+					formActionValue='pharmacySystem';
+				} else if (kitImages[i] == 'PntArvlNfyPharmacist') {
+					$("#arrow9").show();
+					$("#node10").show();
+					featuresName= $('#'+kitImages[i]).parent().next().find('label').text().trim();
+					formActionValue='patientArrivalNotificationToPharmacist';
+					panelId='patientarrivalnotificationtodoctor';
+				} else if (kitImages[i] == 'PrescriptionStsNotify') {
+					$("#arrow10").show();
+					$("#node11").show();
+					featuresName= $('#'+kitImages[i]).parent().next().find('label').text().trim();
+					formActionValue='prescriptionAndStatusNotification';
+					panelId='prescriptionstatusnotification';
+				} else if (kitImages[i] == 'PharmacistNotify') {
+					$("#arrow11").show();
+					$("#node12").show();
+					featuresName= $('#'+kitImages[i]).parent().next().find('label').text().trim();
+					formActionValue='#';
+				} else if (kitImages[i] == 'MedicinesReceivd') {
+					$("#arrow12").show();
+					$("#node13").show();
+					featuresName= $('#'+kitImages[i]).parent().next().find('label').text().trim();
+					formActionValue='#';
+				}
+		
+			// $('#'+kitImages[i]).parent().next().css({'background-color': 'red'});
+			// $('.item').css({minWidth: width, minHeight: height});
+			if(!featuresName.isEmpty())
+					$('.listitems').append('<a href="#"   class="list-group-item" id='+panelId+'  value='+formActionValue+' >'+featuresName+'</a>');
+				
+			  });
+	      }
+		  }
+	  });
+	  
+	  
+	 
+		   
+	});
+	
+	
+	
+	
+	     var isVisible = $('#displayworkflow').is(':visible');
+		if(isVisible){
+		$('#displayworkflow').css({height:'650px'});
+		}
+	
+	
+
+	 $(document).on('click', '.WFName', function () { 
+	    $('#workflowheading').show();
+		$('.WFName').removeClass('active');
+		$(this).addClass('active');
+	 });
+	
+	 
+	 var targetAction;
+	 var featuresName;
+	 $(document).on('click', '.list-group-item', function () { 
+	 
+	 
+	   $('#autocheckinpanel').hide();
+	   $('#personalizedwelcomepanel').hide();
+	   $('#patientschedularlistpanel').hide();
+	   $('#patientarrivalnotificationtodoctorpanel').hide();
+	   $('#pharmacysystempanel').hide();
+	   $('#appointmentwaittimenotificationpanel').hide();
+	   $('#prescriptionstatusnotificationpanel').hide();
+	 
+	      featuresName=($(this).text());
+		  
+		  
+	     
+	      $('.list-group-item').removeClass('active');
+		 
+		  
+	 //alert($(this).text());
+	  var targetPanel=($(this).attr('id'));
+	  
+	  var targetValue=($(this).attr('value'));
+	 
+	  $(this).addClass( "active" );
+	 
+	 console.log(targetPanel+'span');
+	 
+	  $("#"+targetPanel+'span').text(selectedKitName + '/' + featuresName);
+	  targetAction=targetPanel+"form";
+	  console.log(targetAction);
+	  
+	  $('#displaykitnameIT').html(selectedKitName);
+	  $('#'+targetAction).attr("action", "/"+targetValue+"/"+selectedKitName); 
+      $('#'+targetPanel+'panel').show();
+	  
+	  
+	 });
+	 
+	 
+	 $('.conformationbutton').on('click', function(e) {
+	
+    e.preventDefault();
+	
+	
+
+	 $.ajax({
+	      type: "POST",
+	      url: $('#'+targetAction).attr("action"),
+	      dataType: "json",
+		  data: $('#'+targetAction).serialize(),
+	      success: function (data) {
+		   alert( featuresName  + '  of Your Selected KitName  ' + selectedKitName + '  has beed Updated Successfully');
+		  }
+		  
+	
+     });
+	
+	 
+	 
+});
+
+
+
+         $('.resetbutton').on('click', function() {
+			$('#'+targetAction).reset();
+		 });
+
+
+	 
+	  	 $('.topdown').click(function() {
+	    var isVisible = $('#displayworkflow').is(':visible');
+		var isHidden = $('#displayworkflow').is(':hidden');
+		
+		if(isVisible){
+		$('#displayworkflow').css({height:'650px'});
+		$('#symbol').html('&#9650;');
+		}
+		else
+	    $('#symbol').html('&#9660;');
+	
+		
+   
+	}); 
+
+	 
+	 	  $("#approval").click(function(){
+		 
+	     kitDetails.kitName=selectedKitName;
+		 kitDetails.configStatus = "CONFIGUREDONE";
+			 $.ajax({
+		 		type: "POST",
+	      		url: "http://152.48.2.245:80/sendForApproval",
+	      		dataType: "json",
+	      		async:false,
+	      		data:kitDetails,
+	       		success: function (data) {
+				getWaitingToConfigureKitNames();
+				$('.listitems').empty();
+	    		
+				console.log(data);
+	    	  if (data.status == 201) 
+             	  alert(kitDetails.kitName+" tool kit has been sent to Super Admin for Approval");
+                  }             
+	    			
+	    		});  
+				    
+	
+	    
+    });
+
+	
+	}); 
+	 
+	 
+	 
+
+	 
+
+	 </script>
+
+</head>
+
+<body>
+	<header>
+		<div class="row clearfix">
+			<div class="col-md-8 nopadding">
+				<div id="cisco_logo_white"></div>
+			</div>
+			<div class="col-md-4 nopadding">
+				<div class="user_details">
+					<div class="user_image"></div>
+					<div class="user_name">Welcome <%= username %></div>
+					<div class="logout">
+						<a href='../logout' id='logout'>Logout</a>
+					</div>
+					<div class="settings">Settings</div>
+				</div>
+			</div>
+		</div>
+	</header>
+	<nav class="navbar navbar-default" role="navigation">
+		<div class="navbar-header">
+
+			<button type="button" class="navbar-toggle" data-toggle="collapse"
+				data-target="#bs-example-navbar-collapse-1">
+				<span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span
+					class="icon-bar"></span><span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="#">Menu</a>
+		</div>
+
+		<div class="collapse navbar-collapse"
+			id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav">
+				<li><a href="/">Home</a></li>
+
+				<li class="active"><a href="/business-it">WORKFLOW
+						CONFIGURATION</a></li>
+				<li><a href="/componentconfiguration">COMPONENT LIBRARY
+						CONFIGURATION</a></li>
+
+				<li><a href="/status">STATUS</a></li>
+
+			</ul>
+
+
+		</div>
+
+	</nav>
+
+	<div class="container business_nonit">
+
+		<div class="btn-group" style='float: right'>
+			<button type="button" class="btn btn-default customsave"
+				id="approval">Send for Approval</button>
+		</div>
+
+		<div class="row clearfix">
+
+
+
+			<div class="col-md-2 column" id='rightpanel'>
+
+
+				<div id='collapsePanel'>
+					<div class="panel panel-default" class='kitName'>
+						<div class="panel-heading custompaneltitle">
+							<h3 class="panel-title">Workflows</h3>
+						</div>
+						<ul class="panel-body templateContent" id='toolkitNames'>
+						</ul>
+
+
+
+
+
+
+						<div class="panel-heading custompaneltitle">
+							<h3 class="panel-title">Features</h3>
+						</div>
+						<div class="panel-body row" id='features'>
+							<div class="list-group">
+								<div class='listitems'>
+									<!-- <a href="#" class="list-group-item" id='common' value='autoCheckInNotification'>Auto Check-in Notification</a>
+						<a href="#" class="list-group-item" id='common' value='personalizedWelcome'>Personalized Welcome</a>
+						<a href="#" class="list-group-item" id='patientschedularlist' value='patientSchedularSystem'>Patient Scheduler System</a>
+						<a href="#" class="list-group-item" id='common' value='patientArrivalNotificationToDoctor'>Patient Arrival Notification to Doctor</a>
+						<a href="#" class="list-group-item" id='common' value='appointmentAndWaitTimeNotification'>Appointment and Wait time Notification</a>
+						<a href="#" class="list-group-item" id='pharmacysystemlist' value='pharmacySystem'>Pharmacy System</a>
+						<a href="#" class="list-group-item" id='common' value='patientArrivalNotificationToPharmacist'>Patient Arrival Notification to Pharmacist</a>
+						<a href="#" class="list-group-item" id='common' value='prescriptionAndStatusNotification'>Prescription and Status Notification</a> -->
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+
+			<div class="col-md-10 column abx" id='itmiddleworkflowcontainer'>
+				<div class="col-md-12 column" id='mainview'>
+					<div class="panel-group" id="panel-683187">
+						<div class="panel">
+							<div class="panel-heading" id='workflowheading'>
+								<span id='displaykitnameIT' ></span>
+								 <a id='symbol' class="panel-title topdown"
+									data-toggle="collapse" data-parent="#panel-683187"
+									href="#panel-element-810024" >&#9660;</a>
+							</div>
+							<div id="panel-element-810024" class="panel-collapse in">
+								<div class="panel-body" id='itdisplayworkflow'>
+							<div class="row my-row1 clearfix">
+							
+								<div class="col-md-7 column"></div>
+								
+								<div class="col-md-1 column">
+									<div id="arrow4">
+										<div class="arrow_four">
+											<img src="../images/arrow_45_right.png" />
+										</div>
+									</div>
+									<div id="arrow5">
+										<div class="arrow_five">
+											<img src="../images/arrow_45_right_botton.png" />
+										</div>
+									</div>
+								</div>
+								
+								<div class="col-md-1 column">
+								<div id="node5">
+									<div class="node_five">
+										<div id="PatArrivalNotify" class="circular context-menu-disabled"></div>
+									</div>
+									<div class="node_five_label"></div>
+								</div>
+								</div>
+								
+								<div class="col-md-1 column">
+								<div id="arrow6">
+									<div class="arrow_six">
+										<img src="../images/arrow_right.png" />
+									</div>
+								</div>
+								</div>
+										
+								<div class="col-md-1 column">				
+								<div id="node7">
+									<div class="node_seven">
+										<div id="DoctorNotify" class="circular context-menu-disabled"></div>
+									</div>
+									<div class="node_seven_label"></div>
+								</div>
+								</div>
+							</div>
+							
+							
+							<div class="row my-row3 clearfix">
+								<div class="col-md-5 column"></div>
+								
+								<div class="col-md-1 column">	
+									<div id="arrow3">
+										<div class="arrow_three">
+											<img src="../images/arrow_45_right.png" />
+										</div>
+									</div>
+									<div id="arrow8">
+										<div class="arrow_eight">
+											<img src="../images/arrow_45_right_botton.png" />
+										</div>
+									</div>
+								</div>
+								
+								<div class="col-md-1 column">
+									<div id="node4">
+										<div class="node_four">
+											<div id="PatSchedularSys" class="circular context-menu-disabled"></div>
+										</div>
+										<div class="node_four_label"></div>
+									</div>
+								</div>
+								
+							</div>
+							
+							<div class="row my-row5 clearfix">
+								<div class="col-md-7 column"></div>
+								
+								<div class="col-md-1 column">
+									<div id="arrow51">
+										<div class="arrow_five">
+											<img src="../images/arrow_45_right_botton.png" />
+										</div>
+									</div>
+								</div>
+								
+								<div class="col-md-1 column">
+									<div id="node6">
+										<div class="node_six">
+											<div id="ApptWaitTimeNotify" class="circular context-menu-disabled"></div>
+										</div>
+										<div class="node_six_label"></div>
+									</div>
+								</div>
+											
+								<div class="col-md-1 column">		
+									<div id="arrow7">
+										<div class="arrow_seven">
+											<img src="../images/arrow_right.png" />
+										</div>
+									</div>
+								</div>
+										
+								<div class="col-md-1 column">				
+									<div id="node8">
+										<div class="node_eight">
+											<div id="IntrctnComptdDr" class="circular context-menu-disabled"></div>
+										</div>
+										<div class="node_eight_label"></div>
+									</div>
+								</div>
+							</div>
+							  
+							<div class="row my-row6 clearfix">	
+								
+								<div class="col-md-1 column">
+								<div id="node1">
+									<div class="node_one">
+										<div id="PatientIdentified" class="circular context-menu-disabled"></div>
+									</div>
+									<div class="node_one_label"></div>
+								</div>
+								</div>
+											
+								<div class="col-md-1 column">		
+								<div id="arrow1">
+									<div class="arrow_one">
+										<img src="../images/arrow_right.png" />
+									</div>
+								</div>
+								</div>
+										
+								<div class="col-md-1 column">
+								<div id="node2">
+									<div class="node_two">
+										<div id="AutoCheckin" class="circular context-menu-disabled"></div>
+									</div>
+									<div class="node_two_label"></div>
+								</div>
+								</div>
+										
+								<div class="col-md-1 column">			
+								<div id="arrow2">
+									<div class="arrow_two">
+										<img src="../images/arrow_right.png" />
+									</div>
+								</div>
+								</div>
+										
+								<div class="col-md-1 column">	
+								<div id="node3">
+									<div class="node_three">
+										<div id="PersonalizedWelcome" class="circular context-menu-disabled"></div>
+									</div>
+									<div class="node_three_label"></div>
+								</div>
+								</div>
+								
+							</div>		
+							
+							<div class="row my-row1 clearfix">
+								<div class="col-md-7 column"></div>
+								
+								<div class="col-md-1 column">
+									<div id="arrow9">
+										<div class="arrow_nine">
+											<img src="../images/arrow_45_right.png" />
+										</div>
+									</div>
+									<div id="arrow10">
+										<div class="arrow_ten">
+											<img src="../images/arrow_45_right_botton.png" />
+										</div>
+									</div>
+								</div>
+								
+								<div class="col-md-1 column">
+									<div id="node10">
+										<div class="node_ten">
+											<div id="PntArvlNfyPharmacist" class="circular context-menu-disabled"></div>
+										</div>
+										<div class="node_ten_label"></div>
+									</div>
+								</div>		
+													
+								<div class="col-md-1 column">
+								<div id="arrow11">
+									<div class="arrow_11">
+										<img src="../images/arrow_right.png" />
+									</div>
+								</div>
+								</div>
+										
+								<div class="col-md-1 column">				
+									<div id="node12">
+										<div class="node_12">
+											<div id="PharmacistNotify" class="circular context-menu-disabled"></div>
+										</div>
+										<div class="node_12_label"></div>
+									</div>
+								</div>
+							</div>
+							
+							<div class="row my-row3 clearfix">
+								<div class="col-md-5 column"></div>
+								
+								<div class="col-md-1 column">
+									<div id="arrow51">
+										<div class="arrow_five">
+											<img src="../images/arrow_45_right_botton.png" />
+										</div>
+									</div>
+								</div>
+								
+								<div class="col-md-1 column">
+									<div id="node9">
+										<div class="node_nine">
+											<div id="PharmacySystem" class="circular context-menu-disabled"></div>
+										</div>
+										<div class="node_nine_label"></div>
+									</div>
+								</div>
+							</div>
+							
+							<div class="row my-row5 clearfix">
+								<div class="col-md-7 column"></div>
+								
+								<div class="col-md-1 column">
+									<div id="arrow51">
+										<div class="arrow_five">
+											<img src="../images/arrow_45_right_botton.png" />
+										</div>
+									</div>
+								</div>
+								
+								<div class="col-md-1 column">
+									<div id="node11">
+										<div class="node_11">
+											<div id="PrescriptionStsNotify" class="circular context-menu-disabled"></div>
+										</div>
+										<div class="node_11_label"></div>
+									</div>
+								</div>
+											
+								<div class="col-md-1 column">		
+									<div id="arrow12">
+										<div class="arrow_12">
+											<img src="../images/arrow_right.png" />
+										</div>
+									</div>
+								</div>
+										
+								<div class="col-md-1 column">				
+									<div id="node13">
+										<div class="node_13">
+											<div id="MedicinesReceivd" class="circular context-menu-disabled"></div>
+										</div>
+										<div class="node_13_label"></div>
+									</div>
+								</div>
+							</div>	
+						</div>
+					</div>
+				</div>
+
+
+						<!-- NC Hospital / Auto checkin Notification -->
+						<div class="panel panel-default" id='autocheckinpanel'>
+							<div class="panel-heading" id='custompanelhead'>
+								<span id='autocheckinspan'> </span>
+							</div>
+
+							<div class="panel-body">
+
+
+								<form class="form-horizontal" role="form" method='POST'
+									id='autocheckinform'>
+									<div class="form-group">
+										<label for="inputEmail3" class="col-sm-4 control-label1 ">Select
+											Database</label>
+
+										<!-- Small button group -->
+										<div class="col-sm-4">
+											<select class="form-control" name='Database Name'>
+												<option>Local</option>
+												<option>CRM</option>
+												<option>AD</option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="inputEmail3" class="col-sm-4 control-label1 ">Select
+											Fields</label>
+
+										<!-- Small button group -->
+
+										<div class="col-sm-4">
+											<select class="form-control" name='FieldName' id='Field Name'>
+												<option>Hospital</option>
+											</select>
+										</div>
+									</div>
+
+									<div class="form-group">
+										<label for="inputEmail3" class="col-sm-4 control-label1">Select
+											Font Style</label>
+										<!-- Small button group -->
+										<div class="col-sm-4">
+											<select class="form-control" name='FontsName'>
+												<option>Arial</option>
+												<option>Calibri</option>
+
+
+											</select>
+										</div>
+									</div>
+
+
+									<div class="form-group">
+										<label for="inputEmail3" class="col-sm-4 control-label1">Select
+											Notification Type</label>
+										<!-- Small button group -->
+										<div class="col-sm-4">
+											<select class="form-control" name='NotificationType'>
+												<option>Push</option>
+												<option>SMS</option>
+												<option>Email</option>
+
+											</select>
+										</div>
+									</div>
+
+
+									<div class="form-group">
+										<label for="inputEmail3" class="col-sm-4 control-label1">Message
+											Text</label>
+										<!-- Small button group -->
+										<div class="col-sm-4">
+											<textarea class="form-control" rows="3" cols="43"
+												name='Message'></textarea>
+										</div>
+									</div>
+
+
+									<div class="form-group">
+
+										<div class="col-sm-offset-3 col-sm-3 custom-modified">
+											<button type="button" class="btn btn-default customsave conformationbutton" >Save</button>
+											<button type="reset" class="btn btn-default customsave resetbutton">Cancel</button>
+										</div>
+
+									</div>
+
+
+								</form>
+
+
+
+							</div>
+
+						</div>
+
+
+						<!-- NC Hospital / Personalized Welcome -->
+						<div class="panel panel-default" id='personalizedwelcomepanel'>
+							<div class="panel-heading" id='custompanelhead'>
+								<span id='personalizedwelcomespan'></span>
+							</div>
+
+							<div class="panel-body">
+
+
+								<form class="form-horizontal" role="form" method='POST'
+									id='personalizedwelcomeform'>
+									<div class="form-group">
+										<label for="inputEmail3" class="col-sm-4 control-label1 ">Select
+											Database</label>
+
+										<!-- Small button group -->
+										<div class="col-sm-4">
+											<select class="form-control" name='Database Name'>
+												<option>Local</option>
+												<option>CRM</option>
+												<option>AD</option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="inputEmail3" class="col-sm-4 control-label1 ">Select
+											Fields</label>
+
+										<!-- Small button group -->
+
+										<div class="col-sm-4">
+											<select class="form-control" name='Patient Name'>
+												<option>Name</option>
+											</select>
+										</div>
+
+										<div class="col-sm-4">
+											<select class="form-control" name='Appointment Details'>
+												<option>Appointment Details</option>
+											</select>
+										</div>
+									</div>
+
+									<div class="form-group">
+										<label for="inputEmail3" class="col-sm-4 control-label1">Select
+											Font Style</label>
+										<!-- Small button group -->
+										<div class="col-sm-4">
+											<select class="form-control" name='Font Style'>
+												<option>Arial</option>
+												<option>Calibri</option>
+											</select>
+										</div>
+									</div>
+
+
+									<div class="form-group">
+										<label for="inputEmail3" class="col-sm-4 control-label1">Select
+											Notification Type</label>
+										<!-- Small button group -->
+										<div class="col-sm-4">
+											<select class="form-control" name='Notification Type'>
+												<option>Push</option>
+												<option>SMS</option>
+												<option>Email</option>
+
+											</select>
+										</div>
+									</div>
+
+
+									<div class="form-group">
+										<label for="inputEmail3" class="col-sm-4 control-label1">Message
+											Text</label>
+										<!-- Small button group -->
+										<div class="col-sm-4">
+											<textarea class="form-control" rows="3" cols="43"
+												name='Message'></textarea>
+										</div>
+									</div>
+
+
+
+
+
+
+
+									<div class="form-group">
+
+										<div class="col-sm-offset-3 col-sm-3 custom-modified">
+											<button type="button" class="btn btn-default customsave conformationbutton">Save</button>
+											<button type="reset" class="btn btn-default customsave resetbutton">Cancel</button>
+										</div>
+
+									</div>
+
+
+								</form>
+
+
+
+							</div>
+
+						</div>
+
+
+						<!-- NC Hospital / Patient Scheduler System -->
+						<div class="panel panel-default" id='patientschedularlistpanel'>
+							<div class="panel-heading" id='custompanelhead'>
+								<span id='patientschedularlistspan'></span>
+							</div>
+
+							<div class="panel-body">
+								<form class="form-horizontal" role="form" method='POST'
+									id='patientschedularlistform'>
+									<div class="form-group">
+										<label for="inputEmail3" class="col-sm-4 control-label1 ">Select
+											Patient Scheduler System</label>
+
+										<!-- Small button group -->
+										<div class="col-sm-3 customsmallcol">
+											<select class="form-control" name='Patient Schedular Name'>
+												<option>Cerner</option>
+												<option>Epic</option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="inputEmail3" class="col-sm-4 control-label1 ">Select
+											Patient Data</label>
+
+										<!-- Small button group -->
+
+										<div class="col-sm-3 customsmallcol">
+											<select class="form-control" name='Patient Name'>
+												<option>Name</option>
+
+
+											</select>
+										</div>
+										<div class="col-sm-1 customsmallselect">
+											<select class="form-control" name='sex'>
+												<option>Sex</option>
+												<option>Male</option>
+												<option>Female</option>
+
+
+
+											</select>
+										</div>
+										<div class="col-sm-1 customsmallselect">
+											<select class="form-control" name='Age'>
+												<option>Age</option>
+
+
+
+											</select>
+										</div>
+										<div class="col-sm-3">
+											<select class="form-control" name='Insurance Provider'>
+												<option>Insurance Provider</option>
+											</select>
+										</div>
+									</div>
+
+									<div class="form-group">
+										<label for="inputEmail3" class="col-sm-4 control-label1">Select
+											Appointment Data</label>
+										<!-- Small button group -->
+										<div class="col-sm-3 customsmallcol">
+											<select class="form-control" name='Doctors Name'>
+												<option>Doctor's Name</option>
+											</select>
+										</div>
+
+										<div class="col-sm-3 customsmallcol">
+											<select class="form-control" name='Department'>
+												<option>Department</option>
+											</select>
+										</div>
+
+
+										<div class="col-sm-3 customsmallcol">
+												<div class='input-group date' id='appointmentdate'>
+												<input type='text' class="form-control" name='Appointment Date' />
+												<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+												</span>
+												</div>
+										</div>
+
+
+
+									</div>
+
+
+									<div class="form-group">
+
+										<div class="col-sm-offset-3 col-sm-3 custom-modified">
+											<button type="button" class="btn btn-default customsave conformationbutton">Save</button>
+											<button type="reset" class="btn btn-default customsave resetbutton">Cancel</button>
+										</div>
+
+									</div>
+
+
+								</form>
+							</div>
+						</div>
+
+
+						<!-- NC Hospital / Patient Arrival Notification to Doctor-->
+						<div class="panel panel-default"
+							id='patientarrivalnotificationtodoctorpanel'>
+							<div class="panel-heading" id='custompanelhead'>
+								<span id='patientarrivalnotificationtodoctorspan'></span>
+							</div>
+
+							<div class="panel-body">
+								<form class="form-horizontal" role="form" method='POST'
+									id='patientarrivalnotificationtodoctorform'>
+									<div class="form-group">
+										<label for="inputEmail3" class="col-sm-4 control-label1 ">Select
+											Database</label>
+
+										<!-- Small button group -->
+										<div class="col-sm-4">
+											<select class="form-control" name='Database Name'>
+												<option>Local</option>
+												<option>CRM</option>
+												<option>AD</option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="inputEmail3" class="col-sm-4 control-label1 ">Select
+											Fields</label>
+
+										<!-- Small button group -->
+
+										<div class="col-sm-4">
+											<select class="form-control" name='PatientName'>
+												<option>Patient Name</option>
+
+											</select>
+										</div>
+
+										<div class="col-sm-4">
+											<select class="form-control" name='Appointment Details'>
+												<option>Appointment Details</option>
+
+											</select>
+										</div>
+									</div>
+
+									<div class="form-group">
+										<label for="inputEmail3" class="col-sm-4 control-label1">Select
+											Font Style</label>
+										<!-- Small button group -->
+										<div class="col-sm-4">
+											<select class="form-control" name='Fonts Style'>
+												<option>Arial</option>
+												<option>Calibri</option>
+
+											</select>
+										</div>
+
+									</div>
+
+
+									<div class="form-group">
+										<label for="inputEmail3" class="col-sm-4 control-label1">Select
+											Notification Type</label>
+										<!-- Small button group -->
+										<div class="col-sm-4">
+											<select class="form-control" name='Notification Type'>
+												<option>Push</option>
+												<option>SMS</option>
+												<option>Email</option>
+
+											</select>
+										</div>
+
+									</div>
+
+
+									<div class="form-group">
+										<label for="inputEmail3" class="col-sm-4 control-label1">Message
+											Text</label>
+										<!-- Small button group -->
+										<div class="col-sm-4">
+											<textarea class="form-control" rows="3" cols="43"
+												name='Message'></textarea>
+										</div>
+									</div>
+
+
+
+
+
+
+									<div class="form-group">
+
+										<div class="col-sm-offset-3 col-sm-3 custom-modified">
+											<button type="button" class="btn btn-default customsave conformationbutton">Save</button>
+											<button type="reset" class="btn btn-default customsave resetbutton">Cancel</button>
+										</div>
+
+									</div>
+
+
+								</form>
+							</div>
+
+						</div>
+
+
+
+
+
+						<!-- NC Hospital / Appointment and Wait time Notification -->
+						<div class="panel panel-default"
+							id='appointmentwaittimenotificationpanel'>
+							<div class="panel-heading" id='custompanelhead'>
+								<span id='appointmentwaittimenotificationspan'>
+									</span>
+							</div>
+
+							<div class="panel-body">
+								<form class="form-horizontal" role="form" method='POST'
+									id='appointmentwaittimenotificationform'>
+									<div class="form-group">
+										<label for="inputEmail3" class="col-sm-4 control-label1 ">Select
+											Database</label>
+
+										<!-- Small button group -->
+										<div class="col-sm-4">
+											<select class="form-control" name='Database Name'>
+												<option>Local</option>
+												<option>CRM</option>
+												<option>AD</option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="inputEmail3" class="col-sm-4 control-label1 ">Select
+											Fields</label>
+
+										<!-- Small button group -->
+
+										<div class="col-sm-3 customsmallcol">
+											<select class="form-control" name='Patient Name'>
+												<option>Name</option>
+
+
+											</select>
+										</div>
+										<div class="col-sm-3 customsmallcol">
+											<select class="form-control" name='Appointment Details'>
+												<option>Appointment Details</option>
+
+											</select>
+										</div>
+
+										<div class="col-sm-3 customsmallcol">
+												<div class='input-group date' id='appointmentwaittime'>
+												<input type='text' class="form-control" name='WaitTime' />
+												<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+												</span>
+												</div>
+										</div>
+										
+										
+										
+										
+									
+
+
+									</div>
+
+									<div class="form-group">
+										<label for="inputEmail3" class="col-sm-4 control-label1">Select
+											Font Style</label>
+										<!-- Small button group -->
+										<div class="col-sm-4">
+											<select class="form-control" name='Fonts Style'>
+												<option>Arial</option>
+												<option>Calibri</option>
+											</select>
+										</div>
+
+									</div>
+
+
+									<div class="form-group">
+										<label for="inputEmail3" class="col-sm-4 control-label1">Select
+											Notification Type</label>
+										<!-- Small button group -->
+										<div class="col-sm-4">
+											<select class="form-control" name='Notification Type'>
+												<option>Push</option>
+												<option>SMS</option>
+												<option>Email</option>
+											</select>
+										</div>
+
+									</div>
+
+
+									<div class="form-group">
+										<label for="inputEmail3" class="col-sm-4 control-label1">Message
+											Text</label>
+										<!-- Small button group -->
+										<div class="col-sm-4">
+											<textarea class="form-control" rows="3" cols="43"
+												name='Message'></textarea>
+										</div>
+									</div>
+
+									<div class="form-group">
+
+										<div class="col-sm-offset-3 col-sm-3 custom-modified">
+											<button type="button" class="btn btn-default customsave conformationbutton">Save</button>
+											<button type="reset" class="btn btn-default customsave resetbutton">Cancel</button>
+										</div>
+
+									</div>
+
+								</form>
+							</div>
+
+
+						</div>
+
+
+
+
+
+						<!--  NC Hospital / Pharmacy System -->
+						<div class="panel panel-default" id='pharmacysystempanel'>
+							<div class="panel-heading" id='custompanelhead'>
+								<span id='pharmacysystemspan'></span>
+							</div>
+
+							<div class="panel-body">
+								<form class="form-horizontal" role="form" method='POST'
+									id='pharmacysystemform'>
+									<div class="form-group">
+										<label for="inputEmail3" class="col-sm-3 control-label1">Select
+											Pharmacy System</label>
+
+										<!-- Small button group -->
+										<div class="col-sm-4">
+											<select class="form-control" name='Pharmacy System'>
+												<option>Cerner</option>
+												<option>Epic</option>
+											</select>
+										</div>
+									</div>
+
+
+									<div class="form-group">
+										<label for="inputEmail3" class="col-sm-4 control-label1 ">Select
+											Patient Data</label>
+
+										<!-- Small button group -->
+
+										<div class="col-sm-3 customsmallcol">
+											<select class="form-control" name='Patient Name'>
+												<option>Name</option>
+
+
+											</select>
+										</div>
+										<div class="col-sm-1 customsmallselect">
+											<select class="form-control" name='sex'>
+												<option>Sex</option>
+												<option>Male</option>
+												<option>Female</option>
+
+
+
+											</select>
+										</div>
+										<div class="col-sm-1 customsmallselect">
+											<select class="form-control" name='Age'>
+												<option>Age</option>
+
+
+
+											</select>
+										</div>
+										<div class="col-sm-3 customsmallcol">
+											<select class="form-control" name='Insurance Provider'>
+												<option>Insurance Provider</option>
+												<option>Insurance Provider</option>
+
+
+											</select>
+										</div>
+									</div>
+
+									<div class="form-group">
+										<label for="inputEmail3" class="col-sm-3 control-label1">Select
+											Prescription Data</label>
+										<!-- Small button group -->
+										<div class="col-sm-3 customsmallcol">
+											<select class="form-control" name='PrescriptionData'>
+												<option>Medicine</option>
+											</select>
+										</div>
+
+										<div class="col-sm-3 customsmallcol">
+											<select class="form-control" name='duration'>
+												<option>Duration</option>
+											</select>
+										</div>
+
+
+										<div class="col-sm-3 customsmallcol">
+												<div class='input-group date' id='pharamacySystemtime'>
+												<input type='text' class="form-control"  name='Appointment Time'/>
+												<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+												</span>
+												</div>
+										</div>
+
+									</div>
+
+
+
+
+
+									<div class="form-group">
+
+										<div class="col-sm-offset-3 col-sm-3 custom-modified">
+											<button type="button" class="btn btn-default customsave conformationbutton">Save</button>
+											<button type="reset" class="btn btn-default customsave resetbutton">Cancel</button>
+										</div>
+
+									</div>
+
+
+								</form>
+							</div>
+
+						</div>
+
+
+
+
+
+						<!-- NC Hospital / Prescription and Status Notification -->
+						<div class="panel panel-default"
+							id='prescriptionstatusnotificationpanel'>
+							<div class="panel-heading" id='custompanelhead'>
+								<span id='prescriptionstatusnotificationspan'></span>
+							</div>
+
+							<div class="panel-body">
+								<form class="form-horizontal" role="form" method='POST'
+									id='prescriptionstatusnotificationform'>
+									<div class="form-group">
+										<label for="inputEmail3" class="col-sm-4 control-label1 ">Select
+											Database</label>
+
+										<!-- Small button group -->
+										<div class="col-sm-4">
+											<select class="form-control" name='Patient Schedular Name'>
+												<option>Local</option>
+												<option>CRM</option>
+												<option>AD</option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="inputEmail3" class="col-sm-4 control-label1 ">Select
+											Fields</label>
+
+										<!-- Small button group -->
+
+										<div class="col-sm-3 customsmallcol">
+											<select class="form-control" name='Patient Name'>
+												<option>Name</option>
+
+
+											</select>
+										</div>
+										<div class="col-sm-3 customsmallcol">
+											<select class="form-control" name='Appointment Details'>
+												<option>Appointment Details</option>
+
+											</select>
+										</div>
+
+										<div class="col-sm-2">
+											<select class="form-control" name='Status'>
+												<option>Status</option>
+
+											</select>
+										</div>
+
+
+									</div>
+
+									<div class="form-group">
+										<label for="inputEmail3" class="col-sm-4 control-label1">Select
+											Font Style</label>
+										<!-- Small button group -->
+										<div class="col-sm-4">
+											<select class="form-control" name='Fonts Style'>
+												<option>Arial</option>
+												<option>Calibri</option>
+											</select>
+										</div>
+
+									</div>
+
+
+									<div class="form-group">
+										<label for="inputEmail3" class="col-sm-4 control-label1">Select
+											Notification Type</label>
+										<!-- Small button group -->
+										<div class="col-sm-4">
+											<select class="form-control" name='Notification Type'>
+												<option>Push</option>
+												<option>SMS</option>
+												<option>Email</option>
+											</select>
+										</div>
+
+									</div>
+
+
+									<div class="form-group">
+										<label for="inputEmail3" class="col-sm-4 control-label1">Message
+											Text</label>
+										<!-- Small button group -->
+										<div class="col-sm-4">
+											<textarea class="form-control" rows="3" cols="43"
+												name='Message'></textarea>
+										</div>
+									</div>
+
+									<div class="form-group">
+
+										<div class="col-sm-offset-3 col-sm-3 custom-modified">
+											<button type="button" class="btn btn-default customsave conformationbutton">Save</button>
+											<button type="reset" class="btn btn-default customsave resetbutton">Cancel</button>
+										</div>
+
+									</div>
+
+								</form>
+							</div>
+
+
+						</div>
+
+
+
+
+
+
+					</div>
+
+				</div>
+
+
+
+
+			</div>
+
+
+		</div>
+	</div>
+
+
+
+<!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="../js_boot/bootstrap.min.js"></script>
+		<script src="../js_boot/moment.js"></script>
+		<script src="../js_boot/bootstrap-datetimepicker.min.js"></script>
+		<!--<script type="text/javascript">
+				$(function () {
+						$('#start').datetimepicker();
+				});
+		</script>-->
+
+</body>
+</html>
+
+
+
+

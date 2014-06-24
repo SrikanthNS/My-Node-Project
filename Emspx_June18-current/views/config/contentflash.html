@@ -1,0 +1,121 @@
+<!--<h4 class="page-header" style="margin-top:5px;">Image Gallery<h4>-->
+<div class="page-header">
+	<h4>&nbsp; Content Flash </h4>
+</div>						
+		<ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+			<li class="active" ><a href="#addContentFlash" data-toggle="tab" >New Content Flash Config</a></li>
+			<li ><a href="#viewContentFlash" data-toggle="tab" class="viewTable" id="contentFlash_contentFlashTable">View Content Flash Config</a></li>
+		</ul>
+	<div  class="tab-content">
+		<div class="tab-pane active" id="addContentFlash">
+			<br />
+			<div class="row">
+				<div class="componentConfigForm col-md-6" id="ContentFlash_createContentFlashConfiguration">
+                    <form role="form" data-toggle="validator" class="formConfig" id="saveContentFlashConfig">
+						<div class="input-group form-group">
+							<span class="input-group-addon">Content Type</span>
+								<select class="form-control" id="contentFlashInfoSelection">
+								<option value="select">Select Content Type</option>
+								<option value="Info1">Images</option>
+								<option value="Info2">RSS</option>
+								</select>
+						</div>
+							
+								
+											<div class="input-group form-group">
+												<span class="input-group-addon">Content URL</span>
+												<input type="URL" class="form-control" placeholder="Content URL" id="contentFlashURL" required=" " title="Please provide url: http:// https://">
+									
+										   </div>
+									
+								
+									
+										    <div class="input-group form-group">
+												<span class="input-group-addon">Content Flash Height</span>
+												<input type="text" class="form-control" placeholder="Content Flash Height" id="contentFlashHeight" required=" " title="Please provide height in number format">
+										    </div>
+									    
+								
+
+
+									
+									
+									    <div class="input-group form-group">
+												<span class="input-group-addon">Content Flash Width</span>
+												<input type="text" class="form-control" placeholder="Content Flash Width" id="contentFlashWidth" required=" " title="Please provide width in number format">
+										
+										</div>
+								
+
+									
+									<div class="input-group form-group">
+											<span class="input-group-addon">Autoplay</span>
+												<select class="form-control" id="contentFlashGalleryAutoselection">
+													<option value="select">Select Option</option>
+													<option value="Info1">true</option>
+													<option value="Info2">false</option>
+												</select>
+														
+									</div>
+
+
+  						<span><button type="submit" class="btn btn-default btn-primary add-tab saveBtn" >Save</button>
+						<button type="submit" class="btn btn-primary add-tab cancelBtn" >Cancel</button>
+						</span>
+					</form>
+				</div>
+			</div>	
+		</div>	
+			<div class="tab-pane" id="viewContentFlash">
+				<div class="modal fade configurationUpdateModal"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				    <div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h4 class="modal-title" id="myModalLabel">Modal title</h4>
+							</div>
+						    <div class="modal-body configurationUpdateModalContent">
+							this is the content
+						    </div>	
+						    <div class="modal-footer">
+							<button type="submit" class="btn btn-default" data-dismiss="modal">Close</button>
+							<button type="button" class="btn btn-primary modalUpdateButton">Save changes</button>
+						    </div>
+						</div>
+				    </div>
+				</div>
+				<div class="col-md-12 configDataTable">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Content Flash
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover" id="contentFlashTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Content Type</th>
+                                            <th>Content URL</th>
+                                            <th>Content Flash Height</th>
+                                            <th>Content Flash Width</th>
+											<th>AutoPlay</th>
+											<th>Update</th>
+											<th>Delete</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>			
+			</div>
+	</div>	
+			                <script src="../bootstrap-validator/js/validator.js"></script>								
+							<script src="../js/ComponentConfig.js"></script>		

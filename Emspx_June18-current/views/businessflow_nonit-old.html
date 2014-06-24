@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="../css/style.css" />
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.1/jquery.min.js"></script>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="../js/jquery.js" type="text/javascript"></script>
+<script src="../js/jquery.contextmenu.js" type="text/javascript"></script>
+<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<script type='text/javascript' src='../js/jquery.simplemodal.js'></script>
+<script type='text/javascript' src='../js/basic.js'></script>
+<link href="../css/jquery.contextMenu.css" rel="stylesheet" type="text/css" /> 
+<link type='text/css' href='../css/demo.css' rel='stylesheet' media='screen' /> 
+<link type='text/css' href='../css/basic.css' rel='stylesheet' media='screen' />
+<style>
+
+
+</style>
+
+<script type="text/javascript">
+
+function isEmpty(str) {
+    return (!str || 0 === str.length);
+}
+
+function isBlank(str) {
+    return (!str || /^\s*$/.test(str));
+}
+
+function closeWin(){
+	window.location.reload();
+		$('#simplemodal-container').hide();
+}
+var username = window.location.search.substring(1);
+var defaultWFDetails = {};
+$(window).load(function() {
+	  $.ajax({
+	      type: "GET",
+	      //url: "http://152.48.2.245:3050/retrieveKitNames",
+	      url: "http://152.48.2.245:80/retrieveDefaultWFKitNames",
+	      dataType: "json",
+	      async:false,
+	      success: function (data) {
+	    	  console.log(data);
+	    	  var result = JSON.stringify(data);
+	    	  var result1=JSON.parse(result);
+	    	  defaultWFDetails = result1;
+	    	  if (result1.statusCode == 200){
+	    	  $.each(result1.kitItems,function(i){
+					$(".kitName").append('<li class="WFName" id="DWF"><a id="selected" href="#">'+result1.kitItems[i].kitName+'</a></li>');
+	    	  });
+	    	  }
+	      }
+	  });
+	  
+	  ///Saving the default workflow details into modified solution kit collection
+	  $.each(defaultWFDetails.kitItems,function(i){
+	  	$.ajax({
+	 		type: "PUT",
+    		//url: "http://152.48.2.245:3050/saveData",
+    		url: "http://152.48.2.245:80/saveDWFDetailsIntoMSK",
+    		dataType: "json",
+    		async:false,
+    		data:defaultWFDetails.kitItems[i],
+     		success: function (data) {
+  				console.log(data);
+    		}
+    
+ 		});
+	  });
+	  $(".kitName li").remove();
+	  $.ajax({
+	      type: "GET",
+	      //url: "http://152.48.2.245:3050/retrieveKitNames",
+	      url: "http://152.48.2.245:80/retrieveModifiedWFKitNames/DWF",
+	      dataType: "json",
+	      async:false,
+	      success: function (data) {
+	    	  console.log(data);
+	    	  var result = JSON.stringify(data);
+	    	  var result1=JSON.parse(result);
+	    	  if (result1.statusCode == 200){
+	    	  $.each(result1.kitItems,function(i){
+	    		  $(".kitName").append('<li class="WFName" id="DWF"><a id="selected" href="#">'+result1.kitItems[i].kitName+'</a></li>');
+	    	  });
+	      	  }
+	      }
+	  });
+	  
+  $.ajax({
+	      type: "GET",
+	      //url: "http://152.48.2.245:3050/retrieveKitNames",
+	      url: "http://152.48.2.245:80/retrieveModifiedWFKitNames/MWF",
+	     dataType: "json",
+	      async:false,
+	    success: function (data) {
+	    	  console.log(data);
+	   	  var result = JSON.stringify(data);
+	    	  var result1=JSON.parse(result);
+	    	  if (result1.statusCode == 200){
+	    	  $.each(result1.kitItems,function(i){
+					$(".kitName").append('<li class="WFName" id="MWF"><a id="selected" href="#">'+result1.kitItems[i].kitName+'</a></li>');
+	    	 });
+	      	  }
+	     }
+	  }); 
+	  
+	 
+		   //$(".kitName li").children('a:first').css('background-color','red');
+	//  $(".kitName li").children('a:first').click();
+	
+	
+	   $.ajax({
+	      type: "GET",
+	      //url: "http://152.48.2.245:3050/retrieveKitNames",
+	      url: "http://152.48.2.245:80/retrieveComponentList",
+	      dataType: "json",
+	      async:false,
+	      success: function (data) {
+	    	  console.log(data);
+	    	  var result = JSON.stringify(data);
+	    	  var result1=JSON.parse(result);
+			
+			  $.each(result1.component,function(i){
+				if (result1.component[i].componentName == 'patient'){
+					$("#patient").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat;"></div>' +
+									' <p id="pat1">'+result1.component[i].title+'</p>');
+				} else if (result1.component[i].componentName == 'cerner'){
+					$("#cerner").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat; margin-top:3px; margin-left:4px;"></div>' +
+									' <p id="pat2">'+result1.component[i].title+'</p>');
+				} if (result1.component[i].componentName == 'welcome'){
+					$("#welcome").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat; margin-top:12px; margin-left:4px;"></div>' +
+									' <p id="pat21">'+result1.component[i].title+'</p>');
+				} if (result1.component[i].componentName == 'arrival'){
+					$("#arrival").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat; margin-top:-4px; margin-left:3px;"></div>' +
+									' <p id="pat3">'+result1.component[i].title+'</p>');
+				} if (result1.component[i].componentName == 'wayfinder'){
+					$("#wayfinder").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat; margin-top:2px; margin-left:2px;"></div>' +
+									' <p id="pat31">'+result1.component[i].title+'</p>');
+				} if (result1.component[i].componentName == 'doctor'){
+					$("#doctor").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat; margin-top:-3px;"></div>' +
+									' <p id="pat4">'+result1.component[i].title+'</p>');
+				} if (result1.component[i].componentName == 'wayfinder1'){
+					$("#wayfinder1").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat; margin-top:2px; margin-left:2px;"></div>' +
+									' <p id="pat32">'+result1.component[i].title+'</p>');
+				}
+			  });
+	      }
+	  }); 
+	  
+	
+	  
+	  
+
+
+      	  
+	  
+	});
+
+$(document).ready(function() {
+	imageJson = {};
+	function createJSON() {
+		var images = new Array();
+	    jsonObj = [];
+	    $(".circular").each(function() {
+	        var id = $(this).attr("id");
+	        	//alert(id);
+	        	images.push(id);
+	     });
+	     var kitname = document.getElementById("kitname").value; 
+		 var description = document.getElementById("description").value;
+	     imageJson.kitName=kitname;
+	     imageJson.description=description;
+	     imageJson.images=images;
+		 return imageJson;
+	  }
+	  
+		var result1 = {};
+		var kitImg = [];
+		var kitDetails = {};
+		var typeWF, kitNm, kitDesc;
+	$('.kitName').on('click', '.WFName', function () { 
+		$("#modify").removeAttr("disabled");
+		$("#modify").stop().fadeTo("",1);
+		$('#kitname').val('');
+		$('#description').val('');
+		$(".kitName li a").removeClass('selected');
+		$(this).children().addClass('selected');
+		$(".circular").addClass('context-menu-disabled');
+		$(".child_one").hide();
+		$(".child_two_top").hide();
+		$(".child_three_top").hide();
+		$(".child_two_bottom").hide();
+		$(".child_three_bottom").hide();
+		$(".child_four_top").hide();
+		$(".child_five_top").hide();
+		$(".child_four_bottom").hide();
+		$(".child_five_bottom").hide();
+		$(".child_six").hide();
+		$(".child_seven").hide();
+		$(".child_two_bottom1").hide();
+		$(".child_three_bottom1").hide();
+		  var title = $(this).text();
+		  $('.titlec').text(title);
+		  
+		  typeWF = $(this).attr("id");
+
+		  $.ajax({
+	      type: "GET",
+	      //url: "http://152.48.2.245:3050/retrieveKitNames",
+	      url: "http://152.48.2.245:80/retrieveKitDetails/"+title,
+	      dataType: "json",
+	      async:false,
+	      success: function (data) {
+	    	  var result = JSON.stringify(data);
+	    	  result1=JSON.parse(result);
+			  var kitImages = result1.images;
+			  kitImg = result1.images;
+			  kitNm = result1.kitName;
+			  kitDesc = result1.description;
+			  $.each(kitImages,function(i){
+				if (kitImages[i] == 'patient'){
+					$(".child_one").show();
+					//kitImageArray.push(kitImages[i]);
+				} else if (kitImages[i] == 'cerner') {
+					$(".child_two_top").show();
+					$(".child_three_top").show();
+					//kitImageArray.push(kitImages[i]);
+				} else if (kitImages[i] == 'welcome') {
+					$(".child_two_bottom").show();
+					$(".child_three_bottom").show();
+					//kitImageArray.push(kitImages[i]);
+				} else if (kitImages[i] == 'arrival') {
+					$(".child_four_top").show();
+					$(".child_five_top").show();
+					//kitImageArray.push(kitImages[i]);
+				} else if (kitImages[i] == 'wayfinder') {
+					$(".child_four_bottom").show();
+					$(".child_five_bottom").show();
+					//kitImageArray.push(kitImages[i]);
+				} else if (kitImages[i] == 'doctor') {
+					$(".child_six").show();
+					$(".child_seven").show();
+					//kitImageArray.push(kitImages[i]);
+				} else if (kitImages[i] == 'wayfinder1') {
+					$(".child_two_bottom1").show();
+					$(".child_three_bottom1").show();
+					//kitImageArray.push(kitImages[i]);
+				}
+			  });
+	      }
+	  });
+		   
+	});
+	
+	$("#modify").click(function(){
+		$(".circular").removeClass('context-menu-disabled');
+		$("#modify").attr("disabled", true);
+		$("#modify").fadeTo("",0.5);
+		if (typeWF == "DWF"){
+			$('#kitname').val('Copy of '+result1.kitName);
+			$('#description').val(result1.description);
+		} else if (typeWF == "MWF") {
+			$('#kitname').val(result1.kitName);
+			$('#description').val(result1.description);
+		}
+		
+	});
+	
+	//Accordion Menus
+	$(function() {
+    	$( "#accordion" ).accordion();
+    });
+	
+    //Left Slide Toggle
+	$(".trigger").click(function() {
+		  $(".leftcontainer").toggle("left");
+			$(this).toggleClass("active");
+			//$("#patient").css({"height" : "200px"});
+	  		return false;
+	  		
+	 });
+	 	
+	 //Header Menu Highlighting
+     var str = location.href.toLowerCase();
+	 $(".navigation li a").each(function() {
+		if (str.indexOf(this.href.toLowerCase()) > -1) {
+			$("li.highlight").removeClass("highlight");
+			$(this).parent().addClass("highlight");
+		}
+	 });
+	 //Header Menu Highlighting -HealthCare
+	 var str_health = location.href.toLowerCase();
+	 $(".navigation_healthcare li a").each(function() {
+		if (str_health.indexOf(this.href.toLowerCase()) > -1) {
+			$("li.highlight").removeClass("highlight");
+			$(this).parent().addClass("highlight");
+		}
+	 });
+	 
+	 $("#savebutton").click(function(){
+		kitDetails.kitName = $('#kitname').val();
+		kitDetails.description = $('#description').val();
+		kitDetails.images = kitImg;
+		var isValid = true;
+		$('input[type="text"]').each(function() {
+			if ($.trim($(this).val()) == '') {
+				isValid = false;
+				$(this).css({ "border": "1px solid red", "background": "#FFCECE"});
+			} else {
+				$(this).css({"border": "","background": ""  });
+			}
+		});
+		$('#kitname').val('');
+		$('#description').val('');
+		$(".kitName li").remove();
+		
+		if(kitDetails.kitName.length>0) {
+			if(typeWF == "DWF"){
+		 //var imageJson=createJSON();
+		 		$.ajax({
+			 		type: "POST",
+		      		//url: "http://152.48.2.245:3050/saveData",
+		      		url: "http://152.48.2.245:80/saveModifiedWF",
+		      		dataType: "json",
+		      		async:false,
+		      		data:kitDetails,
+		       		success: function (data) {
+		    		console.log(data);
+		      	}
+		      
+		   	}); 
+			} else if (typeWF == "MWF"){
+				$.ajax({
+			 		type: "PUT",
+		      		//url: "http://152.48.2.245:3050/saveData",
+		      		url: "http://152.48.2.245:80/saveModifiedWF1/"+kitNm,
+		      		dataType: "json",
+		      		async:false,
+		      		data:kitDetails,
+		       		success: function (data) {
+		    		console.log(data);
+		      	}
+		      
+		   	});
+			}
+	    }
+		
+		$.ajax({
+		      type: "GET",
+		      //url: "http://152.48.2.245:3050/retrieveKitNames",
+		      url: "http://152.48.2.245:80/retrieveModifiedWFKitNames/DWF",
+		      dataType: "json",
+		      async:false,
+		      success: function (data) {
+		    	  console.log(data);
+		    	  var result = JSON.stringify(data);
+		    	  var result1=JSON.parse(result);
+		    	  $.each(result1.kitItems,function(i){
+						$(".kitName").append('<li class="WFName" id="DWF"><a id="selected" href="#">'+result1.kitItems[i].kitName+'</a></li>');
+		    	  });
+		      }
+		  });
+		  
+		  $.ajax({
+		      type: "GET",
+		      //url: "http://152.48.2.245:3050/retrieveKitNames",
+		      url: "http://152.48.2.245:80/retrieveModifiedWFKitNames/MWF",
+		      dataType: "json",
+		      async:false,
+		      success: function (data) {
+		    	  console.log(data);
+		    	  var result = JSON.stringify(data);
+		    	  var result1=JSON.parse(result);
+		    	  $.each(result1.kitItems,function(i){
+						$(".kitName").append('<li class="WFName" id="MWF"><a id="selected" href="#">'+result1.kitItems[i].kitName+'</a></li>');
+		    	  });
+		      }
+		  });
+		  
+		 $(".kitName li a").each(function(){
+			 var kn =  $(this).text();
+			 if (kn === kitDetails.kitName){
+				 $(this).click();
+			 }
+		 });
+		 
+	});
+	 
+	 $("#configure").click(function(){
+		 result1.configStatus = "WAITINGTOCONFIGURE";
+			 $.ajax({
+		 		type: "PUT",
+	      		//url: "http://152.48.2.245:3050/saveData",
+	      		url: "http://152.48.2.245:80/sendForConfiguration",
+	      		dataType: "json",
+	      		async:false,
+	      		data:result1,
+	       		success: function (data) {
+	    		console.log(data);
+	    		if (data.statusCode == 201) {
+	    			alert('"'+result1.kitName+'" tool kit has been sent to administrator for configuration.');
+	    		}
+	      	}
+	   	});
+	});
+	 
+	 $("#cancel").click(function(){
+		$('#kitname').val('');
+		$('#description').val('');
+	});
+	 
+ $(function() {
+	 //Patient identified on Arrival
+	 $.contextMenu({
+		selector : "#patient",
+		callback : function(key, options) {	
+			if(key == "comp1") {
+				$(".child_two_top").show();
+				$(".child_three_top").show();
+				var a = 0;
+				$.each(kitImg, function(i){
+					if (kitImg[i] == "cerner"){
+						a++;
+					}
+				});
+				if (a == 0){
+					kitImg.push("cerner");
+				}
+			} else if(key == "comp2") {
+		 		$(".child_two_bottom").show();
+				$(".child_three_bottom").show();
+				var a = 0;
+				$.each(kitImg, function(i){
+					if (kitImg[i] == "welcome"){
+						a++;
+					}
+				});
+				if (a == 0){
+					kitImg.push("welcome");
+				}
+			}
+		},
+		items : {
+			"comp1" : {
+				name : "Cerner",
+				icon : "cut"
+			},
+			"comp2" : {
+				name : "Welcome",
+				icon : "cut1"
+			}
+		}
+	});
+	 
+	 //Cerner
+	 $.contextMenu({
+		selector : "#cerner",
+		callback : function(key, options) {	
+			if(key == "delete") {
+				$(".child_two_top").hide();
+				$(".child_three_top").hide();
+				$(".child_four_top").hide();
+				$(".child_five_top").hide();
+				$(".child_six").hide();
+				$(".child_seven").hide();
+				
+				var remarray = ["cerner","arrival","doctor"];
+				$.each(remarray, function(i){
+				var index = $.inArray(remarray[i], kitImg);
+				if (index>=0) {
+					kitImg.splice(index, 1);
+				}
+			});
+			//alert(kitImg);
+	   		} else if(key == "comp1") {
+	 			$(".child_five_top").show();
+				$(".child_four_top").show();
+				var a = 0;
+				$.each(kitImg, function(i){
+					if (kitImg[i] == "arrival"){
+						a++;
+					}
+				});
+				if (a == 0){
+					kitImg.push("arrival");
+				}			}
+		},
+		items : {
+			"delete" : {
+				name : "Delete",
+				icon : "delete"
+			},
+			"sep1" : "---------",
+			"comp1" : {
+				name : "Patient Arrival Notification",
+				icon : "cut"
+			}
+		}
+	});
+	 	
+	 // Patient Arrival Notification
+	 $.contextMenu({
+		selector : "#arrival",
+		callback : function(key, options) {
+			if(key == "delete") {
+	   			$(".child_four_top").hide();
+	   			$(".child_five_top").hide();
+	   			$(".child_six").hide();
+	   			$(".child_seven").hide();
+	   			
+	   			var remarray = ["arrival","doctor"];
+				$.each(remarray, function(i){
+				var index = $.inArray(remarray[i], kitImg);
+				if (index>=0) {
+					kitImg.splice(index, 1);
+				}
+			});
+	   		} else if (key == "comp1") {
+	  			$(".child_six").show();
+	  			$(".child_seven").show();
+	  			var a = 0;
+				$.each(kitImg, function(i){
+					if (kitImg[i] == "doctor"){
+						a++;
+					}
+				});
+				if (a == 0){
+					kitImg.push("doctor");
+				}
+	   		}
+		},
+		items : {
+				"delete" : {
+					name : "Delete",
+					icon : "delete"
+				},
+				"sep1" : "---------",
+				"comp1" : {
+					name : "Doctor",
+					icon : "cut"
+				}
+		}
+	});
+	
+	 // Doctor	
+	 $.contextMenu({
+		selector : "#doctor",
+		callback : function(key, options) {
+			//alert(result1.images[0]);
+			if(key == "delete") {
+				$(".child_six").hide();
+ 				$(".child_seven").hide();
+ 				var remarray = ["doctor"];
+				$.each(remarray, function(i){
+				var index = $.inArray(remarray[i], kitImg);
+				if (index>=0) {
+					kitImg.splice(index, 1);
+				}
+			});
+				
+ 			}
+		},
+		items : {
+			"delete" : {
+				name : "Delete",
+				icon : "delete"
+			}
+		}
+	});
+		
+	 //Welcome
+	 $.contextMenu({
+		selector : "#welcome",
+		callback : function(key, options) {
+			if(key == "delete") {
+				$(".child_two_bottom").hide();
+				$(".child_three_bottom").hide();
+				$(".child_four_bottom").hide();
+				$(".child_five_bottom").hide();
+				$(".child_two_bottom1").hide();
+			  	$(".child_three_bottom1").hide();
+			  	
+			  	var remarray = ["welcome","wayfinder","wayfinder1"];
+				$.each(remarray, function(i){
+				var index = $.inArray(remarray[i], kitImg);
+				if (index>=0) {
+					kitImg.splice(index, 1);
+				}
+			});
+			} else if(key == "comp1") {
+				$(".child_four_bottom").show();
+				$(".child_five_bottom").show();
+				var a = 0;
+				$.each(kitImg, function(i){
+					if (kitImg[i] == "wayfinder"){
+						a++;
+					}
+				});
+				if (a == 0){
+					kitImg.push("wayfinder");
+				}
+			} else if(key == "comp2") {
+				$(".child_two_bottom1").show();
+				$(".child_three_bottom1").show();
+				var a = 0;
+				$.each(kitImg, function(i){
+					if (kitImg[i] == "wayfinder1"){
+						a++;
+					}
+				});
+				if (a == 0){
+					kitImg.push("wayfinder1");
+				}
+			}
+		},
+		items : {
+			"delete" : {
+				name : "Delete",
+				icon : "delete"
+			},
+			"sep1" : "---------",
+			"comp1" : {
+				name : "Auto Check-in Notification",
+				icon : "cut"
+			},
+			"comp2" : {
+				name : "Wayfinder",
+				icon : "cut1"
+			}
+		}
+	});
+	 
+		//Auto Check-in Notification
+	 $.contextMenu({
+		selector : "#wayfinder",
+		callback : function(key, options) {
+			if(key == "delete") {	
+				$(".child_four_bottom").hide();
+				$(".child_five_bottom").hide();
+			}
+			var remarray = ["wayfinder"];
+			$.each(remarray, function(i){
+			var index = $.inArray(remarray[i], kitImg);
+			if (index>=0) {
+				kitImg.splice(index, 1);
+			}
+		});
+		},
+		items : {
+			"delete" : {
+				name : "Delete",
+				icon : "delete"
+			}
+		}
+	});
+		
+	// Wayfinder
+	 $.contextMenu({
+		selector : "#wayfinder1",
+		callback : function(key, options) {
+			if(key == "delete") {
+				$(".child_three_bottom1").hide();
+ 				$(".child_two_bottom1").hide();
+ 		  	}
+			var remarray = ["wayfinder1"];
+			$.each(remarray, function(i){
+			var index = $.inArray(remarray[i], kitImg);
+			if (index>=0) {
+				kitImg.splice(index, 1);
+			}
+		});
+		},
+		items : {
+			"delete" : {
+				name : "Delete",
+				icon : "delete"
+			}
+		}
+	});
+ }); 
+});
+</script>
+</head>
+<body>
+<header>
+
+
+	<div class="header_part">
+		<div id="banner_health">
+			<div id="cisco_logo_white"></div>
+			<div class="user_details">
+				<div class="user_image"></div>
+					<div class="user_name">Welcome <%= username %></div>
+				    <div class="logout" ><a href='/logout' id='logout'>Logout</a></div>
+				<div class="settings">Settings</div>
+			</div>
+		</div>
+		<nav>
+			<ul class="navigation_healthcare">
+			    <li><a href="/">Home</a></li>
+				<li><a href="#">Dashboard</a></li>
+				<li class="highlight"><a href='/businessworkflow'>Business Flow</a></li>
+				<li><a href="#">Status</a></li>
+				<li><a href="#">Reports</a></li>
+				
+			</ul>
+		</nav>
+	</div>
+</header>
+
+<div id="basic-modal-content">
+	<!--  <p>"NC Hospital" tool kit has been sent to administrator for configuration</p>-->
+	<!--  <input type="button" value="Close" onclick="closeWin()" class="closebt"> -->
+</div>
+	<div class="manincontainer">
+		<div class="leftcontainer">  <!--  Left Extendable Area -->
+			<div id="leftexpandablePanel" >
+				<div class="leftcont">    <!--  Left Extendble Panel -->
+					<div class="toolskit_healthcare">TOOL KITS</div>
+			 		<div class="leftnavgation">
+						<ul class="kitName">
+							<!--<li><a href="#">Patient Visitation Experience</a></li>-->
+							<!--  <li style=" background:#574c4c;"><a style="color:#fff" href="#">Physician and Care Team productivity</a></li>-->
+						</ul>
+					 </div>
+				</div>
+			</div>
+		</div>	
+		<div class="leftmenu">  
+				  <!-- cab  -->
+ 		    	<div id="leftnavshadowpanel"><a class="trigger" href="#"></a></div> 
+		  </div>
+		<div class="middlecontainer_steve">
+			<div class="leftm">
+       		<p class="titlec"></p>
+			</div>
+			<div class="center-panel">
+       		<div class="child_one">
+					<div id="patient" class="circular context-menu-disabled">
+						<!--<div class="timage" style="background: url('../images/patient.png') no-repeat"></div>
+							<p id="pat1">Patient identified on arrival</p>-->
+					</div>
+			</div>
+			<div class="child_two">
+					<div class="child_two_top">
+						<div class="child_two_top_temp">
+							<img width="70px" height="70px" src="../images/arrow_45_right.png" />
+						</div>
+					</div>
+					<div class="child_two_bottom">
+						<img width="70px" height="70px"	src="../images/arrow_45_right_botton.png" />
+					</div>
+			</div>
+			<div class="child_three">
+				<div class="child_three_top">
+					<div class="child_three_top_temp">
+						<div  id="cerner" class="circular context-menu-disabled">
+							<!--<div class="timage" style="background: url('../images/cerner.png') no-repeat; margin-top:3px; margin-left:4px;"></div>
+								<p id="pat2">Cerner</p>-->
+						</div>
+					</div>	
+				</div>
+				<div class="child_three_bottom_temp">
+					<div class="child_three_bottom">
+						<div id="welcome" class="circular context-menu-disabled">
+							<!--<div class="timage" style="background: url('../images/welcome.png') no-repeat; margin-top:12px; margin-left:4px;"></div>
+								<p id="pat21">Welcome</p>-->
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="child_four">
+				<div class="child_four_top">
+					<div class="child_four_top_temp">
+						<img width="70px" height="33px" src="../images/arrow_right.png" />
+					</div>
+				</div>
+				<div class="child_four_bottom">
+					<img width="70px" height="33px" src="../images/arrow_right.png" />
+				</div>
+				<div class="child_two_bottom1">
+					<!-- <img width="70px" height="33px" src="../images/arrow_right.png" />-->
+					<img width="70px" height="70px" src="../images/arrow_45_right_botton.png" />
+				</div>	
+			</div>
+			<div class="child_five">
+				<div class="child_five_top">
+					<div class="child_five_top_temp">
+						<div id="arrival" class="circular context-menu-disabled">
+							<!--<div class="timage" style="background: url('../images/arrival.png') no-repeat; margin-top:-4px; margin-left:3px;"></div>
+								<p id="pat3">Patient Arrival Notification</p>-->
+						</div>
+					</div>	
+				</div>
+				<div class="child_five_bottom">
+					<div id="wayfinder" class="circular context-menu-disabled">
+						<!--<div class="timage" style="background: url('../images/auto_checkin.png') no-repeat; margin-top:2px; margin-left:2px;"></div>
+							<p id="pat31">Auto Check-in Notification</p>-->
+					</div>
+				</div>
+				<div class="child_three_bottom1">
+					<div id="wayfinder1" class="circular context-menu-disabled">
+						<!--<div class="timage" style="background: url('../images/wayfinder.png') no-repeat; margin-top:2px; margin-left:2px;"></div>
+							<p id="pat32">Wayfinder</p>-->
+					</div>
+				</div>
+			</div>
+			
+			<div class="child_six">
+				<div class="child_six_top">
+					<div class="child_six_top_temp">
+						<img width="70px" height="33px" src="../images/arrow_right.png" />
+					</div>
+				</div>
+			</div>
+			<div class="child_seven">
+				<div class="child_seven_top">
+					<div class="child_seven_top_temp">
+						<div id="doctor" class="circular context-menu-disabled">
+							<!--<div class="timage" style="background: url('../images/doctor.png') no-repeat; margin-top:-3px;"></div>
+								<p id="pat4">Doctor</p>-->
+						</div>
+					</div>
+				</div>
+			</div>
+			</div>
+			<div class="submit_area">
+				<div class="submit_are" style=" float:right">
+					<div id="modifybtn">
+						<button class="saveb"  id="modify" style="color: white">Modify</button>
+					</div>
+						<!--<a href="#" class="savebt"  id="modify" style="color: white">Modify</a>
+					<div class="sendconfigbtn">-->
+						<!--<a href="#" class="cancelbt" style="color: white">Send for Configuration</a>-->
+						<button class="sendconfigbtn" id="configure" style="color: white">Send for Configuration</button>
+				</div>
+			</div>
+		</div>   
+		<div class="rightcontainer">
+			<form class="userform">
+				<div class="userpanel">
+					<label for="kitname" class="kitnmlabel">Kit Name</label>
+					<input type="text" id="kitname" placeholder="Enter Kitname" data-mini="true">
+					<label for="description" class="desclabel">Description</label>
+					<textarea id="description" class="kitname" rows="4" cols="5"></textarea>
+					<div class="buttonpanel">
+						<div id="savebutton">
+							<button class="savebtn" type="button" style="color: white">Save</button>
+						</div>
+						<div id="cancel">
+							<button class="cancelbtn" type="button" style="color: white">Cancel</button>
+					</div>
+				</div>
+			</form>
+		</div>
+    </div>
+</body>
+</html>

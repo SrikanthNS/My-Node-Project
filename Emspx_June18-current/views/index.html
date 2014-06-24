@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- Mobile viewport optimized: h5bp.com/viewport -->
+<meta name="viewport" content="width=device-width">
+<link rel="stylesheet" href="../css/style.css" /> 
+<link rel="stylesheet" href="../css/fonts.css">
+<!--<link rel="stylesheet" href="../css/jquery-mobile/jquery.mobile-1.4.2.min.css">-->
+
+<script src="../js/jquery.js"></script>
+<!--<script src="../js/jquery.mobile-1.4.2.min.js"></script>-->
+<script src="../js/jqueryui.js"></script>
+
+<script>
+
+
+$(document).ready(function(){
+//  Bind the event handler to the "submit" JavaScript event
+ $("#loginpanel").on('submit',function (e){
+       
+        var errorCount = 0;
+        $('#comment').text('');
+		
+	
+    // Get the Login Name value and trim it
+    var name = $.trim($('#username').val());
+	var password = $.trim($('#password').val());
+
+    // Check if empty of not
+	if (name === '' && password === '') {
+	        $('#comment').text('Please Enter UserName and Password');
+           errorCount++;
+    }
+	else{
+    if (name === '') {
+	       $('#comment').text('Please Enter UserName');
+           errorCount++;
+    }
+	if (password === '') {
+	        $('#comment').text('Please Enter Password');
+           errorCount++;
+    }
+	}
+       
+    if(errorCount==0){
+            $(this)[0].submit(); // submit form if no error
+        }
+        e.preventDefault();
+    });
+	
+	
+	
+});
+</script>
+</head>
+<body>
+<div class="loginwrapper_steve">
+	<div id="loginform">
+	<form  method="post" id="loginpanel" action="/login">
+		<label for="username" class="username">Usernsdsdsdame</label>
+		<input id="username" name="username" value="">
+		
+		<label for="password" class="password">Password</label> 
+		<input type="password" id="password" name="password">
+		<p id="comment"><%= information %></p>
+		<div class="keeplog">
+				<div class="keeplogincontainers">
+					<input type="checkbox" id="keeploggedin" />
+				</div>
+				<div class="keeplogincontainer">Keep me logged in</div>
+		</div>
+		<div class="signincontainer_steve">
+			<input  type="submit" id="signin" value="SIGN IN"></input>  
+		</div>
+	</form>
+	</div>
+</div>
+
+</body>
+</html>
+
+
+

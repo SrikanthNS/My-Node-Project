@@ -1,0 +1,461 @@
+<!--<h4 class="page-header" style="margin-top:5px;">Image Gallery<h4>-->
+	<div class="page-header">
+		<h4>&nbsp; Notification </h4>
+	</div>						
+			<ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+				<li class="active" ><a href="#newNotification" data-toggle="tab">New Notification</a></li>
+				<li ><a href="#viewEmailNotification" data-toggle="tab" class="viewTable" id="emailNotification_emailNotificationTable">View Email Notification</a></li>
+				<li ><a href="#viewSMSNotification" data-toggle="tab" class="viewTable" id="SMSNotification_SMSNotificationTable">View SMS Notification</a></li>
+				<li ><a href="#viewAndroidPushNotification" data-toggle="tab" class="viewTable" id="androidPushNotification_androidPushNotificationTable">View Android Push Notification</a></li>
+				<li ><a href="#viewApplePushNotification" data-toggle="tab" class="viewTable" id="applePushNotification_applePushNotificationTable" >View Apple Push Notification</a></li>
+			</ul>
+	<div  class="tab-content">
+	<div class="tab-pane active" id="newNotification">
+				<br />
+				<div class="row componentHeader">
+					<div class="col-md-12 column">
+					<h4>Email Notification</h4>
+					</div>	
+		<div class="componentConfigForm col-md-6 column" id="notification_emailNotificationConfiguration">							
+			<form role="form" data-toggle="validator" class="formConfig" id="saveEmailNotificationConfig">	
+			
+					<div class="input-group form-group">
+					<span class="input-group-addon">SMTP</span>
+					<select class="form-control" id="emailSMTPSelection" required="" title="Select the email server">
+					<option value="select">Select SMTP</option>
+					<option value="Gmail">Gmail</option>
+					<option value="Yahoo">Yahoo</option>
+					<option value="Hotmail">Hotmail</option>
+					<option value="Others">Others</option>
+					</select>
+					</div>
+				
+			
+					<div class="input-group form-group">
+						<span class="input-group-addon">SMTP URL</span>
+						<input type="url" class="form-control" placeholder="SMTP URL" id="emailSMTPUrl" disabled>
+					</div>	
+									
+				
+					<div class="input-group form-group">
+						<span class="input-group-addon">EmailAddress</span>
+						<input type="email" class="form-control" placeholder="EmailAddress" id="emailAddress" required="" title="provide the emailAddress">
+					</div>
+				
+					
+				
+					<div class="input-group form-group">
+						<span class="input-group-addon">password</span>
+						<input type="password" class="form-control" placeholder="password" id="emailPassword" required="" title="provide the appropriate password">
+					</div>
+				
+					<div class="input-group form-group ">
+						<span class="input-group-addon">Category</span>
+						<input type="text" class="form-control" placeholder="Category" id="emailCategory" required="" title="Select the category here">
+					</div>
+			
+				
+					<div class="input-group form-group">
+						<span class="input-group-addon">SubCategory</span>
+						<input type="text" class="form-control" placeholder="SubCategory" id="emailSubCategory" required="" title="Select the subCategogry here">
+					</div>	
+				
+				
+						<div>
+						<span><button type="submit" class="btn btn-primary add-tab saveBtn" >Save</button>
+						<button type="button" class="btn btn-primary add-tab cancelBtn" >Cancel</button>
+						
+						</span>
+						</div>
+			</form>			
+		</div>	
+							<div class="col-md-6 column alertMessage">
+							
+							</div>
+		</div>
+					
+		<div class="row">
+			<div class="col-md-12 column">
+				<h4>SMS Notification<h4>
+			</div>
+			<div class="componentConfigForm col-lg-6" id="notification_SMSNotificationConfiguration">	
+				<form role="form" data-toggle="validator" class="formConfig" id="saveSMSNotificationConfig">	
+				
+					<div class="input-group form-group">
+					<span class="input-group-addon">Country</span>
+					<select class="form-control" id="smsNotificationCountrySelection" required="" title="Please select the country here">
+					<option value="select">Select Country</option>
+					<option value="India">India</option>
+					<option value="USA">USA</option>
+					</select>
+					</div>	
+					
+			
+					<div class="input-group form-group">
+					<span class="input-group-addon">SMS Gateway</span>
+					<select class="form-control" id="smsNotificationGatewaySelection" required="" title="Please select the SMS Gateway>
+					<option value="select">Select SMS Gateway</option>
+					<option value="Twilio">Twilio</option>
+					</select>
+					</div>	
+					
+				
+				
+						<div class="input-group form-group">
+							<span class="input-group-addon">mobileNumber</span>
+							<input type="text" class="form-control" placeholder="mobileNumber" id="smsNotificationMobileNumber" required="" title="Provide the mobile number">
+						</div>
+					
+				
+						<div class="input-group form-group">
+							<span class="input-group-addon">Category</span>
+							<input type="text" class="form-control" placeholder="Category" id="smsNotificationCategory" required="" title="Please select the category here">
+						</div>
+				
+					
+						<div class="input-group form-group">
+							<span class="input-group-addon">SubCategory</span>
+							<input type="text" class="form-control" placeholder="SubCategory" id="smsNotificationSubCategory" required="" title="Please select the category here">
+						</div>
+					
+					<div>
+						<span class=""><button type="submit" class="btn btn-primary add-tab btnMarginTop saveBtn" >Save</button>
+						<button type="button" class="btn btn-primary add-tab btnMarginTop saveBtn" >Cancel</button>
+					
+						</span>
+					</div>
+					</form>
+			</div>
+					<div class="alertMessage">
+						SMS Notification
+					</div>
+		</div>	
+					<div class="row">
+					<div class="col-md-12 column">
+					<h4>Push Notification</h4>
+					
+						<!--<div class="input-group col-lg-6">
+							<span class="input-group-addon">Mobile Platform</span>
+					<select class="form-control" id="applicationInfoSelection">
+					<option value="select">Select Mobile Platform</option>
+					<option value="Info1">Android</option>
+					<option value="Info2">Iphone</option>
+					</select>
+						</div>	-->					
+						
+							<div class="checkbox">
+								<label style="font-size:14px">
+								<input type="checkbox"> Android Push Notification</input>
+								</label>
+								
+							</div>
+							<div class="checkbox">
+								<label style="font-size:14px">
+								<input type="checkbox"> Apple Push Notification</input>
+								</label>
+							</div>
+							</div>
+						</div>
+		<div class="row">
+			    <div class="col-md-12 column">
+				<h4>Android Push Notification</h4>
+				</div>
+			<div class="componentConfigForm col-md-6 column" id="androidPushnotification_androidPushConfiguration">	
+<form role="form" data-toggle="validator" class="formConfig" id="saveAndroidPushNotificationConfig">			
+				
+					<div class="input-group form-group">
+						<span class="input-group-addon">Project Number</span>
+						<input type="text" class="form-control" placeholder="Project Number" id="androidPushNotificationProjectNumber" required="" title="Please select the project number here">
+					</div>	
+			
+              
+					<div class="input-group form-group">
+						<span class="input-group-addon">APIKey</span>
+						<input type="text" class="form-control" placeholder="APIKey" id="androidPushNotificationAPIKey" required="" title="Please select the API key here"> 
+					</div>
+			
+				
+					<div class="input-group form-group">
+						<span class="input-group-addon">Category</span>
+						<input type="text" class="form-control" placeholder="Category" id="androidPushNotificationCategory" required="" title="Please select the category here">
+					</div>
+				
+				
+					<div class="input-group form-group">
+						<span class="input-group-addon">SubCategory</span>
+						<input type="text" class="form-control" placeholder="SubCategory" id="androidPushNotificationSubCategory" required="" title="Please select the subCategory here">
+					</div>
+			
+					<div>
+					<span><button type="submit" class="btn btn-primary add-tab btnMarginTop saveBtn" >Save</button>
+					<button type="button" class="btn btn-primary add-tab btnMarginTop cancelBtn" >Cancel</button>
+					
+					</span>
+					</div>
+					</form>
+			</div>
+							
+						<!--
+						<h5 class="page-header">Apple Push Service<h5>
+						<div class="input-group ">
+							<span class="input-group-addon"></span>
+							<input type="text" class="form-control" placeholder="EmailAddress" id="EmailAddress">
+						</div>
+						<div class="input-group ">
+							<span class="input-group-addon"></span>
+							<input type="text" class="form-control" placeholder="EmailAddress" id="EmailAddress">
+						</div>	
+						<span><button type="button" class="btn btn-primary add-tab" id="saveBtn">Save</button>
+						<button type="button" class="btn btn-primary add-tab" id="addBtn">Add Another</button>
+						</span>	
+							
+						-->
+				<div class=" alertMessage">
+					Android Push Notification
+				</div>								
+									
+
+		</div>		
+	</div>	
+				<div class="tab-pane" id="viewEmailNotification">
+					<div class="modal fade configurationUpdateModal"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+						  <div class="modal-dialog">
+							<div class="modal-content">
+							  <div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h4 class="modal-title" id="myModalLabel">Update Configuration</h4>
+							  </div>
+							  <div class="modal-body configurationUpdateModalContent">
+								this is the content
+							  </div>	
+							  <div class="modal-footer">
+								<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+								<button type="button" class="btn btn-primary modalUpdateButton">Save changes</button>
+							  </div>
+							</div>
+						  </div>
+						</div>
+						
+					<div class="modal fade configurationDeleteModal"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+						  <div class="modal-dialog">
+							<div class="modal-content">
+							  <div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h4 class="modal-title" id="myModalLabel">Delete Configuration</h4>
+							  </div>
+							  <div class="modal-body configurationDeleteModalContent">
+								Do You Want To Delete The Configuration
+							  </div>	
+							  <div class="modal-footer">
+								<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+								<button type="button" class="btn btn-primary modalDeleteButton">OK</button>
+							  </div>
+							</div>
+						  </div>
+						</div>									
+	<div class="col-md-12 column configDataTable">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				Email Notification
+			</div>
+			<!-- /.panel-heading -->
+			<div class="panel-body">
+				<div class="table-responsive">
+					<table class="table table-striped table-bordered table-hover" id="emailNotificationTable">
+						<thead>
+							<tr>
+							<th>SMTP</th>
+							<th>SMTP URL</th>
+								<th>EmailAddress</th>
+								<th>Password</th>
+								<th>Category</th>
+								<th>Subcategory</th>
+								<th>Status</th>
+								<th>Update</th>
+								<th>Delete</th>
+							</tr>
+						</thead>
+						<tbody>
+
+
+
+						</tbody>
+					</table>
+				</div>
+
+			</div>
+			<!-- /.panel-body -->
+		</div>
+		<!-- /.panel -->
+	</div>
+				
+				</div>
+				
+				
+				<div class="tab-pane" id="viewSMSNotification">
+					<div class="modal fade configurationUpdateModal"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+						  <div class="modal-dialog">
+							<div class="modal-content">
+							  <div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h4 class="modal-title" id="myModalLabel">Update Configuration</h4>
+							  </div>
+							  <div class="modal-body configurationUpdateModalContent">
+								this is the content
+							  </div>	
+							  <div class="modal-footer">
+								<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+								<button type="button" class="btn btn-primary modalUpdateButton">Save changes</button>
+							  </div>
+							</div>
+						  </div>
+						</div>
+						
+					<div class="modal fade configurationDeleteModal"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+						  <div class="modal-dialog">
+							<div class="modal-content">
+							  <div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h4 class="modal-title" id="myModalLabel">Delete Configuration</h4>
+							  </div>
+							  <div class="modal-body configurationDeleteModalContent">
+								Do You Want To Delete The Configuration
+							  </div>	
+							  <div class="modal-footer">
+								<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+								<button type="button" class="btn btn-primary modalDeleteButton">OK</button>
+							  </div>
+							</div>
+						  </div>
+						</div>						
+	<div class="col-md-12 column configDataTable">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				SMS Notification
+			</div>
+			<!-- /.panel-heading -->
+			<div class="panel-body">
+				<div class="table-responsive">
+					<table class="table table-striped table-bordered table-hover" id="SMSNotificationTable">
+						<thead>
+							<tr>
+								<th>Country</th>
+								<th>SMS Gateway</th>
+								<th>Mobile Number</th>
+								<th>Category</th>
+								<th>Subcategory</th>
+								<th>Update</th>
+								<th>Delete</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+
+			</div>
+			<!-- /.panel-body -->
+		</div>
+		<!-- /.panel -->
+	</div>
+				
+				</div>
+
+				<div class="tab-pane" id="viewAndroidPushNotification">
+				
+	<div class="col-md-12 column configDataTable">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				Android Push Notification
+			</div>
+			<!-- /.panel-heading -->
+			<div class="panel-body">
+				<div class="table-responsive">
+					<table class="table table-striped table-bordered table-hover" id="androidPushNotificationTable">
+						<thead>
+							<tr>
+								<th>Project Number</th>
+								<th>API Key</th>
+								<th>Category</th>
+								<th>Subcategory</th>
+								<th>Update</th>
+								<th>Delete</th>
+							</tr>
+						</thead>
+						<tbody>
+						
+						</tbody>
+					</table>
+				</div>
+
+			</div>
+			<!-- /.panel-body -->
+		</div>
+		<!-- /.panel -->
+	</div>
+				
+				</div>
+				
+				
+<div class="tab-pane" id="viewApplePushNotification">
+				
+	<div class="col-md-12 column configDataTable">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				Apple Push Notification
+			</div>
+			<!-- /.panel-heading -->
+			<div class="panel-body">
+			  <!--  <div class="table-responsive">
+					<table class="table table-striped table-bordered table-hover" id="applePushNotificationTable">
+						<thead>
+							<tr>
+								<th>EmailAddress</th>
+								<th>Password</th>
+								<th>Category</th>
+								<th>Subcategory</th>
+								<th>Active Flag</th>
+								<th>Update</th>
+								<th>Delete</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr class="odd gradeX">
+								
+								<td>experience.retail@gmail.com</td>
+								<td>retail@123</td>
+								<td class="center">Retail</td>
+								<td class="center">Customer Care</td>
+								<td class="center">Active</td>
+								<td class="center">update</td>
+								<td class="center">delete</td>
+							</tr>
+							<tr class="even gradeC">
+								
+									<td>experience.retail@gmail.com</td>
+								<td>retail@123</td>
+								<td class="center">Retail</td>
+								<td class="center">Customer Care</td>
+								<td class="center">Active</td>
+								<td class="center">update</td>
+								<td class="center">delete</td>
+							</tr>
+
+
+						</tbody>
+					</table>
+				</div>-->
+
+			</div>
+			<!-- /.panel-body -->
+		</div>
+		<!-- /.panel -->
+	</div>
+				
+				</div>							
+
+				
+				</div>	
+			</div>	
+			<script src="../bootstrap-validator/js/validator.js"></script>	
+			<script src="../js/ComponentConfig.js"></script>	

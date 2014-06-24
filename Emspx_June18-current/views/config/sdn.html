@@ -1,0 +1,180 @@
+<!--<h4 class="page-header" style="margin-top:5px;">Image Gallery<h4>-->
+							<div class="page-header">
+						<h4>&nbsp; SDN </h4>
+						</div>						
+							<ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+								<li class="active" ><a href="#newSDNConfig" data-toggle="tab">New SDN Config</a></li>
+								<li ><a href="#viewSDNPolicyConfig" data-toggle="tab">View SDN Policy Config</a></li>
+								<li ><a href="#viewSDNServerConfig" data-toggle="tab">View SDN Server Config</a></li>
+							</ul>
+							<div  class="tab-content">
+							<div class="tab-pane active" id="newSDNConfig">
+							<br />
+						<div class="row">
+						<div class="col-md-12 column">
+					<h4>Configure Policy </h4>
+					</div>
+						
+						
+							<div class="componentConfigForm col-md-6">
+								<div class="input-group form-group ">
+							<span class="input-group-addon">User Id</span>
+							<input type="text" class="form-control" placeholder="User Id" id="sdnUserId">
+						</div>
+				<div class="input-group form-group " >
+				<span class="input-group-addon">ApplicationInfo</span>
+					<select class="form-control" id="sdnApplicationInfoSelection">
+					<option value="select">Select a Component</option>
+					<option value="Info1">Info1</option>
+					<option value="Info2">Info2</option>
+					<option value="Info3">Info3</option>
+					<option value="Info4">Info4</option>
+					<option value="Info5">Info5</option>
+					</select>
+				</div>
+						<div class="input-group form-group">
+					<span class="input-group-addon">Priority</span>
+					<select class="form-control" id="sdnPrioritySelection">
+					<option value="select">Select priority</option>
+					<option value="high">high</option>
+					<option value="low">low</option>
+					<option value="no">no</option>
+					</select>
+						</div>
+						<div>
+						<span><button type="button" class="btn btn-primary add-tab saveBtn" id="saveSDNPolicyConfig">Save</button>
+						<button type="button" class="btn btn-primary add-tab cancelBtn" id="cancelSDNPolicyConfig">cancel</button>
+						</span>
+						</div>
+						</div>
+						</div>
+						<div class="row">
+						<div class="col-md-12 column">
+					<h4>Configure Server Details </h4>
+					</div>
+						<div class="componentConfigForm col-md-6">
+						<div class="input-group form-group ">
+							<span class="input-group-addon">Ip Address</span>
+							<input type="text" class="form-control" placeholder="Ip Address" id="sdnIpAddress">
+						</div>
+						<div class="input-group form-group ">
+							<span class="input-group-addon">Port No.</span>
+							<input type="text" class="form-control" placeholder="Port No." id="sdnPortNo">
+						</div>
+						<div class="input-group form-group ">
+							<span class="input-group-addon">Login Id</span>
+							<input type="text" class="form-control" placeholder="Login Id" id="sdnLoginId">
+						</div>
+						<div class="input-group form-group ">
+							<span class="input-group-addon">Password</span>
+							<input type="text" class="form-control" placeholder="Password" id="sdnPassword">
+						</div>						
+						<div>
+						<span><button type="button" class="btn btn-primary add-tab saveBtn" id="saveSDNServerConfig">Save</button>
+						<button type="button" class="btn btn-primary add-tab saveBtn" id="cancelSDNServerConfig">cancel</button>
+						</span>
+						</div>
+						</div>
+							<div class="col-md-6 alertMessage">
+								
+							</div>
+							</div>
+							</div>
+							<div class="tab-pane" id="viewSDNPolicyConfig">
+							
+				<div class="col-md-12 configDataTable">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                           SDN Policy
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover" id="SDNpolicyConfigTable">
+                                    <thead>
+                                        <tr>
+                                            <th>User Id</th>
+                                            <th>Application Info</th>
+                                            <th>Priority</th>
+											<th>Update</th>
+											<th>Delete</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="odd gradeX">
+											
+                                            <td class="center">saty123</td>
+                                            <td class="center">info1</td>
+                                            <td class="center">high</td>
+										    <td class="center"><a href="#">update</a></td>
+											<td class="center"><a href="#">delete</a></td>
+                                        </tr>
+                                        <tr class="even gradeC">
+											
+                                                <td class="center">saty4123</td>
+                                            <td class="center">info2</td>
+                                            <td class="center">low</td>
+									        <td class="center"><a href="#">update</a></td>
+											<td class="center"><a href="#">delete</a></td>
+                                        </tr>
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+							
+							</div>
+							
+						<div class="tab-pane" id="viewSDNServerConfig">
+							
+				<div class="col-md-12 configDataTable">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            SDN Server 
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover" id="SDNserverConfigTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Ip Address</th>
+                                            <th>Port</th>
+                                            <th>Login Id</th>
+                                            <th>Password</th>
+											<th>Update</th>
+											<th>Delete</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="odd gradeX">
+											
+                                            <td>10.0.0.27</td>
+                                            <td>80</td>
+                                            <td class="center">saty123</td>
+											<td class="center">password@321</td>
+                                            <td class="center"><a href="#">update</a></td>
+											<td class="center"><a href="#">delete</a></td>
+                                        </tr>
+                                        
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+							
+							</div>							
+							</div>	
+					
