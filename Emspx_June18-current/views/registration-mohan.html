@@ -1,0 +1,399 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <title>Registration</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	
+		<!--link rel="stylesheet/less" href="less/bootstrap.less" type="text/css" /-->
+	<!--link rel="stylesheet/less" href="less/responsive.less" type="text/css" /-->
+	<!--script src="js/less-1.3.3.min.js"></script-->
+	<!--append ‘#!watch’ to the browser URL, then refresh the page. -->
+	
+	<link href="../css_boot/bootstrap.min.css" rel="stylesheet">
+	<link href="../css_boot/style.css" rel="stylesheet">
+	<link href="../css/registration.css" rel="stylesheet">
+
+  <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+  <!--[if lt IE 9]>
+    <script src="js/html5shiv.js"></script>
+  <![endif]-->
+
+  <!-- Fav and touch icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="img/apple-touch-icon-144-precomposed.png">
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="img/apple-touch-icon-114-precomposed.png">
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="img/apple-touch-icon-72-precomposed.png">
+  <link rel="apple-touch-icon-precomposed" href="img/apple-touch-icon-57-precomposed.png">
+  <link rel="shortcut icon" href="img/favicon.png">
+  
+	<script type="text/javascript" src="../js_boot/jquery.min.js"></script>
+	<script type="text/javascript" src="../js_boot/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../js_boot/scripts.js"></script>
+	
+	<!-- <script src="js/jquery.steps.js"></script> -->
+    <script src="js/countries.js"></script>
+	<script type="text/javascript">
+window.onload = function () {
+	
+    document.getElementById("password1").onchange = validatePassword;
+    document.getElementById("password2").onchange = validatePassword;
+    
+	$("#textinput").on('change', function() { 
+	    alert('hisdfas');
+		usernamecheckFunction();
+	});
+
+    
+    //input[type=text], input[type=password], textarea
+    //$('input[type=text]').on("blur", function(){
+  //  $(".submits").hide();
+  // alert($('#wizard ul li.class').text());
+   //	var current_class= $('#wizard ul li').attr("class"); 
+  //  var res = current_class.slice("5"); //alert(res);
+   /*	if( res == 'current'){
+   		
+   		$(".submits").hide();
+   	
+   	}*/
+   /* $('.submits').on("click", function() {
+    	
+    	alert("sssss");
+    });*/
+    
+   	
+   	//alert(current_class);
+  // 	$('#wizard ul li').removeClass('first');
+    //var checkclass = "first current";
+    //var match_str = checkclass.match(current_class); 
+    //alert(match_str);
+  /* $('#companyname,#lineofbusiness,#noofemp,#city,#address,#country,#state,#telephone').on("blur", function() {
+    	    	
+    	if($('#companyname').val().length == 0 ||  $("#lineofbusiness").val() =='-1' ||  $("#noofemp").val() =='-1' || $('#city').val().length == 0 
+    	|| $('#address').val().length == 0 || $("#country").val() =='-1' ||  $("#state").val() =='-1' || $('#telephone').val().length == 0 */ 
+    	/*|| $('#fname').val().length == 0 || $('#lname').val().length == 0 || $('#email').val().length == 0 || $('#username').val().length == 0
+    	|| $('#password1').val().length == 0 || $('#password2').val().length == 0 */
+    	/*) {*/    
+    	//if($('input:text').val().length == 0 || $('textarea').val().length == 0 || $('select').val().length == 0) {
+    /*	$(".submits").hide();
+    		return false;
+    	}
+	    $(".submits").show();
+		return true;
+	    
+	});*/
+    
+	
+}
+	function validatePassword(){
+		var pass2=document.getElementById("password2").value;
+		var pass1=document.getElementById("password1").value;
+		if(pass1!=pass2)
+    		document.getElementById("password2").setCustomValidity("Password's doesn't match");
+		else
+    		document.getElementById("password2").setCustomValidity(''); 
+			//empty string means no validation error
+		}
+
+		var jqueryFunction;
+		var usernamecheckFunction;
+
+	$(document).ready(function(){
+
+	usernamecheckFunction=function(){
+	   alert('hi');
+		var userDetailsJson={};
+		userDetailsJson.username = $('#username').val();
+		$.ajax({
+			type: "POST",
+		     // url: "http://152.48.2.245:3000/login",
+			url: "http://localhost:80/usernameexist",
+		    dataType: "json",
+		    data:  userDetailsJson,
+		    	success: function (data) {
+		    		console.log(data);
+		    	  		var result 	= JSON.stringify(data); //alert(result);
+		    	  		var parseResult=JSON.parse(result);
+		    	  		var errormsg = parseResult.status;
+		    	  		$('#usernameerror').html(errormsg);
+		    	  	},
+			 }); 
+		}
+	
+	var html = '';
+	for( var i=1; i<5000; i=i+50 ) {
+	    html += '<option value="'+ i + "-" +parseInt(49+i)+'">' + i + "-" +parseInt(49+i)+'</option>';
+	}                   
+	$('#noofemp').append(html);
+
+	$("#cancel").click(function(){ 
+		alert("hi");
+		 $('#superadmin').each(function(){
+ 			this.reset();  
+	 	}); 
+	});
+	
+	if($('input:password').val()=="" ||  $('input#email').val()=="" || $('input:text').val()==""){
+		/*var message = "Please fill all the Input Fields";
+		document.getElementById("errorstatus").innerHTML = message;*/
+	}else{
+	
+    jqueryFunction=function(){
+	    	var userDetailsJson={};
+			userDetailsJson.companyname = $('#companyname').val();
+			userDetailsJson.noofemp = $('#noofemp').val();
+			userDetailsJson.lineofbusiness = $('#lineofbusiness').val();
+			userDetailsJson.address = $('#address').val();
+			userDetailsJson.city = $('#city').val();
+			userDetailsJson.state = $('#state').val();
+			userDetailsJson.country = $('#country').val();
+			userDetailsJson.telephone = $('#telephone').val();
+			userDetailsJson.fname = $('#fname').val();
+			userDetailsJson.lname = $('#lname').val();
+			userDetailsJson.email = $('#email').val();
+			userDetailsJson.username = $('#username').val();
+			userDetailsJson.password = $('#password').val();
+			userDetailsJson.confpassword = $('#confpassword').val();
+			userDetailsJson.termscond = $('#termscond').val();
+			userDetailsJson.upload = $('#upload').val();
+			//console.log($( "#role option:selected" ).text());
+		
+			$.ajax({
+		      	type: "POST",
+		     // url: "http://152.48.2.245:3000/login",
+			 	url: "http://localhost:80/registration",
+		       	dataType: "json",
+		      	data:  userDetailsJson,
+		      		success: function (data) {
+		    	  		console.log(data);
+		    	  		var result = JSON.stringify(data);
+		    	  		var parseResult=JSON.parse(result);
+		    	  		//console.log('response'+parseResult.sessionuser);
+		    	  		//console.log('response'+parseResult.userrole);
+		    	  		$('.statusmessage ').html('<b>Thank you!! We have received New user Registeration Information</b>');
+		    	     },
+			   			 	
+			}); 
+		}
+	}
+	
+});
+</script>
+	
+
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/formToWizard.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("#SignupForm").formToWizard({ submitButton: 'SaveAccount' })
+        });
+    </script>
+	<script type="text/javascript" src="../js/registration.js"></script>
+
+
+</head>
+<body onload="disableSubmit()">
+<div class="container">
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+<div id="wrapper">
+<div class="title_superadmin">REGISTRATION1</div>
+    <div id="main">
+        <form id="SignupForm" action="#" method="post">
+        <fieldset>
+            <legend>ENTERPRISE PROFILE</legend>
+             <!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="textinput">COMPANY NAME</label>  
+  <div class="col-md-6">
+  <input id="textinput" name="textinput" placeholder="Enter the Companyname" class="form-control input-md" required="" type="text">
+    
+  </div>
+</div>
+
+<!-- Select Basic -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="noofemp">NO. OF EMPLOYEES</label>
+  <div class="col-md-6">
+ 
+									
+  
+    <select id="noofemp" name="noofemp" class="form-control" required="">
+      <option value="">Choose No of Employees </option>
+    </select>
+  </div>
+</div>
+
+<!-- Select Basic -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="lineofbusiness">LINE OF BUSINESS</label>
+  <div class="col-md-6">
+
+  
+    <select id="lineofbusiness" name="lineofbusiness" class="form-control" required="">
+  <option value="">Choose Line of Business </option>
+									<option value="HealthCare">HealthCare</option>
+									<option value="Finance">Finance</option>
+									<option value="Retail">Retail</option>
+									<option value="Hotel">Hotel</option>
+    </select>
+  </div>
+</div>
+
+<!-- Textarea -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="address">ADDRESS</label>
+  <div class="col-md-6">                     
+    <textarea class="form-control" id="address" name="address" placeholder="Enter the address" required=""></textarea>
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="city">CITY</label>  
+  <div class="col-md-6">
+  <input id="city" name="city" placeholder="Enter the City" class="form-control input-md" required="" type="text">
+    
+  </div>
+</div>
+
+
+
+
+<!-- Select Basic -->
+<div class="form-group">
+  <label class="col-md-4 control-label"  placeholder="Enter the Country" for="state">COUNTRY</label>
+  <div class="col-md-6">
+    <select id="country" name="country" class="form-control" placeholder="Enter the Country"></select>
+  </div>
+</div>
+
+
+<!-- Select Basic -->
+<div class="form-group">
+  <label class="col-md-4 control-label"  placeholder="Enter the State" for="state">STATE</label>
+  <div class="col-md-6">
+
+    <select id="state" name="state" class="form-control" placeholder="Enter the State"></select>
+	<script language="javascript">
+		populateCountries("country", "state");
+ 	</script>
+  </div>
+</div>
+
+<!-- Select Basic -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="countrycode">PHONE</label>
+  <div class="col-md-2">
+   <input id="countrycode" class="form-control"  name="countrycode" value="">
+  <!--   <select id="countrycode" name="countrycode" class="form-control">
+      <option value="+91">+91</option>
+      <option value="+1">+1</option>
+    </select> -->
+  </div>
+    <div class="col-md-4">
+  <input id="telephone" name="telephone" placeholder="Enter Phone No" class="form-control input-md" required="" type="text">
+    
+  </div>
+</div>
+
+
+        </fieldset>
+        <fieldset>
+            <legend>USER PROFILE</legend>
+            <!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="fname"> FIRST NAME</label>  
+  <div class="col-md-6">
+  <input id="fname" name="fname" placeholder="Enter the Firstname" class="form-control input-md" required="" type="text">
+    
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="lname">LAST NAME</label>  
+  <div class="col-md-6">
+  <input id="lname" name="lname" placeholder="Enter the Lastname" class="form-control input-md" type="text">
+    
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="email">EMAIL ID</label>  
+  <div class="col-md-6">
+  <input id="email" name="email" placeholder="Enter the Emailaddress" class="form-control input-md" required="" type="text">
+    
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="username">CREATE USER NAME</label>  
+  <div class="col-md-6">
+  <input id="username" name="username" placeholder="Enter the Username" class="form-control input-md" required="" type="text">
+  <p id="usernameerror"><%= infor %></p> 
+  </div>
+</div>
+
+<!-- Password input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="password1">PASSWORD</label>
+  <div class="col-md-6">
+    <input id="password1" name="password" placeholder="Enter the Password" class="form-control input-md" required="" type="password">
+    
+  </div>
+</div>
+
+<!-- Password input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="password2">CONFIRM PASSWORD</label>
+  <div class="col-md-6">
+    <input id="password2" name="confpassword" placeholder="Enter the ConfirmPassword" class="form-control input-md" required="" type="password">
+    
+  </div>
+</div>
+        </fieldset>
+        <fieldset >
+            <legend>LICENSE</legend>
+            <!-- Multiple Checkboxes -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="termscond"> TERMS and CONDITIONS</label>
+  <div class="col-md-4">
+  <div class="checkbox">
+    <label for="termscond-0">
+	
+
+      <input name="termscond" id="termscond-0" value="1" type="checkbox" onchange="activateButton(this)">
+      I accept the terms in Licensing Agreement
+    </label>
+	</div>
+  </div>
+</div>
+
+<!-- File Button --> 
+<div class="form-group">
+  <label class="col-md-4 control-label" for="upload">upload</label>
+  <div class="col-md-4">
+    <input id="upload" name="upload" class="input-file" type="file">
+  </div>
+</div>
+
+
+        </fieldset>
+        <!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="register"></label>
+  <div class="col-md-4">
+	<button id="register" name="register" class="btn btn-primary">SUBMIT</button>
+  </div>
+</div>
+        </form>
+    </div>
+	</div>
+	</div>
+	</div>
+</div>
+</body>
+</html>

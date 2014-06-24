@@ -1,0 +1,189 @@
+  body { font-family:Lucida Sans, Arial, Helvetica, Sans-Serif; font-size:13px; margin:20px;}
+		div#wrapper {
+width : 630px ;
+text-align : left ;
+margin-left : auto ;
+margin-right : auto ;
+position : relative ;
+}
+        #main {margin: 0px auto; border:solid 1px #b2b3b5; -moz-border-radius:10px; padding:20px; background-color:#f6f6f6; float:left;}
+        #header { text-align:center; border-bottom:solid 1px #b2b3b5; margin: 0 0 20px 0; }
+        /*fieldset { border:none; width:320px;}
+        legend { font-size:18px; margin:0px; padding:10px 0px; color:#b0232a; font-weight:bold;}
+        label { display:block; margin:15px 0 5px;}
+        input[type=text], input[type=password] { width:300px; padding:5px; border:solid 1px #000;}*/
+        .prev, .next { background-color:#8C8E1F; padding:5px 10px; color:#fff; text-decoration:none; border-radius:5px;}
+        .prev:hover, .next:hover { background-color:#000; text-decoration:none;}
+        .prev { float:left;}
+        .next { float:right;}
+        #steps {
+    list-style: none outside none;
+    margin: 0 auto;
+    overflow: hidden;
+    padding: 0;
+    text-align: center;
+    width: 70%;
+}
+        #steps li {font-size:24px; float:left; padding:10px; color:#b0b1b3;}
+       #steps li span {
+    display: block;
+    font-size: 14px;
+    text-align: center;
+    width: 70px;
+}
+        #steps li.current { color:#000;}
+        #makeWizard { background-color:#b0232a; color:#fff; padding:5px 10px; text-decoration:none; font-size:18px;}
+        #makeWizard:hover { background-color:#000;}
+		p#step0commands {
+		float:right;
+		}
+		.form-group {
+		width:100%;
+		float:left;
+		}
+		
+#steps li.current .circle {
+    background: none repeat scroll 0 0 #008A1E;
+    border: 1px solid #C1C1C1;
+    border-radius: 126px;
+    color: #FFFFFF;
+    cursor: default;
+    font-size: 1.429em;
+    height: 55px;
+    margin: 10px;
+    text-align: center;
+    width: 53px;
+}
+#steps li .circle {
+    background-image: linear-gradient(to bottom, #F8F8F8 0%, #C4C4C4 100%);
+    border: 1px solid #C1C1C1;
+    border-radius: 126px;
+    color: #000000;
+    cursor: default;
+    float: left;
+    font-size: 1.429em;
+    height: 55px;
+    margin: 10px;
+    text-align: center;
+    width: 53px;
+}
+
+.arrow_ad {
+    color: #008A1E;
+    float: left;
+    font-size: 60px;
+    height: auto;
+    margin: -10px auto 0;
+    position: relative;
+}
+
+ul#steps li#stepDesc2 .arrow_ad {
+    display: none;
+}
+
+#wizard {
+float:left;
+margin:0 auto;
+position: relative;
+}
+.form-control{
+padding:5px;
+}
+
+.form-group label {
+   color: #164F86;
+    font-family: verdana,helvetica,arial,sans-serif;
+    font-size: 14px;
+    margin-left: 0;
+    margin-top: 13px;
+	font-weight:normal;
+	}
+.form-control {
+	border: 1px solid #164F86;
+	 color: #164F86;
+	}
+	.form-control::-moz-placeholder {
+	 color: #164F86;
+	}
+	.next { display: none; }
+   #step1Next{ display: none; }
+   
+.title_superadmin {
+    font-size: 16px;
+    padding: 4px;
+}
+.container {
+border:none;
+box-shadow:none;
+}
+
+.btn-primary.disabled, .btn-primary[disabled], fieldset[disabled] .btn-primary, .btn-primary.disabled:hover, .btn-primary[disabled]:hover, fieldset[disabled] .btn-primary:hover, .btn-primary.disabled:focus, .btn-primary[disabled]:focus, fieldset[disabled] .btn-primary:focus, .btn-primary.disabled:active, .btn-primary[disabled]:active, fieldset[disabled] .btn-primary:active, .btn-primary.disabled.active, .btn-primary.active[disabled], fieldset[disabled] .btn-primary.active {
+visibility:hidden;
+}
+
+@media screen and (max-width: 768px) {
+#steps {
+width:100%;
+}
+#steps li {
+padding:0px;
+}
+div#wrapper {
+width:100%;
+}
+}
+
+@media screen and (max-width: 480px) {
+
+#steps li.current .circle {
+    background: none repeat scroll 0 0 #008A1E;
+    border: 1px solid #C1C1C1;
+    border-radius: 126px;
+    color: #FFFFFF;
+    cursor: default;
+    font-size: 0.429em;
+    height: 20px;
+    margin: 10px;
+    text-align: center;
+    width: 20px;
+}
+.arrow_ad {
+    color: #008A1E;
+    float: left;
+    font-size: 24px;
+    height: auto;
+    margin: 3px auto 0;
+    position: relative;
+}
+#steps li .circle {
+    background-image: linear-gradient(to bottom, #F8F8F8 0%, #C4C4C4 100%);
+    border: 1px solid #C1C1C1;
+    border-radius: 126px;
+    color: #000000;
+    cursor: default;
+    float: left;
+    font-size: 0.429em;
+    height: 20px;
+    margin: 10px;
+    text-align: center;
+    width: 20px;
+}
+#steps li span {
+    display: block;
+    font-size: 7px;
+    text-align: center;
+    width: 65%;
+}
+
+.form-group label {
+font-size:11px;
+}
+legend {
+font-size:15px;
+}
+.prev, .next {
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+}

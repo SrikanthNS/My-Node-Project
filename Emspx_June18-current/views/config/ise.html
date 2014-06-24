@@ -1,0 +1,101 @@
+
+							
+						<!--<h4 class="page-header" style="margin-top:5px;">Image Gallery<h4>-->
+							<div class="page-header">
+								<h4>&nbsp; ISE  </h4>
+							</div>						
+							<ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+								<li class="active" ><a href="#addISE" data-toggle="tab">New ISE Config</a></li>
+								<li ><a href="#viewISE" data-toggle="tab">View ISE Config</a></li>
+							</ul>
+							<div  class="tab-content">
+							<div class="tab-pane active" id="addISE">
+							<br />
+							<div class="row componentHeader">
+									<div class="row">
+										<div class="col-md-12 column">
+											<h4>New ISE Config</h4>
+										</div>
+										<div class="componentConfigForm col-md-6 column">
+										<div class="input-group form-group">
+											<span class="input-group-addon">Host Name</span>
+											<input type="text" class="form-control" placeholder="Host Name" id="iseHostName">
+										</div>						
+										<div class="input-group form-group">
+											<span class="input-group-addon">Ip Address</span>
+											<input type="text" class="form-control" placeholder="Ip Address" id="iseIpAddress">
+										</div>
+										<div class="input-group form-group">
+											<span class="input-group-addon">User Name</span>
+											<input type="text" class="form-control" placeholder="User Name" id="iseUserName">
+										</div>
+										<div class="input-group form-group">
+											<span class="input-group-addon">Password</span>
+											<input type="text" class="form-control" placeholder="Password" id="isePassword">
+										</div>	
+										<div class="input-group form-group">
+											<span class="input-group-addon">Certificate</span>
+											<input type="text" class="form-control" placeholder="Upload a file" >
+											  <span class="input-group-btn">
+												<button class="btn btn-primary" type="button">Upload</button>
+											  </span>
+											
+										</div>						
+										<div>
+										<span><button type="button" class="btn btn-primary add-tab saveBtn" id="saveISEServerConfig">Save</button>
+										<button type="button" class="btn btn-primary add-tab cancelBtn" id="cancelBtn">Cancel</button>
+										</span>
+										</div>
+										</div>
+									</div>
+						</div>
+							</div>
+							<div class="tab-pane" id="viewISE">
+							
+				<div class="col-md-12 configDataTable">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                           ISE Config
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover" id="ISETable">
+                                    <thead>
+                                        <tr>
+										<th>Host Name</th>
+                                            <th>IP Address</th>
+                                            <th>User Name</th>
+                                            <th>Password</th>
+											<th>Update</th>
+											<th>Delete</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                       <!-- <tr class="odd gradeX">
+											<td>EMSPx_ISE</td>
+                                            <td>10.0.0.2</td>
+                                            <td>EmspIse</td>
+                                            <td class="center">ISE@123</td>
+											<td class="center"><a href="#">update</a></td>
+											<td class="center"><a href="#">delete</a></td>
+                                        </tr>-->
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+							
+							</div>
+							</div>	
+
+
+
+
+						

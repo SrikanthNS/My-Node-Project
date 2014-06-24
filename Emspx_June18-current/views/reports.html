@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="../css/style.css" />
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="../js/jquery.js" type="text/javascript"></script>
+<script src="../js/jquery.contextmenu.js" type="text/javascript"></script>
+<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<script type='text/javascript' src='../js/jquery.simplemodal.js'></script>
+<script type='text/javascript' src='../js/basic.js'></script>
+<link href="../css/jquery.contextMenu.css" rel="stylesheet" type="text/css" /> 
+<link type='text/css' href='../css/demo.css' rel='stylesheet' media='screen' />
+<link type='text/css' href='../css/basic.css' rel='stylesheet' media='screen' />
+
+<script type="text/javascript">
+function closeWin(){
+	window.location.reload();
+	$('#simplemodal-container').hide();
+	
+	
+}
+$(document).ready(function() {
+		
+		$('#something').click( function() { alert('clicked'); });				
+			$(function() {
+          		$( "#accordion" ).accordion();
+          	});
+			$(".leftcontainer .trigger").click(function() {
+				  $("#leftexpandablePanel").toggle("left");
+			  	  $(this).toggleClass("active");
+			  		return false;
+			 });
+			var str = location.href.toLowerCase();
+			$(".navigation li a").each(function() {
+				if (str.indexOf(this.href.toLowerCase()) > -1) {
+					$("li.highlight").removeClass("highlight");
+					$(this).parent().addClass("highlight");
+				}
+			});
+			var str_health = location.href.toLowerCase();
+			$(".navigation_healthcare li a").each(function() {
+				if (str_health.indexOf(this.href.toLowerCase()) > -1) {
+					$("li.highlight").removeClass("highlight");
+					$(this).parent().addClass("highlight");
+				}
+			});
+			
+			$('.savebt').on('click',function(e) { 
+				//$("#kitname").show();
+				$("#kitname").css("border","1px solid #00B0F0");
+			});
+			
+			 
+			var listeningItem;
+			 $('#cerner').bind("contextmenu",function(e){
+
+				 listeningItem=$(this).attr('id');
+				
+			 });
+			
+ 			 $(function() {
+				// add new trigger
+					$.contextMenu({
+					selector : "#cerner",
+					callback : function(key, options) {
+						var m = "clicked: " + key;
+					  
+						
+						$('.icon-delete').on('click',
+								function(e) {
+							
+							// $("#"+listeningItem).closest('div').remove();
+							// $("#"+listeningItem).closest('div').css({"color":"red","border":"2px solid red"});
+							   // console.log( $("#"+listeningItem).closest('div'));
+						//var test = $('.circular')[0].text; alert(test);
+          					//var cerner = $("#patient p#pat1").text();alert(cerner);
+          					var cerner = $("#cerner p#pat2").text();//alert(cerner);
+          					if(cerner == "Cerner") { 
+          						$(".child_two_top_temp").hide();
+          						$(".child_three_top_temp").hide();
+          						$(".child_four_top_temp").hide();
+          						$(".child_five_top_temp").hide();
+          						$(".child_six_top_temp").hide();
+          						$(".child_seven_top").hide();
+          					}
+          				           				
+          																 
+						});
+						$('.icon-cut').on('click',
+								function(e) {
+							
+	       					var cerner = $("#cerner p#pat2").text(); //alert(welcome);
+	       				 	
+	       					if(cerner == "Cerner"){
+	       						$(".child_five_top_temp").show();
+          						$(".child_four_top_temp").show();
+	       						
+	       					}
+									 
+					});
+								
+					},
+					items : {
+						"delete" : {
+							name : "Delete",
+							icon : "delete"
+						},
+						"sep1" : "---------",
+						"notification" : {
+							name : "Patient Arrival Notification",
+							icon : "cut"
+						},
+						"cerner" : {
+							name : "Doctor",
+							icon : "copy"
+						}
+													
+					},
+					
+					
+					
+				});
+				$('#arrival').bind("contextmenu",function(e){
+
+						 listeningItem=$(this).attr('id');
+						
+				});
+	 			$.contextMenu({
+					selector : "#arrival",
+					callback : function(key, options) {
+						var m = "clicked: " + key;
+					  
+						
+						$('.icon-delete').on('click',
+								function(e) {
+							
+							// $("#"+listeningItem).closest('div').remove();
+							// $("#"+listeningItem).closest('div').css({"color":"red","border":"2px solid red"});
+							   // console.log( $("#"+listeningItem).closest('div'));
+						//var test = $('.circular')[0].text; alert(test);
+          					//var cerner = $("#patient p#pat1").text();alert(cerner);
+          					var arrival = $("#arrival p#pat3").text(); //alert(arrival);
+          					//var doctor = $("#target p#pat4").text(); 
+          				            					
+          					if(arrival == "Patient Arrival Notification"){
+          						$(".child_two_top_temp").show();
+          						$(".child_three_top_temp").show();
+          						$(".child_four_top_temp").hide();
+          						$(".child_five_top_temp").hide();
+          						$(".child_six_top_temp").hide();
+          						$(".child_seven_top").hide();
+          					}
+          					
+          					
+									 
+						});
+						
+						$('.icon-cut').on('click',
+								function(e) {
+							
+	       					var arrival = $("#arrival p#pat3").text(); //alert(welcome);
+	       				 	
+	       					if(arrival == "Patient Arrival Notification"){
+	       						$(".child_six_top_temp").show();
+	       						$(".child_seven_top").show();
+	       						
+	       					}
+									 
+					});
+					
+								
+					},
+					items : {
+						"delete" : {
+							name : "Delete",
+							icon : "delete"
+						},
+						"sep1" : "---------",
+						"notification" : {
+							name : "Doctor",
+							icon : "cut"
+						}
+													
+					}
+					
+				});
+			}); 
+ 			 
+ 			 
+			$('#doctor').bind("contextmenu",function(e){
+
+				 listeningItem=$(this).attr('id');
+				
+			});
+ 			$.contextMenu({
+				selector : "#doctor",
+				callback : function(key, options) {
+					var m = "clicked: " + key;
+				  
+					
+					$('.icon-delete').on('click',
+							function(e) {
+						
+						
+        					var doctor = $("#doctor p#pat4").text(); 
+        				 	
+        					if(doctor == "Doctor"){
+        						$(".child_two_top_temp").show();
+        						$(".child_three_top_temp").show();
+        						$(".child_four_top_temp").show();
+        						$(".child_five_top_temp").show();
+        						$(".child_six_top_temp").hide();
+        						$(".child_seven_top").hide();
+        					}
+								 
+					});
+					
+			
+					
+				
+							
+				},
+				items : {
+					"delete" : {
+						name : "Delete",
+						icon : "delete"
+					}
+															
+				}
+			});
+ 			
+			$('#welcome').bind("contextmenu",function(e){
+
+				 listeningItem=$(this).attr('id');
+				
+			});
+ 			$.contextMenu({
+				selector : "#welcome",
+				callback : function(key, options) {
+					var m = "clicked: " + key;
+				  
+					
+					$('.icon-delete').on('click',
+							function(e) {
+						
+						
+       					var welcome = $("#welcome p#pat21").text(); //alert(welcome);
+       				 	
+       					if(welcome == "Welcome"){
+       						
+       						$(".child_two_bottom").hide();
+       						$(".child_three_bottom_temp").hide();
+       						$(".child_four_bottom").hide();
+       						$(".child_five_bottom").hide();
+       						$(".child_two_bottom1").hide();
+       						$(".child_three_bottom1").hide();
+       						
+       					}
+								 
+				});
+				
+					$('.icon-cut').on('click',
+							function(e) {
+						
+       					var welcome = $("#welcome p#pat21").text(); //alert(welcome);
+       				 	
+       					if(welcome == "Welcome"){
+       						$(".child_four_bottom").show();
+       						$(".child_five_bottom").show();
+       						
+       					}
+								 
+				});
+					
+					$('.icon-cut1').on('click',
+							function(e) {
+						
+       					var welcome = $("#welcome p#pat21").text(); //alert(welcome);
+       				 	
+       					if(welcome == "Welcome"){
+       						
+       						$(".child_two_bottom1").show();
+       						$(".child_three_bottom1").show();
+       						
+       					}
+								 
+				});
+					
+					
+				},
+				items : {
+					"delete" : {
+						name : "Delete",
+						icon : "delete"
+					},
+					"sep1" : "---------",
+					"notification" : {
+						name : "Auto Check-in Notification",
+						icon : "cut"
+					},
+					"notification1" : {
+						name : "Wayfinder",
+						icon : "cut1"
+					}
+												
+				}
+			});
+ 			
+			$('#wayfinder').bind("contextmenu",function(e){
+
+				 listeningItem=$(this).attr('id');
+				
+			});
+ 			$.contextMenu({
+				selector : "#wayfinder",
+				callback : function(key, options) {
+					var m = "clicked: " + key;
+				  
+					
+					$('.icon-delete').on('click',
+							function(e) {
+						
+						
+      					var wayfinder = $("#wayfinder p#pat31").text(); //alert(wayfinder);
+      				 	
+      					if(wayfinder == "Auto Check-in Notification"){
+      						
+      						$(".child_four_bottom").hide();
+      						$(".child_five_bottom").hide();
+      						
+      						
+      						
+      					}
+								 
+					});
+				
+							
+				},
+				items : {
+					"delete" : {
+						name : "Delete",
+						icon : "delete"
+					}
+					
+				}
+			});
+ 			
+ 			
+ 			
+			$('#wayfinder1').bind("contextmenu",function(e){
+
+				 listeningItem=$(this).attr('id');
+				
+			});
+			$.contextMenu({
+				selector : "#wayfinder1",
+				callback : function(key, options) {
+					var m = "clicked: " + key;
+				  
+					
+					$('.icon-delete').on('click',
+							function(e) {
+						
+						
+     					var wayfinder1 = $("#wayfinder1 p#pat32").text(); 
+     				 	
+     					if(wayfinder1 == "Wayfinder"){
+     						$(".child_two_bottom").show();
+     						$(".child_three_bottom_temp").show();
+     						$(".child_four_bottom").show();
+     						$(".child_five_bottom").show();
+     						$(".child_two_bottom1").hide();
+     						$(".child_three_bottom1").hide();
+     						
+     						
+     						
+     					}
+								 
+					});
+				
+							
+				},
+				items : {
+					"delete" : {
+						name : "Delete",
+						icon : "delete"
+					}
+					
+				}
+			});
+ 			
+ 	
+ 		
+		});
+		
+</script>
+
+</head>
+<body>
+<header>
+<div class="header_part">
+	<div id="banner_health">
+		<div id="cisco_logo_white"></div>
+		<div class="user_details">
+			<div class="user_image"></div>
+			<div class="user_name">Welcome Steve</div>
+			<div class="logout">Logout</div>
+			<div class="settings">Settings</div>
+		</div>
+	</div>
+	<nav>
+		<ul class="navigation_healthcare">
+			<li class="highlight"><a href="dashboard.html">Dashboard</a></li>
+			<li><a href="businessflow_steve.html">Business Flow</a></li>
+			<li><a href="status.html">Status</a></li>
+			<li><a href="reports.html">Reports</a></li>
+			
+		</ul>
+	</nav>
+</div>
+</header>
+
+<div id="basic-modal-content">
+<p>"NC Hospital" tool kit has been sent to administator for configuration</p>
+<input type="button" value="Close" onclick="closeWin()" class="closebt">
+</div>
+
+ <!-- <div class="inter">
+      <p>Liste des Produits</p>
+      <ul>
+          <li><a href="#1">PsAS1</a></li>
+          <li><a href="#2">P2</a></li>
+          <li><a href="#3">P3</a></li>
+      </ul>
+  </div> -->
+<div class="manincontainer">
+<div class="manincontainer">
+
+<h4 style=" color:red; text-align:center;font-size:18px;">The Page Under Construction </h4>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="../js/jquery.js" type="text/javascript"></script>
+    <script src="../js/jquery.contextmenu.js" type="text/javascript"></script>
+    <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <script type='text/javascript' src='../js/basic.js'></script>
+    <link href="../css_boot/bootstrap.min.css" rel="stylesheet" />
+    <link href="../css_boot/style.css" rel="stylesheet" />
+    <script type="text/javascript" src="../js_boot/bootstrap.min.js"></script>
+	<style>
+	.approvebtn{float:left;}
+	.rejectbtn{float:right;}
+	.customreview{padding:2%;}
+	#displayreviewworkflow{background:none;}
+	#dynamicbusinessconfiguration{border:red 1px solid;}
+    #reviewContainer .statusContainer {
+        border:1px solid #DCDEE0;
+    }
+    #reviewContainer .form-group {
+        margin:0;
+    }
+    #reviewContainer .form-horizontal .control-label {
+        text-align: left;
+        min-width: 200px;
+    }
+    #reviewContainer .col-sm-10 {
+        clear: both;
+    }
+    #reviewContainer .btn-group .dropdown-toggle {
+        width: 160px;
+        text-align: left;
+    }
+    #reviewContainer .btn .caret {
+        float: right;
+        margin-top: 8px;
+    }
+    #reviewContainer .form-horizontal {
+        margin-bottom: 20px;
+    }
+    .reviewLeftPanel {
+        position: absolute;
+        top: 40px;
+        width: 200px;
+    }
+    .reviewRigthPanel {
+        float: right;
+        padding-left: 3%;
+        width:20%;
+    }
+    #adminworkflowContainer{
+		border-right: 1px solid #ccc;
+		width:80%;
+		padding-bottom:4%;
+	}
+    #reviewContainer .reviewRigthPanel .form-horizontal .control-label, #reviewContainer .reviewRigthPanel .col-sm-10 {
+        margin: 0;
+        padding: 0;
+    }
+    .reviewRigthPanel p {
+        font-size: 13px;
+        font-weight: bold;
+    }
+    p.oddRow {
+        clear: both;
+        padding-top:10px;
+        margin: 0;
+    }
+    p.evenRow {
+        color: #0467c4;
+    }
+    .reviewRigthPanel textarea {
+        resize:none;
+        border: 1px solid #0467c4;
+        background-color: #F5F5F5;
+        width: 90%;
+        height: 120px;
+    }
+	</style>
+	
+	<script type='text/javascript'>
+	
+   
+	</script>
+</head>
+
+<body>
+    <header>
+        <div class="row clearfix">
+            <div class="col-md-8 nopadding">
+                <div id="cisco_logo_white"></div>
+            </div>
+            <div class="col-md-4 nopadding">
+                <div class="user_details">
+                    <div class="user_image"></div>
+                    <div class="user_name">Welcome
+                        <%=username %>
+                    </div>
+                    <div class="logout"><a href='../logout' id='logout'>Logout</a>
+                    </div>
+                    <div class="settings">Settings</div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Menu</a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                <li>
+                    <a href="/usermanagement">USER MANAGEMENT</a>
+                </li>
+                <li class="active">
+                    <a href="/review">REVIEW</a>
+                </li>
+                <li>
+                    <a href="/status">STATUS</a>
+                </li>
+                
+
+            </ul>
+        </div>
+    </nav>
+    
+    <article id='articlecontainer'>
+        <div class="container" id="reviewContainer">
+            <div class="row clearfix">
+           		<div class="col-md-12 column">
+               		<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">REVIEW</h3>
+						</div>
+					<div class="panel-body" id='admindisplayworkflow'>
+						<div class="col-md-9 column" id="adminworkflowContainer">
+							<!--  <div class="row my-row10 clearfix">
+                           		<div class="form-group">
+                             		 <label for="inputEmail3" class="col-sm-10 control-label">Select Workflows</label>
+                             	</div>
+                              	<div class="col-sm-4">
+									<select class="form-control" name='userType' id='waitingtoconfigure'>
+										<option>Select Work Flow</option>															
+									</select>
+								</div>
+							</div>-->
+                                        	
+							<div class="row my-row1 clearfix">
+								<div class="form-group">
+                             		 <label for="inputEmail3" class="col-sm-10 control-label">Select Workflows</label>
+                             	</div>
+                              	<div class="col-md-4">
+									<select class="form-control" name='userType' id='waitingtoconfigure'>
+										<option>Select Work Flow</option>															
+									</select>
+								</div>
+								<div class="col-md-3 column"></div>
+								
+								<div class="col-md-1 column">
+									<div id="arrow4">
+										<div class="arrow_four">
+											<img src="../images/arrow_45_right.png" />
+										</div>
+									</div>
+									<div id="arrow5">
+										<div class="arrow_five">
+											<img src="../images/arrow_45_right_botton.png" />
+										</div>
+									</div>
+								</div>
+								
+								<div class="col-md-1 column">
+								<div id="node5">
+									<div class="node_five">
+										<div id="PatArrivalNotify" class="circular context-menu-disabled"></div>
+									</div>
+									<div class="node_five_label"></div>
+								</div>
+								</div>
+								
+								<div class="col-md-1 column">
+								<div id="arrow6">
+									<div class="arrow_six">
+										<img src="../images/arrow_right.png" />
+									</div>
+								</div>
+								</div>
+										
+								<div class="col-md-1 column">				
+								<div id="node7">
+									<div class="node_seven">
+										<div id="DoctorNotify" class="circular context-menu-disabled"></div>
+									</div>
+									<div class="node_seven_label"></div>
+								</div>
+								</div>
+							</div>
+							
+							
+							<div class="row my-row3 clearfix">
+								<div class="col-md-5 column"></div>
+								
+								<div class="col-md-1 column">	
+									<div id="arrow3">
+										<div class="arrow_three">
+											<img src="../images/arrow_45_right.png" />
+										</div>
+									</div>
+									<div id="arrow8">
+										<div class="arrow_eight">
+											<img src="../images/arrow_45_right_botton.png" />
+										</div>
+									</div>
+								</div>
+								
+								<div class="col-md-1 column">
+									<div id="node4">
+										<div class="node_four">
+											<div id="PatSchedularSys" class="circular context-menu-disabled"></div>
+										</div>
+										<div class="node_four_label"></div>
+									</div>
+								</div>
+								
+							</div>
+							
+							<div class="row my-row5 clearfix">
+								<div class="col-md-7 column"></div>
+								
+								<div class="col-md-1 column">
+									<div id="arrow51">
+										<div class="arrow_five">
+											<img src="../images/arrow_45_right_botton.png" />
+										</div>
+									</div>
+								</div>
+								
+								<div class="col-md-1 column">
+									<div id="node6">
+										<div class="node_six">
+											<div id="ApptWaitTimeNotify" class="circular context-menu-disabled"></div>
+										</div>
+										<div class="node_six_label"></div>
+									</div>
+								</div>
+											
+								<div class="col-md-1 column">		
+									<div id="arrow7">
+										<div class="arrow_seven">
+											<img src="../images/arrow_right.png" />
+										</div>
+									</div>
+								</div>
+										
+								<div class="col-md-1 column">				
+									<div id="node8">
+										<div class="node_eight">
+											<div id="IntrctnComptdDr" class="circular context-menu-disabled"></div>
+										</div>
+										<div class="node_eight_label"></div>
+									</div>
+								</div>
+							</div>
+							  
+							<div class="row my-row6 clearfix">	
+								
+								<div class="col-md-1 column">
+								<div id="node1">
+									<div class="node_one">
+										<div id="PatientIdentified" class="circular context-menu-disabled"></div>
+									</div>
+									<div class="node_one_label"></div>
+								</div>
+								</div>
+											
+								<div class="col-md-1 column">		
+								<div id="arrow1">
+									<div class="arrow_one">
+										<img src="../images/arrow_right.png" />
+									</div>
+								</div>
+								</div>
+										
+								<div class="col-md-1 column">
+								<div id="node2">
+									<div class="node_two">
+										<div id="AutoCheckin" class="circular context-menu-disabled"></div>
+									</div>
+									<div class="node_two_label"></div>
+								</div>
+								</div>
+										
+								<div class="col-md-1 column">			
+								<div id="arrow2">
+									<div class="arrow_two">
+										<img src="../images/arrow_right.png" />
+									</div>
+								</div>
+								</div>
+										
+								<div class="col-md-1 column">	
+								<div id="node3">
+									<div class="node_three">
+										<div id="PersonalizedWelcome" class="circular context-menu-disabled"></div>
+									</div>
+									<div class="node_three_label"></div>
+								</div>
+								</div>
+								
+							</div>		
+							
+							<div class="row my-row1 clearfix">
+								<div class="col-md-7 column"></div>
+								
+								<div class="col-md-1 column">
+									<div id="arrow9">
+										<div class="arrow_nine">
+											<img src="../images/arrow_45_right.png" />
+										</div>
+									</div>
+									<div id="arrow10">
+										<div class="arrow_ten">
+											<img src="../images/arrow_45_right_botton.png" />
+										</div>
+									</div>
+								</div>
+								
+								<div class="col-md-1 column">
+									<div id="node10">
+										<div class="node_ten">
+											<div id="PntArvlNfyPharmacist" class="circular context-menu-disabled"></div>
+										</div>
+										<div class="node_ten_label"></div>
+									</div>
+								</div>		
+													
+								<div class="col-md-1 column">
+								<div id="arrow11">
+									<div class="arrow_11">
+										<img src="../images/arrow_right.png" />
+									</div>
+								</div>
+								</div>
+										
+								<div class="col-md-1 column">				
+									<div id="node12">
+										<div class="node_12">
+											<div id="PharmacistNotify" class="circular context-menu-disabled"></div>
+										</div>
+										<div class="node_12_label"></div>
+									</div>
+								</div>
+							</div>
+							
+							<div class="row my-row3 clearfix">
+								<div class="col-md-5 column"></div>
+								
+								<div class="col-md-1 column">
+									<div id="arrow51">
+										<div class="arrow_five">
+											<img src="../images/arrow_45_right_botton.png" />
+										</div>
+									</div>
+								</div>
+								
+								<div class="col-md-1 column">
+									<div id="node9">
+										<div class="node_nine">
+											<div id="PharmacySystem" class="circular context-menu-disabled"></div>
+										</div>
+										<div class="node_nine_label"></div>
+									</div>
+								</div>
+							</div>
+							
+							<div class="row my-row5 clearfix">
+								<div class="col-md-7 column"></div>
+								
+								<div class="col-md-1 column">
+									<div id="arrow51">
+										<div class="arrow_five">
+											<img src="../images/arrow_45_right_botton.png" />
+										</div>
+									</div>
+								</div>
+								
+								<div class="col-md-1 column">
+									<div id="node11">
+										<div class="node_11">
+											<div id="PrescriptionStsNotify" class="circular context-menu-disabled"></div>
+										</div>
+										<div class="node_11_label"></div>
+									</div>
+								</div>
+											
+								<div class="col-md-1 column">		
+									<div id="arrow12">
+										<div class="arrow_12">
+											<img src="../images/arrow_right.png" />
+										</div>
+									</div>
+								</div>
+										
+								<div class="col-md-1 column">				
+									<div id="node13">
+										<div class="node_13">
+											<div id="MedicinesReceivd" class="circular context-menu-disabled"></div>
+										</div>
+										<div class="node_13_label"></div>
+									</div>
+								</div>
+							</div>	
+                          </div>
+	
+	                      <div class="reviewRigthPanel">									      
+	                      	<div class="form-group">
+	                       		<label for="inputEmail3" class="control-label">Selector User</label>
+	                          	<br />
+	                            <div class="form-group">
+								<!-- Small button group -->
+									<div class="col-sm-10">
+										<select class="form-control" name='userType' id="userType">
+											<option>Business User</option>
+											<option>IT Admin</option>
+										</select>
+									</div>
+								</div>	
+								<div id='businessConfigDetails'></div>
+	                            	<p class="oddRow">Comments :</p>
+	                                <div class="col-sm-10">
+										<textarea class="form-control" rows="3" cols="250" name='message' id="comments"></textarea>
+									</div>
+	                                <div class="form-group">
+									<input type="hidden" name="status" id="status">
+									<div class="col-sm-9 customreview">
+										<button class="btn btn-primary add-tab approvebtn conformationbutton" id="approved">Approve</button>
+										<button class="btn btn-primary add-tab rejectbtn conformationbutton" id="rejected">Reject</button>
+									</div>
+								</div>
+	                          </div>
+	              			</div>
+	               		</div>
+	      			</div>
+	   			 </div>
+	 		 </div>
+		</div>
+	</article>
+	
+	<script type="text/javascript">
+    var defaultWFDetails = {};
+    var componentsTitle = {};
+    var businessDetails;
+
+
+    $(window).load(function() {
+	
+
+        $.ajax({
+            type: "GET",
+            //url: "http://152.48.2.245:3050/retrieveKitNames",
+            url: "http://152.48.2.245:80/retrieveComponentList",
+            dataType: "json",
+            async: false,
+            success: function(data) {
+                console.log(data);
+                var result = JSON.stringify(data);
+                var result1 = JSON.parse(result);
+
+                $.each(result1.component,function(i){
+					if (result1.component[i].componentName == 'PatientIdentified'){
+						$("#PatientIdentified").append('<img src="../images/PatientIdentified.png" class="img-rounded " alt=""/>');
+						//$("#PatientIdentified").append('<div id="one" class="img-responsive timage" style="background: '+result1.component[i].imageUrl+' no-repeat;"></div>');
+						$(".node_one_label").append('<label class="label1">'+result1.component[i].title+'</label>');
+					} else if (result1.component[i].componentName == 'AutoCheckin'){
+						$("#AutoCheckin").append('<img src="../images/AutoCheckin.png" class="img-rounded " alt=""/>');
+						//$("#AutoCheckin").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat;"></div>');
+						$(".node_two_label").append('<label class="label2">'+result1.component[i].title+'</label>');
+					} else if (result1.component[i].componentName == 'PersonalizedWelcome'){
+						$("#PersonalizedWelcome").append('<img src="../images/PersonalizedWelcome.png" class="img-rounded " alt=""/>');
+						//$("#PersonalizedWelcome").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat;"></div>');
+						$(".node_three_label").append('<label class="label3">'+result1.component[i].title+'</label>');
+					} else if (result1.component[i].componentName == 'PatSchedularSys'){
+						$("#PatSchedularSys").append('<img src="../images/PatSchedularSys.png" class="img-rounded " alt=""/>');
+						//$("#PatSchedularSys").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat;"></div>');
+						$(".node_four_label").append('<label class="label4">'+result1.component[i].title+'</label>');
+					} else if (result1.component[i].componentName == 'PatArrivalNotify'){
+						$("#PatArrivalNotify").append('<img src="../images/PatArrivalNotify.png" class="img-rounded " alt=""/>');
+						//$("#PatArrivalNotify").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat;"></div>');
+						$(".node_five_label").append('<label class="label5">'+result1.component[i].title+'</label>');
+					} else if (result1.component[i].componentName == 'ApptWaitTimeNotify'){
+						$("#ApptWaitTimeNotify").append('<img src="../images/ApptWaitTimeNotify.png" class="img-rounded " alt=""/>');
+						//$("#ApptWaitTimeNotify").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat;"></div>');
+						$(".node_six_label").append('<label class="label6">'+result1.component[i].title+'</label>');
+					} else if (result1.component[i].componentName == 'IntrctnComptdDr'){
+						$("#IntrctnComptdDr").append('<img src="../images/PatientIdentified.png" class="img-rounded " alt=""/>');
+						//$("#IntrctnComptdDr").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat;"></div>');
+						$(".node_eight_label").append('<label class="label8">'+result1.component[i].title+'</label>');
+					} else if (result1.component[i].componentName == 'DoctorNotify'){
+						$("#DoctorNotify").append('<img src="../images/PatientIdentified.png" class="img-rounded " alt=""/>');
+						//$("#DoctorNotify").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat;"></div>');
+						$(".node_seven_label").append('<label class="label7">'+result1.component[i].title+'</label>');
+					} else if (result1.component[i].componentName == 'PharmacySystem'){
+						$("#PharmacySystem").append('<img src="../images/PharmacySystem.png" class="img-rounded " alt=""/>');
+						//$("#PharmacySystem").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat;"></div>');
+						$(".node_nine_label").append('<label class="label9">'+result1.component[i].title+'</label>');
+					} else if (result1.component[i].componentName == 'PntArvlNfyPharmacist'){
+						$("#PntArvlNfyPharmacist").append('<img src="../images/PatArrivalNotify.png" class="img-rounded " alt=""/>');
+						//$("#PntArvlNfyPharmacist").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat;"></div>');
+						$(".node_ten_label").append('<label class="label10">'+result1.component[i].title+'</label>');
+					} else if (result1.component[i].componentName == 'PrescriptionStsNotify'){
+						$("#PrescriptionStsNotify").append('<img src="../images/AutoCheckin.png" class="img-rounded " alt=""/>');
+						//$("#PrescriptionStsNotify").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat;"></div>');
+						$(".node_11_label").append('<label class="label11">'+result1.component[i].title+'</label>');
+					} else if (result1.component[i].componentName == 'PharmacistNotify'){
+						$("#PharmacistNotify").append('<img src="../images/PharmacistNotify.png" class="img-rounded " alt=""/>');
+						//$("#PharmacistNotify").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat;"></div>');
+						$(".node_12_label").append('<label class="label12">'+result1.component[i].title+'</label>');
+					} else if (result1.component[i].componentName == 'MedicinesReceivd'){
+						$("#MedicinesReceivd").append('<img src="../images/MedicinesReceivd.png" class="img-rounded " alt=""/>');
+						//$("#MedicinesReceivd").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat;"></div>');
+						$(".node_13_label").append('<label class="label13">'+result1.component[i].title+'</label>');
+					}
+				  });
+            }
+        });
+        $.ajax({
+            type: "GET",
+            url: "http://152.48.2.245:80/retrieveModifiedWFKitNamesWithStatus/CONFIGUREDONE",
+            dataType: "json",
+            async: false,
+            success: function(data) {
+                console.log(data);
+                var result = JSON.stringify(data);
+                var result1 = JSON.parse(result);
+                if (result1.statusCode == 200) {
+                    $.each(result1.kitItems, function(i) {
+                       // $("#waitingtoconfigure").append('<li><a href="javascript:void(0)">' + result1.kitItems[i].kitName + ' </a>');
+					    $('#waitingtoconfigure').append($("<option></option>").attr("value", result1.kitItems[i].kitName).text(result1.kitItems[i].kitName));
+					    
+                    });
+                }
+				else if(result1.statusCode == 404)
+				$('.statusContainer').empty();
+            }
+        });
+		
+		
+     $("#waitingtoconfigure").change(function()
+    {
+        $('#businessConfigDetails').empty();
+		var value=$(this).val();
+       
+
+        var title = $(this).text();
+
+
+            $(this).parents('.btn-group').find('.dropdown-toggle').html(value + ' <span class="caret"></span>');
+
+            $.ajax({
+                type: "GET",
+                url: "http://152.48.2.245:80/retrieveMWFKitDetails/" + value,
+                dataType: "json",
+                async: false,
+                success: function(data) {
+
+                    var result = JSON.stringify(data);
+                    result1 = JSON.parse(result);
+                    kitImages = result1.images;
+                    deletedImages = result1.deletedImages;
+                    clearedImgs = result1.clearedImgs;
+                    kitImg = result1.images;
+                    kitNm = result1.kitName;
+                    kitDesc = result1.description;
+
+                    $('#kitname').val(kitNm);
+                    $('#description').val(kitDesc);
+
+                    if (kitImages.length > 0) {
+                        $.each(kitImages, function(i) {
+                            if (kitImages[i] == 'PatientIdentified') {
+                                $("#node1").show();
+                            } else if (kitImages[i] == 'AutoCheckin') {
+                                $("#arrow1").show();
+                                $("#node2").show();
+                            } else if (kitImages[i] == 'PersonalizedWelcome') {
+                                $("#arrow2").show();
+                                $("#node3").show();
+                            } else if (kitImages[i] == 'PatSchedularSys') {
+                                $("#arrow3").show();
+                                $("#node4").show();
+                            } else if (kitImages[i] == 'PatArrivalNotify') {
+                                $("#arrow4").show();
+                                $("#node5").show();
+                            } else if (kitImages[i] == 'ApptWaitTimeNotify') {
+                                $("#arrow5").show();
+                                $("#node6").show();
+                            } else if (kitImages[i] == 'DoctorNotify') {
+                                $("#arrow6").show();
+                                $("#node7").show();
+                            } else if (kitImages[i] == 'IntrctnComptdDr') {
+                                $("#arrow7").show();
+                                $("#node8").show();
+                            } else if (kitImages[i] == 'PharmacySystem') {
+                                $("#arrow8").show();
+                                $("#node9").show();
+                            } else if (kitImages[i] == 'PntArvlNfyPharmacist') {
+                                $("#arrow9").show();
+                                $("#node10").show();
+                            } else if (kitImages[i] == 'PrescriptionStsNotify') {
+                                $("#arrow10").show();
+                                $("#node11").show();
+                            } else if (kitImages[i] == 'PharmacistNotify') {
+                                $("#arrow11").show();
+                                $("#node12").show();
+                            } else if (kitImages[i] == 'MedicinesReceivd') {
+                                $("#arrow12").show();
+                                $("#node13").show();
+                            }
+                        });
+                    }
+                   
+
+                    }
+                
+            });
+
+
+			 $.ajax({
+                type: "GET",
+                url: "http://152.48.2.245:80/getDetailsByKitName/" + value,
+                dataType: "json",
+                async: false,
+                success: function(data) {
+
+                    var result = JSON.stringify(data);
+                    businessDetails = JSON.parse(result);
+                    console.log(businessDetails);
+					}
+
+        });
+		});
+
+    
+    $('.conformationbutton').on('click', function(e) {
+	   
+    	var kitDetails = {};
+		e.preventDefault();   		
+		kitDetails.workFlowName = $('#waitingtoconfigure').val();		
+		if(kitDetails.workFlowName == "Select Work Flow"){
+			alert("Please select the workflow");
+			return false;			
+		}
+		kitDetails.userType = $('#userType').val();
+		
+		kitDetails.message = $('#comments').val();
+			
+		if(this.id=='approved')
+			kitDetails.status='APPROVED';
+		else if(this.id=='rejected')
+			kitDetails.status='REJECTED';
+		
+		console.log(kitDetails);
+	    jQuery.ajax({
+		   url: "/addReview",
+		   method: 'POST',
+		   dataType: "json",
+		   async:false,
+		   data:kitDetails
+	    }).done(function (response) {
+	    	  
+	    	    // Do something with the response
+   	    }).fail(function () {
+   	    	
+	   // Whoops; show an error.
+	    });
+    });
+	
+	
+	
+	 //   $('#admindisplayworkflow').on("click", ".circular", function () {
+	    $('.circular').click(function(){
+		
+		$('#businessConfigDetails').empty();
+		
+		if($('#userType').val().trim()=='IT Admin')
+		{
+		
+			 var key;
+			 var id=$(this).attr('id');
+			
+			  switch(id){
+				  case 'AutoCheckin':
+				  {
+				  key='AutoCheckInNotification';
+				  break;
+				 }
+				 case 'PersonalizedWelcome':
+				 {
+				  key='PersonalizedWelcome';
+				  break;
+				 }
+				 case 'PatSchedularSys':
+				 {
+				  key='PatientSchedularSystem';
+				  break;
+				 }
+				 case 'PatArrivalNotify':
+				 {
+				  key='PatientArrivalNotificationToDoctor';
+				  break;
+				 }
+				  case 'ApptWaitTimeNotify':
+				 {
+				  key='AppointmentAndWaitTimeNotification';
+				  break;
+				 }
+				 
+				
+				  case 'PharmacySystem':
+				 {
+				  key='PharmacySystem';
+				  break;
+				 }
+				  case 'PatArrivalNotify':
+				 {
+				  key='PatientArrivalNotificationToPharmacist';
+				  break;
+				 }
+				   case 'PrescriptionStsNotify':
+				 {
+				  key='PrescriptionAndStatusNotification';
+				  break;
+				 }
+				 
+				    case 'PrescriptionStsNotify':
+				 {
+				  key='PrescriptionAndStatusNotification';
+				  break;
+				 }
+				 
+			}
+		
+			if(key!=undefined)
+			{
+			var outputData=businessDetails[key];
+				if(outputData!=undefined){
+				  
+					  $.each(outputData,function(i){
+					  console.log(i + outputData[i]);
+					  $('#businessConfigDetails').append(' <p class="oddRow"> '+ i + '</p>');
+					  $('#businessConfigDetails').append(' <p class="evenRow"> '+ outputData[i] + '</p>');
+													   
+					});
+			   }
+			}
+            
+       }
+    });
+	
+	 });
+    </script>
+</body>
+
+</html>

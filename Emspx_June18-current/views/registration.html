@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Registration</title>
+<link rel="stylesheet" href="../admin_css/admin_style.css" />
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<link rel="stylesheet" href="../admin_css/normalize.css">
+<link rel="stylesheet" href="../admin_css/main.css">
+<link rel="stylesheet" href="../admin_css/jquery.steps.css">
+<!-- <script src="js/jquery-1.9.1.min.js"></script> -->
+<script src="js/jquery.steps.js"></script>
+<script src="js/countries.js"></script>
+<script type="text/javascript">
+var jq = jQuery.noConflict();
+window.onload = function () {
+	
+    document.getElementById("password1").onchange = validatePassword;
+    document.getElementById("password2").onchange = validatePassword;
+    
+	jq("#username").on('change', function() { 
+	   
+		usernamecheckFunction();
+	});
+
+	
+	
+	usernamecheckFunction=function(){
+		var userDetailsJson={};
+		userDetailsJson.username = jq('#username').val();
+		jq.ajax({
+			type: "POST",
+		     // url: "http://152.48.2.245:3000/login",
+			url: "http://152.48.2.245:80/usernameexist",
+		    dataType: "json",
+		    data:  userDetailsJson,
+		    	success: function (data) {
+		    		console.log(data);
+		    	  		var result 	= JSON.stringify(data); //alert(result);
+		    	  		var parseResult=JSON.parse(result);
+		    	  		var errormsg = parseResult.status;
+		    	  	    if(errormsg=="pass") {
+								jq('#usernameerror').html("Username is avilable");
+								jq("#usernameerror").css("color","green");
+						}
+					   else{ 
+								jq('#usernameerror').html("The Username does not exist");
+								jq("#usernameerror").css("color","red");
+						  
+					   }
+						
+						
+						
+		    	  	},
+			 }); 
+		}
+	
+	
+   
+    
+	
+}
+	function validatePassword(){
+		var pass2=document.getElementById("password2").value;
+		var pass1=document.getElementById("password1").value;
+		if(pass1!=pass2)
+    		document.getElementById("password2").setCustomValidity("Password's doesn't match");
+		else
+    		document.getElementById("password2").setCustomValidity(''); 
+			//empty string means no validation error
+		}
+
+		var jqueryFunction;
+		var usernamecheckFunction;
+
+	jq(document).ready(function(){
+
+	
+	var html = '';
+	for( var i=1; i<5000; i=i+50 ) {
+	    html += '<option value="'+ i + "-" +parseInt(49+i)+'">' + i + "-" +parseInt(49+i)+'</option>';
+	}                   
+	jq('#noofemp').append(html);
+
+	jq("#cancel").click(function(){ 
+		alert("hi");
+		 jq('#superadmin').each(function(){
+ 			this.reset();  
+	 	}); 
+	});
+	
+	if(jq('input:password').val()=="" ||  jq('input#email').val()=="" || jq('input:text').val()==""){
+		/*var message = "Please fill all the Input Fields";
+		document.getElementById("errorstatus").innerHTML = message;*/
+	}else{
+	
+    jqueryFunction=function(){
+	    	var userDetailsJson={};
+			userDetailsJson.companyname = jq('#companyname').val();
+			userDetailsJson.noofemp = jq('#noofemp').val();
+			userDetailsJson.lineofbusiness = jq('#lineofbusiness').val();
+			userDetailsJson.address = jq('#address').val();
+			userDetailsJson.city = jq('#city').val();
+			userDetailsJson.state = jq('#state').val();
+			userDetailsJson.country = jq('#country').val();
+			userDetailsJson.telephone = jq('#telephone').val();
+			userDetailsJson.fname = jq('#fname').val();
+			userDetailsJson.lname = jq('#lname').val();
+			userDetailsJson.email = jq('#email').val();
+			userDetailsJson.username = jq('#username').val();
+			userDetailsJson.password = jq('#password').val();
+			userDetailsJson.confpassword = jq('#confpassword').val();
+			userDetailsJson.termscond = jq('#termscond').val();
+			userDetailsJson.upload = jq('#upload').val();
+			//console.log(jq( "#role option:selected" ).text());
+		
+			jq.ajax({
+		      	type: "POST",
+		     // url: "http://152.48.2.245:3000/login",
+			 	url: "http://152.48.2.245:80/registration",
+		       	dataType: "json",
+		      	data:  userDetailsJson,
+		      		success: function (data) {
+		    	  		console.log(data);
+		    	  		var result = JSON.stringify(data);
+		    	  		var parseResult=JSON.parse(result);
+		    	  		//console.log('response'+parseResult.sessionuser);
+		    	  		//console.log('response'+parseResult.userrole);
+		    	  		jq('.statusmessage ').html('<b>Thank you!! We have received New user Registeration Information</b>');
+		    	     },
+			   			 	
+			}); 
+		}
+	}
+	
+});
+</script>
+</head>
+<body>
+       <div class="content" style="  margin-bottom:20px; width:750px; margin:0px auto;">
+            <script>
+                jq(function ()
+                {
+                    jq("#wizard").steps({
+                        headerTag: "h2",
+                        bodyTag: "section",
+                        transitionEffect: "slideLeft"
+                    });
+                });
+            </script>
+            <div class="title_superadmin">REGISTRATION</div>
+         <form action="#" method="post">
+        	 <div id="wizard" >
+                <h2><p>ENTERPRISE PROFILE</p>  <div class="arrow_ad"> &#8594;</div></h2>
+                
+                <section>
+               
+                    		<div class="adminpanel">
+								<label for="companyname" class="companyname">COMPANY NAME</label> 
+								<input id="companyname" name="companyname" value="" aria-describedby="name-format" required  placeholder="Enter the Companyname" aria-required="true"> 
+															
+								<label for="noofemp" class="noofemp">NO. OF EMPLOYEES</label>
+								<!-- <input type="number" id='noofemp' class="noofemp" name="noofemp" required="required" value="1-50" min="1" max="5000" step="50" placeholder="Choose No of Employees" onclick="valueappend()" /> -->
+								<select id='noofemp' class="noofemp" name="noofemp" required="required"> 
+									<option value="-1">Choose No of Employees </option>
+																
+								</select>
+								
+								<label for="lineofbusiness" class="lineofbusiness">LINE OF BUSINESS</label> 
+								<select id='lineofbusiness' name='lineofbusiness' class="lineofbusiness" required="required">
+									<option value="-1">Choose Line of Business </option>
+									<option value="HealthCare">HealthCare</option>
+									<option value="Finance">Finance</option>
+									<option value="Retail">Retail</option>
+									<option value="Hotel">Hotel</option>
+								</select>
+															
+								<label for="address" class="address">ADDRESS</label> 
+       						    <textarea   id="address" name="address" rows=3 cols=50 maxlength=250 required   placeholder="Enter the address"></textarea>
+															
+								<label for="city" class="city">CITY</label> 
+								<input id="city" name="city" value="" aria-describedby="name-format" required  placeholder="Enter the City" aria-required="true">
+																
+								<label for="country" class="country">COUNTRY</label> 
+								<select id="country" name ="country" required  placeholder="Enter the Country"></select>
+								
+								<label for="state" class="state">STATE</label>
+								<select name ="state"  name="state" id ="state" required  placeholder="Enter the State"></select> 
+								<script language="javascript">
+									populateCountries("country", "state");
+ 								</script>
+																								
+								<label for="telephone" class="telephone">PHONE</label>
+								<input id="countrycode" name="countrycode" value="">
+							<!-- 	<select id='countrycode' name='countrycode' class="countrycode" required="required">
+							 	<script language="javascript">
+								change_country( "country","countrycode");
+ 								</script>
+									<option value="">Country Code</option>
+									<option value="+91">+91</option>
+									<option value="+1">+1</option>
+								</select> -->
+								
+								<input id="telephone" name="telephone" value="" aria-describedby="name-format" required  placeholder="Enter Phone No" aria-required="true" pattern="\d{10}">
+								<div id="telephoneError"></div>	
+								<div id="countrycodeError"></div>	
+								 
+							</div>
+					</section>
+
+                <h2><p>USER PROFILE</p><div class="arrow_ad"> &#8594;</div></h2>
+                <section>
+             		<div class="adminpanel">
+								<label for="fname" class="fname">FIRST NAME</label> 
+								 <!--<input id="fname" name="fname" value="" />-->
+								<input id="fname" name="fname" value="" aria-describedby="name-format" required  placeholder="Enter the Firstname" aria-required="true">
+																
+								<label for="lname" class="lname">LAST NAME</label> 
+								 <!-- <input id="lname" name="lname" value="" /> -->
+								<input id="lname" name="lname" value="" aria-describedby="name-format" required  placeholder="Enter the Lastname" aria-required="true">
+																
+								<label for="email" class="email">EMAIL ID</label> 
+								 <!-- <input id="email" name="email" value="" /> -->
+								<input type="email" id="email" name="email" value="" aria-describedby="name-format" required  placeholder="Enter the Emailaddress" aria-required="true">
+																
+								<label for="username" class="username">CREATE USER NAME</label> 
+								<!--<input id="username" name="username" value="" />-->
+								<input type="text" id="username" name="username" value="" aria-describedby="name-format" required  placeholder="Enter the Username" aria-required="true">
+								<p id="usernameerror"><%= infor %></p>
+								
+								<label for="password" class="password1">PASSWORD</label> 
+								<!--  <input type="password" id="password" name="password" value="" /> --> 
+								<input type="password" id="password1" name="password" value="" required  placeholder="Enter the Password">
+																
+								<label for="confpassword" class="password2">CONFIRM PASSWORD</label> 
+								 <input type="password" id="password2" name="confpassword" value=""  required  placeholder="Enter the ConfirmPassword">
+								
+							</div>
+						
+                </section>
+
+                <h2><p>&nbsp;LICENSE</p></h2>
+                <section>
+                           <div class="adminpanel">
+								<label for="termscond" class="termscond">TERMS and CONDITIONS</label> 
+								<input type="checkbox" id="termscond" required name="terms"><label for="termscond" class="termsaccpet">I accept the terms in Licensing Agreement</label>
+															
+								<label for="termscond" class="termscond">UPLOAD</label> 
+								<input type="file" id="upload" name="upload" value="" />
+								
+								<div id="errorstatus" style="color:red; width:275px; float:right; margin-right:36px"> </div>
+								<div class="submit_Area">
+									<div class="adminpanlcancel">
+										<a href="#" class="savebt" id="cancel">CANCEL</a>
+									</div>
+									<div class="adminpanlsubmit">
+										<input id="register" type="submit" value="SUBMIT">
+										<!-- <input  type="button" id="register"  onclick="test()"  value="SIGN IN"></input> -->  
+										<!-- <a href="#" class="savebt" onclick="formValidation()" id="register">SAVE</a> -->
+										<!--  <a href="#" class="savebt" onclick="formValidation()" id="register">SAVE</a> -->
+									</div>
+								</div>
+						
+						</div>
+                </section>
+              </div>
+           </form>
+         </div>
+</body>
+</html>

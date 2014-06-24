@@ -1,0 +1,2437 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>CISCO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!--link rel="stylesheet/less" href="less/bootstrap.less" type="text/css" /-->
+    <!--link rel="stylesheet/less" href="less/responsive.less" type="text/css" /-->
+    <!--script src="js/less-1.3.3.min.js"></script-->
+    <!--append ‘#!watch’ to the browser URL, then refresh the page. -->
+    
+    <link href="../css_boot/bootstrap.min.css" rel="stylesheet">
+    <link href="../css_boot/style.css" rel="stylesheet">
+
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="js_boot/html5shiv.js"></script>
+  <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../img_boot/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../img_boot/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../img_boot/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="../img_boot/apple-touch-icon-57-precomposed.png">
+    <link rel="shortcut icon" href="../img_boot/favicon.png">
+
+    <script type="text/javascript" src="../js_boot/jquery.min.js"></script>
+    <script type="text/javascript" src="../js_boot/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../js_boot/scripts.js"></script>
+	<script type="text/javascript" src="../js/jquery.contextmenu.js"></script>
+	<link href="../css/jquery.contextMenu.css" rel="stylesheet" type="text/css" /> 
+	<style>
+	
+	</style>
+
+    <script type="text/javascript">
+	
+function isEmpty(str) {
+    return (!str || 0 === str.length);
+}
+
+function isBlank(str) {
+    return (!str || /^\s*$/.test(str));
+}
+
+function closeWin(){
+	window.location.reload();
+		$('#simplemodal-container').hide();
+}
+var username = window.location.search.substring(1);
+var defaultWFDetails = {};
+$(window).load(function() {
+	  $.ajax({
+	      type: "GET",
+	      //url: "http://localhost:3050/retrieveKitNames",
+	      url: "http://localhost:80/retrieveDefaultWFKitNames",
+	      dataType: "json",
+	      async:false,
+	      success: function (data) {
+	    	  console.log(data);
+	    	  var result = JSON.stringify(data);
+	    	  var result1=JSON.parse(result);
+	    	  defaultWFDetails = result1;
+	    	  if (result1.statusCode == 200){
+	    	  $.each(result1.kitItems,function(i){
+					//$(".kitName").append('<li class="WFName" id="DWF"><a id="selected" href="#">'+result1.kitItems[i].kitName+'</a></li>');
+			        //$("#templateContent").append('<a  id="DWF" class="list-group-item WFName" href="#">'+result1.kitItems[i].kitName+'</a>');
+	    		  $("#templateContent").append('<ul class="WFName" id="DWF"><a id="selected" href="#">'+result1.kitItems[i].kitName+'</a></ul>');
+	    	  });
+	    	  }
+	      }
+	  });
+	  
+	  //$(".kitName li").remove();
+	  /*$.ajax({
+	      type: "GET",
+	      //url: "http://localhost:3050/retrieveKitNames",
+	      url: "http://localhost:80/retrieveModifiedWFKitNames/DWF",
+	      dataType: "json",
+	      async:false,
+	      success: function (data) {
+	    	  console.log(data);
+	    	  var result = JSON.stringify(data);
+	    	  var result1=JSON.parse(result);
+	    	  if (result1.statusCode == 200){
+	    	  $.each(result1.kitItems,function(i){
+	    		  $(".kitName").append('<li class="WFName" id="DWF"><a id="selected" href="#">'+result1.kitItems[i].kitName+'</a></li>');
+	    	  });
+	      	  }
+	      }
+	  });*/
+	  
+	  $.ajax({
+	      type: "GET",
+	      //url: "http://localhost:3050/retrieveKitNames",
+	      url: "http://localhost:80/retrieveModifiedWFKitNames/MWF",
+	      dataType: "json",
+	      async:false,
+	      success: function (data) {
+	    	  console.log(data);
+	    	  var result = JSON.stringify(data);
+	    	  var result1=JSON.parse(result);
+	    	  if (result1.statusCode == 200){
+	    	  $.each(result1.kitItems,function(i){
+			         //$("#usercreatedtemplates").append('<a  id="MWF" class="list-group-item WFName" href="#">'+result1.kitItems[i].kitName+'</a>');
+					//$(".kitName").append('<li class="WFName" id="MWF"><a id="selected" href="#">'+result1.kitItems[i].kitName+'</a></li>');
+			         $("#usercreatedtemplates").append('<ul class="WFName" id="MWF"><a id="'+result1.kitItems[i].configStatus+'" href="#">'+result1.kitItems[i].kitName+'</a></ul>');
+	    	  });
+	      	  }
+	      }
+	  });
+	  
+	   $(".templateContent ul").children('a:first').click();
+	  
+	   $.ajax({
+	      type: "GET",
+	      //url: "http://localhost:3050/retrieveKitNames",
+	      url: "http://localhost:80/retrieveComponentList",
+	      dataType: "json",
+	      async:false,
+	      success: function (data) {
+	    	  console.log(data);
+	    	  var result = JSON.stringify(data);
+	    	  var result1=JSON.parse(result);
+			  
+			  $.each(result1.component,function(i){
+				if (result1.component[i].componentName == 'PatientIdentified'){
+					$("#PatientIdentified").append('<img src="../images/PatientIdentified.png" class="img-rounded img-responsive center-block timage" alt=""/>');
+					//$("#PatientIdentified").append('<div id="one" class="img-responsive timage" style="background: '+result1.component[i].imageUrl+' no-repeat;"></div>');
+					$(".node_one_label").append('<label class="label1">'+result1.component[i].title+'</label>');
+				} else if (result1.component[i].componentName == 'AutoCheckin'){
+					$("#AutoCheckin").append('<img src="../images/AutoCheckin.png" class="img-rounded img-responsive center-block timage" alt=""/>');
+					//$("#AutoCheckin").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat;"></div>');
+					$(".node_two_label").append('<label class="label2">'+result1.component[i].title+'</label>');
+				} else if (result1.component[i].componentName == 'PersonalizedWelcome'){
+					$("#PersonalizedWelcome").append('<img src="../images/PersonalizedWelcome.png" class="img-rounded img-responsive center-block timage" alt=""/>');
+					//$("#PersonalizedWelcome").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat;"></div>');
+					$(".node_three_label").append('<label class="label3">'+result1.component[i].title+'</label>');
+				} else if (result1.component[i].componentName == 'PatSchedularSys'){
+					$("#PatSchedularSys").append('<img src="../images/PatSchedularSys.png" class="img-rounded img-responsive center-block timage" alt=""/>');
+					//$("#PatSchedularSys").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat;"></div>');
+					$(".node_four_label").append('<label class="label4">'+result1.component[i].title+'</label>');
+				} else if (result1.component[i].componentName == 'PatArrivalNotify'){
+					$("#PatArrivalNotify").append('<img src="../images/PatArrivalNotify.png" class="img-rounded img-responsive center-block timage" alt=""/>');
+					//$("#PatArrivalNotify").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat;"></div>');
+					$(".node_five_label").append('<label class="label5">'+result1.component[i].title+'</label>');
+				} else if (result1.component[i].componentName == 'ApptWaitTimeNotify'){
+					$("#ApptWaitTimeNotify").append('<img src="../images/ApptWaitTimeNotify.png" class="img-rounded img-responsive center-block timage" alt=""/>');
+					//$("#ApptWaitTimeNotify").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat;"></div>');
+					$(".node_six_label").append('<label class="label6">'+result1.component[i].title+'</label>');
+				} else if (result1.component[i].componentName == 'IntrctnComptdDr'){
+					$("#IntrctnComptdDr").append('<img src="../images/PatientIdentified.png" class="img-rounded img-responsive center-block timage" alt=""/>');
+					//$("#IntrctnComptdDr").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat;"></div>');
+					$(".node_eight_label").append('<label class="label8">'+result1.component[i].title+'</label>');
+				} else if (result1.component[i].componentName == 'DoctorNotify'){
+					$("#DoctorNotify").append('<img src="../images/PatientIdentified.png" class="img-rounded img-responsive center-block timage" alt=""/>');
+					//$("#DoctorNotify").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat;"></div>');
+					$(".node_seven_label").append('<label class="label7">'+result1.component[i].title+'</label>');
+				} else if (result1.component[i].componentName == 'PharmacySystem'){
+					$("#PharmacySystem").append('<img src="../images/PharmacySystem.png" class="img-rounded img-responsive center-block timage" alt=""/>');
+					//$("#PharmacySystem").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat;"></div>');
+					$(".node_nine_label").append('<label class="label9">'+result1.component[i].title+'</label>');
+				} else if (result1.component[i].componentName == 'PntArvlNfyPharmacist'){
+					$("#PntArvlNfyPharmacist").append('<img src="../images/PatArrivalNotify.png" class="img-rounded img-responsive center-block timage" alt=""/>');
+					//$("#PntArvlNfyPharmacist").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat;"></div>');
+					$(".node_ten_label").append('<label class="label10">'+result1.component[i].title+'</label>');
+				} else if (result1.component[i].componentName == 'PrescriptionStsNotify'){
+					$("#PrescriptionStsNotify").append('<img src="../images/AutoCheckin.png" class="img-rounded img-responsive center-block timage" alt=""/>');
+					//$("#PrescriptionStsNotify").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat;"></div>');
+					$(".node_11_label").append('<label class="label11">'+result1.component[i].title+'</label>');
+				} else if (result1.component[i].componentName == 'PharmacistNotify'){
+					$("#PharmacistNotify").append('<img src="../images/PharmacistNotify.png" class="img-rounded img-responsive center-block timage" alt=""/>');
+					//$("#PharmacistNotify").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat;"></div>');
+					$(".node_12_label").append('<label class="label12">'+result1.component[i].title+'</label>');
+				} else if (result1.component[i].componentName == 'MedicinesReceivd'){
+					$("#MedicinesReceivd").append('<img src="../images/MedicinesReceivd.png" class="img-rounded img-responsive center-block timage" alt=""/>');
+					//$("#MedicinesReceivd").append('<div class="timage" style="background: '+result1.component[i].imageUrl+' no-repeat;"></div>');
+					$(".node_13_label").append('<label class="label13">'+result1.component[i].title+'</label>');
+				}
+			  });
+	      }
+	  });  
+	  
+	});
+///PharmacistNotify
+$(document).ready(function() {
+   
+    $('#createWF').hide();
+	$('#userform').hide();
+	$('#conformcontainers').hide();
+	
+
+	imageJson = {};
+	function createJSON() {
+		var images = new Array();
+	    jsonObj = [];
+	    $(".circular").each(function() {
+	        var id = $(this).attr("id");
+	        	//alert(id);
+	        	images.push(id);
+	     });
+	     var kitname = document.getElementById("kitname").value; 
+		 var description = document.getElementById("description").value;
+	     imageJson.kitName=kitname;
+	     imageJson.description=description;
+	     imageJson.images=images;
+		 return imageJson;
+	  }
+	  
+		var result1 = {};
+		var kitImg = [], deletedImages = [], clearedImgs = [];
+		var kitDetails = {};
+		var typeWF, kitNm, kitDesc;
+	$('#collapsePanel').on('click', '.WFName', function () { 
+		/*$("#modify").removeAttr("disabled");*/
+		/*$("#modify").stop().fadeTo("",1);*/
+		$('#kitname').val('');
+		$('#description').val('');
+		var kitImages = [];
+		$("#collapsePanel ul a").removeClass('selected');
+		$(this).children().addClass('selected');
+		var title = $(this).text();
+	    $('#titlec').text(title);
+		typeWF = $(this).attr("id");
+		var configSts = $(this).children().attr("id");
+		//alert(configSts);
+		if (typeWF == "DWF"){
+			$("#createWF").show();
+			$("#userform").hide();
+			$("#conformcontainers").hide();
+			$(".circular").addClass('context-menu-disabled');  ///result1.kitItems[i].kitName
+		} else if (typeWF == "MWF" && configSts == ""){
+			$("#createWF").hide();
+			$("#userform").show();
+			$("#conformcontainers").show(); 
+			$(".circular").removeClass('context-menu-disabled');
+		} else if (typeWF == "MWF" && configSts == "WAITINGTOCONFIGURE"){
+			$("#createWF").hide();
+			$("#userform").hide();
+			$("#conformcontainers").hide(); 
+			$(".circular").addClass('context-menu-disabled');
+		}
+		$("#arrow1").stop().fadeTo("",1); $("#arrow2").stop().fadeTo("",1); $("#arrow3").stop().fadeTo("",1); $("#arrow4").stop().fadeTo("",1); $("#arrow5").stop().fadeTo("",1);
+		$("#arrow6").stop().fadeTo("",1); $("#arrow7").stop().fadeTo("",1); $("#arrow8").stop().fadeTo("",1); $("#arrow9").stop().fadeTo("",1); $("#arrow10").stop().fadeTo("",1);
+		$("#arrow11").stop().fadeTo("",1); $("#arrow12").stop().fadeTo("",1);
+		$("#node1").stop().fadeTo("",1); $("#node2").stop().fadeTo("",1); $("#node3").stop().fadeTo("",1); $("#node4").stop().fadeTo("",1); $("#node5").stop().fadeTo("",1);
+		$("#node6").stop().fadeTo("",1); $("#node7").stop().fadeTo("",1); $("#node8").stop().fadeTo("",1); $("#node9").stop().fadeTo("",1); $("#node10").stop().fadeTo("",1);
+		$("#node11").stop().fadeTo("",1); $("#node12").stop().fadeTo("",1); $("#node13").stop().fadeTo("",1);
+		
+		$("#node1").hide(); $("#node2").hide(); $("#node3").hide(); $("#node4").hide(); $("#node5").hide(); $("#node6").hide(); $("#node7").hide(); $("#node8").hide();
+		$("#node9").hide(); $("#node10").hide(); $("#node11").hide(); $("#node12").hide(); $("#node13").hide(); $("#arrow1").hide(); $("#arrow2").hide(); $("#arrow3").hide();
+		$("#arrow4").hide(); $("#arrow5").hide(); $("#arrow6").hide(); $("#arrow7").hide(); $("#arrow8").hide(); $("#arrow9").hide(); $("#arrow10").hide(); $("#arrow11").hide(); $("#arrow12").hide();
+		  
+		  if (typeWF == "DWF"){
+			  $.ajax({
+			      type: "GET",
+			      //url: "http://localhost:3050/retrieveKitNames",
+			      url: "http://localhost:80/retrieveDWFKitDetails/"+title,
+			      dataType: "json",
+			      async:false,
+			      success: function (data) {
+			    	  var result = JSON.stringify(data);
+			    	  result1=JSON.parse(result);
+					  kitImages = result1.images;
+					  kitImg = result1.images;
+					  deletedImages = ["dummy"];
+					  clearedImgs = ["dummy"];
+					  kitNm = result1.kitName;
+					  kitDesc = result1.description;
+			      }
+				});
+		  } else if (typeWF == "MWF"){
+		      
+			  $.ajax({
+			      type: "GET",
+			      //url: "http://localhost:3050/retrieveKitNames",
+			      url: "http://localhost:80/retrieveMWFKitDetails/"+title,
+			      dataType: "json",
+			      async:false,
+			      success: function (data) {
+			    	  var result = JSON.stringify(data);
+			    	  result1=JSON.parse(result);
+					  kitImages = result1.images;
+					  deletedImages = result1.deletedImages;
+					  clearedImgs = result1.clearedImgs;
+					  kitImg = result1.images;
+					  kitNm = result1.kitName;
+					  kitDesc = result1.description;
+			      }
+				});
+		  }
+		  
+		  $('#kitname').val(kitNm);
+		  $('#description').val(kitDesc);
+		  
+		  if (kitImages.length>0){
+			  $.each(kitImages,function(i){
+				if (kitImages[i] == 'PatientIdentified'){
+					$("#node1").show();
+				} else if (kitImages[i] == 'AutoCheckin') {
+					$("#arrow1").show();
+					$("#node2").show();
+				} else if (kitImages[i] == 'PersonalizedWelcome') {
+					$("#arrow2").show();
+					$("#node3").show();
+				} else if (kitImages[i] == 'PatSchedularSys') {
+					$("#arrow3").show();
+					$("#node4").show();
+				} else if (kitImages[i] == 'PatArrivalNotify') {
+					$("#arrow4").show();
+					$("#node5").show();
+				} else if (kitImages[i] == 'ApptWaitTimeNotify') {
+					$("#arrow5").show();
+					$("#node6").show();
+				} else if (kitImages[i] == 'DoctorNotify') {
+					$("#arrow6").show();
+					$("#node7").show();
+				} else if (kitImages[i] == 'IntrctnComptdDr') {
+					$("#arrow7").show();
+					$("#node8").show();
+				} else if (kitImages[i] == 'PharmacySystem') {
+					$("#arrow8").show();
+					$("#node9").show();
+				} else if (kitImages[i] == 'PntArvlNfyPharmacist') {
+					$("#arrow9").show();
+					$("#node10").show();
+				} else if (kitImages[i] == 'PrescriptionStsNotify') {
+					$("#arrow10").show();
+					$("#node11").show();
+				} else if (kitImages[i] == 'PharmacistNotify') {
+					$("#arrow11").show();
+					$("#node12").show();
+				} else if (kitImages[i] == 'MedicinesReceivd') {
+					$("#arrow12").show();
+					$("#node13").show();
+				}
+			  });  
+		  } 
+		 
+		  if (deletedImages.length>0){
+			  $.each(deletedImages,function(i){
+				if (deletedImages[i] == 'PatientIdentified'){
+					$("#node1").fadeTo("",0.5);
+				} else if (deletedImages[i] == 'AutoCheckin') {
+					$("#arrow1").fadeTo("",0.5);
+					$("#node2").fadeTo("",0.5);
+				} else if (deletedImages[i] == 'PersonalizedWelcome') {
+					$("#arrow2").fadeTo("",0.5);
+					$("#node3").fadeTo("",0.5);
+				} else if (deletedImages[i] == 'PatSchedularSys') {
+					$("#arrow3").fadeTo("",0.5);
+					$("#node4").fadeTo("",0.5);
+				} else if (deletedImages[i] == 'PatArrivalNotify') {
+					$("#arrow4").fadeTo("",0.5);
+					$("#node5").fadeTo("",0.5);
+				} else if (deletedImages[i] == 'ApptWaitTimeNotify') {
+					$("#arrow5").fadeTo("",0.5);
+					$("#node6").fadeTo("",0.5);
+				} else if (deletedImages[i] == 'DoctorNotify') {
+					$("#arrow6").fadeTo("",0.5);
+					$("#node7").fadeTo("",0.5);
+				} else if (deletedImages[i] == 'IntrctnComptdDr') {
+					$("#arrow7").fadeTo("",0.5);
+					$("#node8").fadeTo("",0.5);
+				} else if (deletedImages[i] == 'PharmacySystem') {
+					$("#arrow8").fadeTo("",0.5);
+					$("#node9").fadeTo("",0.5);
+				} else if (deletedImages[i] == 'PntArvlNfyPharmacist') {
+					$("#arrow9").fadeTo("",0.5);
+					$("#node10").fadeTo("",0.5);
+				} else if (deletedImages[i] == 'PrescriptionStsNotify') {
+					$("#arrow10").fadeTo("",0.5);
+					$("#node11").fadeTo("",0.5);
+				} else if (deletedImages[i] == 'PharmacistNotify') {
+					$("#arrow11").fadeTo("",0.5);
+					$("#node12").fadeTo("",0.5);
+				} else if (deletedImages[i] == 'MedicinesReceivd') {
+					$("#node13").fadeTo("",0.5);
+	 		  		$("#arrow12").fadeTo("",0.5);
+				}
+			  });  
+		  } /*else {
+			  deletedImages = [""];
+		  }*/
+		  
+		  /*if (clearedImgs.length == 0){
+			  clearedImgs = [""];
+		  }*/
+		  
+		 /* if (clearedImgs.length>0){
+			  $.each(clearedImgs,function(i){
+				  if (kitImages[i] == 'PatientIdentified'){
+						$("#node1").hide();
+					} else if (kitImages[i] == 'AutoCheckin') {
+						$("#arrow1").hide();
+						$("#node2").show();
+					} else if (kitImages[i] == 'PersonalizedWelcome') {
+						$("#arrow2").show();
+						$("#node3").show();
+					} else if (kitImages[i] == 'PatSchedularSys') {
+						$("#arrow3").show();
+						$("#node4").show();
+					} else if (kitImages[i] == 'PatArrivalNotify') {
+						$("#arrow4").show();
+						$("#node5").show();
+					} else if (kitImages[i] == 'ApptWaitTimeNotify') {
+						$("#arrow5").show();
+						$("#node6").show();
+					} else if (kitImages[i] == 'DoctorNotify') {
+						$("#arrow6").show();
+						$("#node7").show();
+					} else if (kitImages[i] == 'IntrctnComptdDr') {
+						$("#arrow7").show();
+						$("#node8").show();
+					} else if (kitImages[i] == 'PharmacySystem') {
+						$("#arrow8").show();
+						$("#node9").show();
+					} else if (kitImages[i] == 'PntArvlNfyPharmacist') {
+						$("#arrow9").show();
+						$("#node10").show();
+					} else if (kitImages[i] == 'PrescriptionStsNotify') {
+						$("#arrow10").show();
+						$("#node11").show();
+					} else if (kitImages[i] == 'PharmacistNotify') {
+						$("#arrow11").show();
+						$("#node12").show();
+					} else if (kitImages[i] == 'MedicinesReceivd') {
+						$("#arrow12").show();
+						$("#node13").show();
+					}
+			  });  
+		  }*/
+	});
+	
+	$("#modify").click(function(){
+		$(".circular").removeClass('context-menu-disabled');
+		$("#modify").attr("disabled", true);
+		$("#modify").fadeTo("",0.5);
+		if (typeWF == "DWF"){
+			$('#kitname').val('Copy of '+result1.kitName);
+			$('#description').val(result1.description);
+		} else if (typeWF == "MWF") {
+			$('#kitname').val(result1.kitName);
+			$('#description').val(result1.description);
+		}
+		
+	});
+	
+	$("#createWF").click(function(){
+		$("#createWF").hide(500);
+		$("#userform").show(900);
+		$('#kitname').val('Copy of '+result1.kitName);
+		$('#description').val(result1.description);
+		$('#titlec').text('Copy of '+result1.kitName);
+		$('#conformcontainers').show();
+	  
+		$(".circular").removeClass('context-menu-disabled');
+	});
+	
+	
+	
+    //Left Slide Toggle
+	$(".trigger").click(function() {
+		  $(".leftcontainer").toggle("left");
+			$(this).toggleClass("active");
+			//$("#patient").css({"height" : "200px"});
+	  		return false;
+	  		
+	 });
+	 	
+	 //Header Menu Highlighting
+     var str = location.href.toLowerCase();
+	 $(".navigation li a").each(function() {
+		if (str.indexOf(this.href.toLowerCase()) > -1) {
+			$("li.highlight").removeClass("highlight");
+			$(this).parent().addClass("highlight");
+		}
+	 });
+	 //Header Menu Highlighting -HealthCare
+	 var str_health = location.href.toLowerCase();
+	 $(".navigation_healthcare li a").each(function() {
+		if (str_health.indexOf(this.href.toLowerCase()) > -1) {
+			$("li.highlight").removeClass("highlight");
+			$(this).parent().addClass("highlight");
+		}
+	 });
+	 
+	 
+	 
+	 
+	 $("#savebutton").click(function(){
+	   	kitDetails.kitName = $('#kitname').val();
+		kitDetails.description = $('#description').val();
+		kitDetails.images = kitImg;
+		kitDetails.deletedImages = deletedImages;
+		kitDetails.clearedImgs = clearedImgs;
+		kitDetails.configStatus = "";
+		//$('.list-group-item').remove();
+		var isValid = true;
+		$('input[type="text"]').each(function() {
+			if ($.trim($(this).val()) == '') {
+				isValid = false;
+				$(this).css({ "border": "1px solid red", "background": "#FFCECE"});
+			} else {
+				$(this).css({"border": "","background": ""  });
+			}
+		});
+		
+		$('#kitname').val('');
+		$('#description').val('');
+		
+		if(kitDetails.kitName.length>0) {
+			if(typeWF == "DWF"){
+		 		$.ajax({
+			 		type: "POST",
+		      		//url: "http://localhost:3050/saveData",
+		      		url: "http://localhost:80/saveModifiedWF",
+		      		dataType: "json",
+		      		async:false,
+		      		data:kitDetails,
+		       		success: function (data) {
+		    		console.log(data);
+		      	}
+		      
+		   	}); 
+			} else if (typeWF == "MWF"){
+				$.ajax({
+			 		type: "PUT",
+		      		//url: "http://localhost:3050/saveData",
+		      		url: "http://localhost:80/saveModifiedWF1/"+kitNm,
+		      		dataType: "json",
+		      		async:false,
+		      		data:kitDetails,
+		       		success: function (data) {
+		    		console.log(data);
+		      	}
+		      
+		   	});
+			}
+	    }
+	   // $(".kitName li").remove();
+	    //$(".kitName .template1").remove();
+		/*
+	    $.ajax({
+		      type: "GET",
+		      //url: "http://localhost:3050/retrieveKitNames",
+		      url: "http://localhost:80/retrieveDefaultWFKitNames",
+		      dataType: "json",
+		      async:false,
+		      success: function (data) {
+		    	  console.log(data);
+		    	  var result = JSON.stringify(data);
+		    	  var result1=JSON.parse(result);
+		    	  defaultWFDetails = result1;
+		    	  if (result1.statusCode == 200){
+		    	  $.each(result1.kitItems,function(i){
+						$(".kitName").append('<li class="WFName" id="DWF"><a id="selected" href="#">'+result1.kitItems[i].kitName+'</a></li>');
+						
+		    	  });
+		    	 // $(".kitName").append('<div class="template1">USER CREATED</div>');
+		    	  }
+		      }
+		  });*/
+		  $('#usercreatedtemplates ul a').remove();
+		  $.ajax({
+		      type: "GET",
+		      //url: "http://localhost:3050/retrieveKitNames",
+		      url: "http://localhost:80/retrieveModifiedWFKitNames/MWF",
+		      dataType: "json",
+		      async:false,
+		      success: function (data) {
+		    	  console.log(data);
+		    	  var result = JSON.stringify(data);
+		    	  var result1=JSON.parse(result);
+		    	  $.each(result1.kitItems,function(i){
+				 		//$(".kitName").append('<li class="WFName" id="MWF"><a id="selected" href="#">'+result1.kitItems[i].kitName+'</a></li>');
+				         //$("#usercreatedtemplates").append('<ul class="WFName" id="MWF"><a id="selected" href="#">'+result1.kitItems[i].kitName+'</a></ul>');
+				         $("#usercreatedtemplates").append('<ul class="WFName" id="MWF"><a id="'+result1.kitItems[i].configStatus+'" href="#">'+result1.kitItems[i].kitName+'</a></ul>');
+
+		    	  });
+		      }
+		  });
+		  
+		  $("#collapsePanel ul a").each(function(){
+			 var kn =  $(this).text();
+			 if (kn === kitDetails.kitName){
+				 $(this).click();
+			 }
+		 });
+		 
+	});
+	 
+	 $("#configure").click(function(){
+		 $("#savebutton").click();
+		 result1.configStatus = "WAITINGTOCONFIGURE";
+		 result1.wfType = "MWF";
+		 $.ajax({
+		 	type: "PUT",
+	      	//url: "http://localhost:3050/saveData",
+	      	url: "http://localhost:80/sendForConfiguration",
+	      	dataType: "json",
+	      	async:false,
+	      	data:result1,
+	       	success: function (data) {
+	    		console.log(data);
+	    		if (data.statusCode == 201) {
+	    			alert('"'+result1.kitName+'" tool kit has been sent to administrator for configuration.');
+	    		}
+	      	}	
+	   	 });
+		 /*$("#createWF").hide();
+		 $("#userform").hide();
+		 $("#conformcontainers").hide(); 
+		 $(".circular").addClass('context-menu-disabled');*/
+		
+		 $('#usercreatedtemplates ul a').remove();
+		 $.ajax({
+			type: "GET",
+			//url: "http://localhost:3050/retrieveKitNames",
+			url: "http://localhost:80/retrieveModifiedWFKitNames/MWF",
+			dataType: "json",
+			async:false,
+			success: function (data) {
+				console.log(data);
+			   	var result = JSON.stringify(data);
+			   	var result1=JSON.parse(result);
+			   	if (result1.statusCode == 200){
+			   		$.each(result1.kitItems,function(i){
+						//$("#usercreatedtemplates").append('<a  id="MWF" class="list-group-item WFName" href="#">'+result1.kitItems[i].kitName+'</a>');
+						//$(".kitName").append('<li class="WFName" id="MWF"><a id="selected" href="#">'+result1.kitItems[i].kitName+'</a></li>');
+				         $("#usercreatedtemplates").append('<ul class="WFName" id="MWF"><a id="'+result1.kitItems[i].configStatus+'" href="#">'+result1.kitItems[i].kitName+'</a></ul>');
+			    	});
+			   	}
+			}
+		});	 
+		 
+		$(".templateContent ul").children('a:first').click();
+
+	 });
+	 
+	 $("#cancel").click(function(){
+		//$('#kitname').val('');
+		//$('#description').val('');
+		
+		 $(".templateContent ul").children('a:first').click();
+	});
+	 
+ $(function() {
+	 //Patient identified on Arrival
+	 var kit = 1;
+	 $.contextMenu({
+		selector : "#PatientIdentified",
+		build: function() {
+		var options = {
+		callback : function(key, options) {	
+			if(key == "comp1") {
+				$("#arrow1").stop().fadeTo("",1);
+ 		  		$("#node2").stop().fadeTo("",1);
+ 		  		kitImg.push("AutoCheckin");
+ 		  		var index = $.inArray("AutoCheckin", clearedImgs);
+				if (index>=0) {
+					clearedImgs.splice(index, 1);
+				}
+			} 
+		},
+		items : {}
+		};
+		var index = $.inArray("PatientIdentified", deletedImages);
+		var index2 = $.inArray("AutoCheckin", clearedImgs);
+		if (index2 >= 0 && index == -1){
+			options.items.comp1 = {name: "Auto Check-in Notification", icon : "cut"};
+		}
+
+	    return options;
+	  }
+	});
+	 
+	 //Auto Check-in Notification
+	 $.contextMenu({
+		selector : "#AutoCheckin",
+		build: function() {
+			var options = {
+				callback : function(key, options) {
+					if(key == "Clear") {
+						$("#node13").hide();
+						$("#arrow12").hide();
+						$("#node12").hide();
+						$("#arrow11").hide();
+						$("#node11").hide();
+						$("#arrow10").hide();
+						$("#node10").hide();
+						$("#arrow9").hide();
+						$("#node9").hide();
+						$("#arrow8").hide();
+						$("#node8").hide();
+						$("#arrow7").hide();
+						$("#node7").hide();
+						$("#arrow6").hide();
+						$("#node6").hide();
+						$("#arrow5").hide();
+						$("#node5").hide();
+						$("#arrow4").hide();
+						$("#node4").hide();
+						$("#arrow3").hide();
+						$("#node3").hide();
+						$("#arrow2").hide();
+						$("#node2").hide();
+						$("#arrow1").hide();
+						
+						var removeArray = ["AutoCheckin","PersonalizedWelcome","PatSchedularSys","PatArrivalNotify","ApptWaitTimeNotify","DoctorNotify","IntrctnComptdDr","PharmacySystem","PntArvlNfyPharmacist","PrescriptionStsNotify","PharmacistNotify","MedicinesReceivd"];
+						$.each(removeArray, function(i){
+							var index1 = $.inArray(removeArray[i], clearedImgs);
+							if (index1 == -1) {
+								clearedImgs.push(removeArray[i]);
+							}
+							var index = $.inArray(removeArray[i], deletedImages);
+							if (index>=0) {
+								deletedImages.splice(index, 1);
+							}
+						});
+			   		} else if(key == "Delete") {
+		 		  		
+		 		  		$("#node2").fadeTo("",0.5);
+		 		  		$("#arrow1").fadeTo("",0.5);
+		 		  		var index12 = $.inArray("PersonalizedWelcome", clearedImgs);
+		 		  		if (index12 == -1){
+		 		  			$("#node3").fadeTo("",0.5);
+			 		  		$("#arrow2").fadeTo("",0.5);
+		 		  		}
+		 		  		var index2 = $.inArray("PatSchedularSys", clearedImgs);
+		 		  		if (index2 == -1){
+		 		  			$("#node4").fadeTo("",0.5);
+			 		  		$("#arrow3").fadeTo("",0.5);
+		 		  		}
+		 		  		var index3 = $.inArray("PatArrivalNotify", clearedImgs);
+		 		  		if (index3 == -1){
+		 		  			$("#node5").fadeTo("",0.5);
+			 		  		$("#arrow4").fadeTo("",0.5);
+		 		  		}
+		 		  		var index4 = $.inArray("ApptWaitTimeNotify", clearedImgs);
+		 		  		if (index4 == -1){
+		 		  			$("#node6").fadeTo("",0.5);
+			 		  		$("#arrow5").fadeTo("",0.5);
+		 		  		}
+		 		  		var index5 = $.inArray("DoctorNotify", clearedImgs);
+		 		  		if (index5 == -1){
+		 		  			$("#node7").fadeTo("",0.5);
+			 		  		$("#arrow6").fadeTo("",0.5);
+		 		  		}
+		 		  		var index6 = $.inArray("IntrctnComptdDr", clearedImgs);
+		 		  		if (index6 == -1){
+		 		  			$("#node8").fadeTo("",0.5);
+			 		  		$("#arrow7").fadeTo("",0.5);
+		 		  		}
+		 		  		var index7 = $.inArray("PharmacySystem", clearedImgs);
+		 		  		if (index7 == -1){
+		 		  			$("#node9").fadeTo("",0.5);
+			 		  		$("#arrow8").fadeTo("",0.5);
+		 		  		}
+		 		  		var index8 = $.inArray("PntArvlNfyPharmacist", clearedImgs);
+		 		  		if (index8 == -1){
+		 		  			$("#node10").fadeTo("",0.5);
+			 		  		$("#arrow9").fadeTo("",0.5);
+		 		  		}
+		 		  		var index9 = $.inArray("PrescriptionStsNotify", clearedImgs);
+		 		  		if (index9 == -1){
+		 		  			$("#node11").fadeTo("",0.5);
+			 		  		$("#arrow10").fadeTo("",0.5);
+		 		  		}
+		 		  		var index10 = $.inArray("PharmacistNotify", clearedImgs);
+		 		  		if (index10 == -1){
+		 		  			$("#node12").fadeTo("",0.5);
+			 		  		$("#arrow11").fadeTo("",0.5);
+		 		  		}
+		 		  		var index11 = $.inArray("MedicinesReceivd", clearedImgs);
+		 		  		if (index11 == -1){
+		 		  			$("#node13").fadeTo("",0.5);
+			 		  		$("#arrow12").fadeTo("",0.5);
+		 		  		}
+		 		  		
+		 		  		var removeArray = ["AutoCheckin","PersonalizedWelcome","PatSchedularSys","PatArrivalNotify","ApptWaitTimeNotify","DoctorNotify","IntrctnComptdDr","PharmacySystem","PntArvlNfyPharmacist","PrescriptionStsNotify","PharmacistNotify","MedicinesReceivd"];
+						$.each(removeArray, function(i){
+							var index1 = $.inArray(removeArray[i], deletedImages);
+							var index2 = $.inArray(removeArray[i], clearedImgs);
+							if (index1 == -1 && index2 == -1) {
+								deletedImages.push(removeArray[i]);
+							}
+							var index = $.inArray(removeArray[i], kitImg);
+							if (index>=0) {
+								kitImg.splice(index, 1);
+							}
+						});
+		 		  	} else if(key == "Restore") {
+		 		  		$("#node2").stop().fadeTo("",1);
+		 		  		$("#arrow1").stop().fadeTo("",1);
+		 		  		
+		 		  		var removeArray = ["AutoCheckin"];
+						$.each(removeArray, function(i){
+							var index = $.inArray(removeArray[i], deletedImages);
+							if (index>=0) {
+								deletedImages.splice(index, 1);
+							}
+							var index1 = $.inArray(removeArray[i], kitImg);
+							var index2 = $.inArray(removeArray[i], clearedImgs);
+							if (index1 == -1 && index2 == -1) {
+								kitImg.push(removeArray[i]);
+							}
+						});
+		 		  	} else if(key == "comp1") {
+						$("#arrow2").stop().fadeTo("",1);
+		 		  		$("#node3").stop().fadeTo("",1);
+		 		  		kitImg.push("PersonalizedWelcome");
+		 		  		var index = $.inArray("PersonalizedWelcome", clearedImgs);
+						if (index>=0) {
+							clearedImgs.splice(index, 1);
+						}		
+					}
+				},
+				items : {}
+	    	};
+			var index = $.inArray("AutoCheckin", deletedImages);
+			var index1 = $.inArray("AutoCheckin", kitImg);
+			var index2 = $.inArray("PersonalizedWelcome", clearedImgs);
+			if (index1 >= 0 && index == -1){
+				options.items.Delete = {name: "Delete", icon : "delete"};
+			} 
+			if (index >= 0 && index1 == -1){
+				options.items.Restore = {name: "Restore", icon : "cut"};
+			 	options.items.Clear = {name: "Clear", icon : "cut"};
+			}
+			if (index2 >= 0 && index == -1){
+				options.items.comp1 = {name: "Personalized Welcome", icon : "cut"};
+			}
+				return options;
+		}
+	 });
+	 
+	 $.contextMenu({
+		selector : "#PersonalizedWelcome",
+		build: function() {
+			var options = {
+				callback : function(key, options) {
+					if(key == "Clear") {
+						$("#node13").hide();
+						$("#arrow12").hide();
+						$("#node12").hide();
+						$("#arrow11").hide();
+						$("#node11").hide();
+						$("#arrow10").hide();
+						$("#node10").hide();
+						$("#arrow9").hide();
+						$("#node9").hide();
+						$("#arrow8").hide();
+						$("#node8").hide();
+						$("#arrow7").hide();
+						$("#node7").hide();
+						$("#arrow6").hide();
+						$("#node6").hide();
+						$("#arrow5").hide();
+						$("#node5").hide();
+						$("#arrow4").hide();
+						$("#node4").hide();
+						$("#arrow3").hide();
+						$("#node3").hide();
+						$("#arrow2").hide();
+						
+						var removeArray = ["PersonalizedWelcome","PatSchedularSys","PatArrivalNotify","ApptWaitTimeNotify","DoctorNotify","IntrctnComptdDr","PharmacySystem","PntArvlNfyPharmacist","PrescriptionStsNotify","PharmacistNotify","MedicinesReceivd"];
+						$.each(removeArray, function(i){
+							var index1 = $.inArray(removeArray[i], clearedImgs);
+							if (index1 == -1) {
+								clearedImgs.push(removeArray[i]);
+							}
+							var index = $.inArray(removeArray[i], deletedImages);
+							if (index>=0) {
+								deletedImages.splice(index, 1);
+							}
+						});
+			   		} else if(key == "Delete") {
+		 		  		$("#node3").fadeTo("",0.5);
+		 		  		$("#arrow2").fadeTo("",0.5);
+		 		  		
+		 		  		var index2 = $.inArray("PatSchedularSys", clearedImgs);
+		 		  		if (index2 == -1){
+		 		  			$("#node4").fadeTo("",0.5);
+			 		  		$("#arrow3").fadeTo("",0.5);
+		 		  		}
+		 		  		var index3 = $.inArray("PatArrivalNotify", clearedImgs);
+		 		  		if (index3 == -1){
+		 		  			$("#node5").fadeTo("",0.5);
+			 		  		$("#arrow4").fadeTo("",0.5);
+		 		  		}
+		 		  		var index4 = $.inArray("ApptWaitTimeNotify", clearedImgs);
+		 		  		if (index4 == -1){
+		 		  			$("#node6").fadeTo("",0.5);
+			 		  		$("#arrow5").fadeTo("",0.5);
+		 		  		}
+		 		  		var index5 = $.inArray("DoctorNotify", clearedImgs);
+		 		  		if (index5 == -1){
+		 		  			$("#node7").fadeTo("",0.5);
+			 		  		$("#arrow6").fadeTo("",0.5);
+		 		  		}
+		 		  		var index6 = $.inArray("IntrctnComptdDr", clearedImgs);
+		 		  		if (index6 == -1){
+		 		  			$("#node8").fadeTo("",0.5);
+			 		  		$("#arrow7").fadeTo("",0.5);
+		 		  		}
+		 		  		var index7 = $.inArray("PharmacySystem", clearedImgs);
+		 		  		if (index7 == -1){
+		 		  			$("#node9").fadeTo("",0.5);
+			 		  		$("#arrow8").fadeTo("",0.5);
+		 		  		}
+		 		  		var index8 = $.inArray("PntArvlNfyPharmacist", clearedImgs);
+		 		  		if (index8 == -1){
+		 		  			$("#node10").fadeTo("",0.5);
+			 		  		$("#arrow9").fadeTo("",0.5);
+		 		  		}
+		 		  		var index9 = $.inArray("PrescriptionStsNotify", clearedImgs);
+		 		  		if (index9 == -1){
+		 		  			$("#node11").fadeTo("",0.5);
+			 		  		$("#arrow10").fadeTo("",0.5);
+		 		  		}
+		 		  		var index10 = $.inArray("PharmacistNotify", clearedImgs);
+		 		  		if (index10 == -1){
+		 		  			$("#node12").fadeTo("",0.5);
+			 		  		$("#arrow11").fadeTo("",0.5);
+		 		  		}
+		 		  		var index11 = $.inArray("MedicinesReceivd", clearedImgs);
+		 		  		if (index11 == -1){
+		 		  			$("#node13").fadeTo("",0.5);
+			 		  		$("#arrow12").fadeTo("",0.5);
+		 		  		}
+		 		  		
+		 		  		var removeArray = ["PersonalizedWelcome","PatSchedularSys","PatArrivalNotify","ApptWaitTimeNotify","DoctorNotify","IntrctnComptdDr","PharmacySystem","PntArvlNfyPharmacist","PrescriptionStsNotify","PharmacistNotify","MedicinesReceivd"];
+						$.each(removeArray, function(i){
+							var index1 = $.inArray(removeArray[i], deletedImages);
+							var index2 = $.inArray(removeArray[i], clearedImgs);
+							if (index1 == -1 && index2 == -1) {
+								deletedImages.push(removeArray[i]);
+							}
+							var index = $.inArray(removeArray[i], kitImg);
+							if (index>=0) {
+								kitImg.splice(index, 1);
+							}
+						});
+		 		  	} else if(key == "Restore") {
+		 		  		$("#node3").stop().fadeTo("",1);
+		 		  		$("#arrow2").stop().fadeTo("",1);
+		 		  		
+		 		  		var removeArray = ["PersonalizedWelcome"];
+						$.each(removeArray, function(i){
+							var index = $.inArray(removeArray[i], deletedImages);
+							if (index>=0) {
+								deletedImages.splice(index, 1);
+							}
+							var index1 = $.inArray(removeArray[i], kitImg);
+							var index2 = $.inArray(removeArray[i], clearedImgs);
+							if (index1 == -1 && index2 == -1) {
+								kitImg.push(removeArray[i]);
+							}
+						});
+		 		  	} else if (key == "comp1") {
+						$("#arrow3").stop().fadeTo("",1);
+		 		  		$("#node4").stop().fadeTo("",1);
+		 		  		kitImg.push("PatSchedularSys");
+		 		  		var index = $.inArray("PatSchedularSys", clearedImgs);
+						if (index>=0) {
+							clearedImgs.splice(index, 1);
+						}
+			   		} else if (key == "comp2") {
+						$("#arrow8").stop().fadeTo("",1);
+		 		  		$("#node9").stop().fadeTo("",1);
+		 		  		kitImg.push("PharmacySystem");
+		 		  		var index = $.inArray("PharmacySystem", clearedImgs);
+						if (index>=0) {
+							clearedImgs.splice(index, 1);
+						}
+			   		}
+				},
+				items : {}
+	    	};
+			var index = $.inArray("PersonalizedWelcome", deletedImages);
+			var index1 = $.inArray("PersonalizedWelcome", kitImg);
+			var index2 = $.inArray("PatSchedularSys", clearedImgs);
+			var index3 = $.inArray("PharmacySystem", clearedImgs);
+			var validateArray = ["AutoCheckin"];
+			var count=0;
+			$.each(validateArray, function(i){
+				var index2 = $.inArray(validateArray[i], deletedImages);
+				if (index2>=0) {
+					count++;
+				}
+			});
+			if (index1 >= 0 && index == -1){
+				options.items.Delete = {name: "Delete", icon : "delete"};
+			} 
+			if (index >= 0 && count == 0){
+				options.items.Restore = {name: "Restore", icon : "cut"};
+			}
+			if (index >= 0 && index1 == -1){
+			 	options.items.Clear = {name: "Clear", icon : "cut"};
+			}
+			if (index2 >= 0 && index == -1){
+				options.items.comp1 = {name: "Patient Scheduler System", icon : "cut"};
+			}
+			if (index3 >= 0 && index == -1){
+				options.items.comp2 = {name: "Pharmacy System", icon : "cut"};
+			}
+				return options;
+		}
+	 });
+	
+	 $.contextMenu({
+		selector : "#PatSchedularSys",
+		build: function() {
+			var options = {
+				callback : function(key, options) {
+					if(key == "Clear") {
+						$("#node8").hide();
+						$("#arrow7").hide();
+						$("#node7").hide();
+						$("#arrow6").hide();
+						$("#node6").hide();
+						$("#arrow5").hide();
+						$("#node5").hide();
+						$("#arrow4").hide();
+						$("#node4").hide();
+						$("#arrow3").hide();
+						
+						var removeArray = ["PatSchedularSys","PatArrivalNotify","ApptWaitTimeNotify","DoctorNotify","IntrctnComptdDr"];
+						$.each(removeArray, function(i){
+							var index1 = $.inArray(removeArray[i], clearedImgs);
+							if (index1 == -1) {
+								clearedImgs.push(removeArray[i]);
+							}
+							var index = $.inArray(removeArray[i], deletedImages);
+							if (index>=0) {
+								deletedImages.splice(index, 1);
+							}
+						});
+			   		} else if(key == "Delete") {
+			   			
+			   		  if (confirm("Are you sure you want to delete Patient Scheduler System Notification?") == true) {
+		        			
+		 		  		$("#node4").fadeTo("",0.5);
+		 		  		$("#arrow3").fadeTo("",0.5);
+		 		  		
+		 		  		var index2 = $.inArray("PatArrivalNotify", clearedImgs);
+		 		  		if (index2 == -1){
+		 		  			$("#node5").fadeTo("",0.5);
+			 		  		$("#arrow4").fadeTo("",0.5);
+		 		  		}
+		 		  		
+		 		  		var index3 = $.inArray("ApptWaitTimeNotify", clearedImgs);
+		 		  		if (index3 == -1){
+		 		  			$("#node6").fadeTo("",0.5);
+			 		  		$("#arrow5").fadeTo("",0.5);
+		 		  		}
+		 		  		
+		 		  		var index4 = $.inArray("DoctorNotify", clearedImgs);
+		 		  		if (index4 == -1){
+		 		  			$("#node7").fadeTo("",0.5);
+			 		  		$("#arrow6").fadeTo("",0.5);
+		 		  		}
+		 		  		
+		 		  		var index5 = $.inArray("IntrctnComptdDr", clearedImgs);
+		 		  		if (index5 == -1){
+		 		  			$("#node8").fadeTo("",0.5);
+			 		  		$("#arrow7").fadeTo("",0.5);
+		 		  		}
+		 		  		
+		 		  		var removeArray = ["PatSchedularSys","PatArrivalNotify","ApptWaitTimeNotify","DoctorNotify","IntrctnComptdDr"];
+						$.each(removeArray, function(i){
+							var index1 = $.inArray(removeArray[i], deletedImages);
+							var index2 = $.inArray(removeArray[i], clearedImgs);
+							if (index1 == -1 && index2 == -1) {
+								deletedImages.push(removeArray[i]);
+							}
+							var index = $.inArray(removeArray[i], kitImg);
+							if (index>=0) {
+								kitImg.splice(index, 1);
+							}
+						});
+			   		  } else {
+	       					return false;
+	    			}
+		 		  	} else if(key == "Restore") {
+		 		  		$("#node4").stop().fadeTo("",1);
+		 		  		$("#arrow3").stop().fadeTo("",1);
+		 		  		
+		 		  		var removeArray = ["PatSchedularSys"];
+						$.each(removeArray, function(i){
+							var index = $.inArray(removeArray[i], deletedImages);
+							if (index>=0) {
+								deletedImages.splice(index, 1);
+							}
+							var index1 = $.inArray(removeArray[i], kitImg);
+							var index2 = $.inArray(removeArray[i], clearedImgs);
+							if (index1 == -1 && index2 == -1) {
+								kitImg.push(removeArray[i]);
+							}
+						});
+		 		  	} else if (key == "comp1") {
+						$("#arrow4").stop().fadeTo("",1);
+		 		  		$("#node5").stop().fadeTo("",1);
+		 		  		kitImg.push("PatArrivalNotify");
+		 		  		var index = $.inArray("PatArrivalNotify", clearedImgs);
+						if (index>=0) {
+							clearedImgs.splice(index, 1);
+						}
+			   		} else if (key == "comp2") {
+						$("#arrow5").stop().fadeTo("",1);
+		 		  		$("#node6").stop().fadeTo("",1);
+		 		  		kitImg.push("ApptWaitTimeNotify");
+		 		  		var index = $.inArray("ApptWaitTimeNotify", clearedImgs);
+						if (index>=0) {
+							clearedImgs.splice(index, 1);
+						}
+			   		}
+				},
+				items : {}
+	 		};
+			var index = $.inArray("PatSchedularSys", deletedImages);
+			var index1 = $.inArray("PatSchedularSys", kitImg);
+			var index2 = $.inArray("PatArrivalNotify", clearedImgs);
+			var index3 = $.inArray("ApptWaitTimeNotify", clearedImgs);
+			var validateArray = ["AutoCheckin","PersonalizedWelcome"];
+			var count=0;
+			$.each(validateArray, function(i){
+				var index2 = $.inArray(validateArray[i], deletedImages);
+				if (index2>=0) {
+					count++;
+				}
+			});
+			if (index1 >= 0 && index == -1){
+				options.items.Delete = {name: "Delete", icon : "delete"};
+			} 
+			if (index >= 0 && count == 0){
+				options.items.Restore = {name: "Restore", icon : "cut"};
+			}
+			if (index >= 0 && index1 == -1){
+			 	options.items.Clear = {name: "Clear", icon : "cut"};
+			}
+			if (index2 >= 0 && index == -1){
+				options.items.comp1 = {name: "Patient Arrival Notification to Doctor", icon : "cut"};
+			}
+			if (index3 >= 0 && index == -1){
+				options.items.comp2 = {name: "Appointment and Wait Time Notification", icon : "cut"};
+			}
+				return options;
+		}
+	 });
+		
+	 $.contextMenu({
+		selector : "#PatArrivalNotify",
+		build: function() {
+			var options = {
+				callback : function(key, options) {
+					if(key == "Clear") {
+						$("#node7").hide();
+						$("#arrow6").hide();
+						$("#node5").hide();
+						$("#arrow4").hide();
+					  	
+						var removeArray = ["PatArrivalNotify","DoctorNotify"];
+						$.each(removeArray, function(i){
+							var index1 = $.inArray(removeArray[i], clearedImgs);
+							if (index1 == -1) {
+								clearedImgs.push(removeArray[i]);
+							}
+							var index = $.inArray(removeArray[i], deletedImages);
+							if (index>=0) {
+								deletedImages.splice(index, 1);
+							}
+						});
+					} else if(key == "Delete") {
+		 		  		$("#node5").fadeTo("",0.5);
+		 		  		$("#arrow4").fadeTo("",0.5);
+		 		  		
+		 		  		var index2 = $.inArray("DoctorNotify", clearedImgs);
+		 		  		if (index2 == -1){
+		 		  			$("#node7").fadeTo("",0.5);
+			 		  		$("#arrow6").fadeTo("",0.5);
+		 		  		}
+		 		  		
+		 		  		var removeArray = ["PatArrivalNotify","DoctorNotify"];
+						$.each(removeArray, function(i){
+							var index1 = $.inArray(removeArray[i], deletedImages);
+							var index2 = $.inArray(removeArray[i], clearedImgs);
+							if (index1 == -1 && index2 == -1) {
+								deletedImages.push(removeArray[i]);
+							}
+							var index = $.inArray(removeArray[i], kitImg);
+							if (index>=0) {
+								kitImg.splice(index, 1);
+							}
+						});
+		 		  	} else if(key == "Restore") {
+		 		  		$("#node5").stop().fadeTo("",1);
+		 		  		$("#arrow4").stop().fadeTo("",1);
+		 		  		
+		 		  		var removeArray = ["PatArrivalNotify"];
+						$.each(removeArray, function(i){
+							var index = $.inArray(removeArray[i], deletedImages);
+							if (index>=0) {
+								deletedImages.splice(index, 1);
+							}
+							var index1 = $.inArray(removeArray[i], kitImg);
+							var index2 = $.inArray(removeArray[i], clearedImgs);
+							if (index1 == -1 && index2 == -1) {
+								kitImg.push(removeArray[i]);
+							}
+						});
+		 		  	} else if(key == "comp1") {
+						$("#arrow6").stop().fadeTo("",1);
+		 		  		$("#node7").stop().fadeTo("",1);
+		 		  		kitImg.push("DoctorNotify");
+		 		  		var index = $.inArray("DoctorNotify", clearedImgs);
+						if (index>=0) {
+							clearedImgs.splice(index, 1);
+						}
+					}
+				},
+				items : {}
+	 		};
+			var index = $.inArray("PatArrivalNotify", deletedImages);
+			var index1 = $.inArray("PatArrivalNotify", kitImg);
+			var index2 = $.inArray("DoctorNotify", clearedImgs);
+			var validateArray = ["AutoCheckin","PersonalizedWelcome","PatSchedularSys"];
+			var count=0;
+			$.each(validateArray, function(i){
+				var index2 = $.inArray(validateArray[i], deletedImages);
+				if (index2>=0) {
+					count++;
+				}
+			});
+			if (index1 >= 0 && index == -1){
+				options.items.Delete = {name: "Delete", icon : "delete"};
+			} 
+			if (index >= 0 && count == 0){
+				options.items.Restore = {name: "Restore", icon : "cut"};
+			}
+			if (index >= 0 && index1 == -1){
+			 	options.items.Clear = {name: "Clear", icon : "cut"};
+			}
+			if (index2 >= 0 && index == -1){
+				options.items.comp1 = {name: "Doctor gets Notified", icon : "cut"};
+			}
+				return options;
+		}
+	 });
+
+	 $.contextMenu({
+		selector : "#ApptWaitTimeNotify",
+		build: function() {
+			var options = {
+				callback : function(key, options) {
+					if(key == "Clear") {
+						$("#node8").hide();
+						$("#arrow7").hide();
+						$("#node6").hide();
+						$("#arrow5").hide();
+					  	
+						var removeArray = ["ApptWaitTimeNotify","IntrctnComptdDr"];
+						$.each(removeArray, function(i){
+							var index1 = $.inArray(removeArray[i], clearedImgs);
+							if (index1 == -1) {
+								clearedImgs.push(removeArray[i]);
+							}
+							var index = $.inArray(removeArray[i], deletedImages);
+							if (index>=0) {
+								deletedImages.splice(index, 1);
+							}
+						});
+					}   else if(key == "Delete") {
+		 		  		$("#node6").fadeTo("",0.5);
+		 		  		$("#arrow5").fadeTo("",0.5);
+		 		  		var index2 = $.inArray("IntrctnComptdDr", clearedImgs);
+		 		  		if (index2 == -1){
+		 		  			$("#node8").fadeTo("",0.5);
+			 		  		$("#arrow7").fadeTo("",0.5);
+		 		  		}
+		 		  		
+		 		  		var removeArray = ["ApptWaitTimeNotify","IntrctnComptdDr"];
+						$.each(removeArray, function(i){
+							var index1 = $.inArray(removeArray[i], deletedImages);
+							var index2 = $.inArray(removeArray[i], clearedImgs);
+							if (index1 == -1 && index2 == -1) {
+								deletedImages.push(removeArray[i]);
+							}
+							var index = $.inArray(removeArray[i], kitImg);
+							if (index>=0) {
+								kitImg.splice(index, 1);
+							}
+						});
+		 		  	} else if(key == "Restore") {
+		 		  		$("#node6").stop().fadeTo("",1);
+		 		  		$("#arrow5").stop().fadeTo("",1);
+		 		  		
+		 		  		var removeArray = ["ApptWaitTimeNotify"];
+						$.each(removeArray, function(i){
+							var index = $.inArray(removeArray[i], deletedImages);
+							if (index>=0) {
+								deletedImages.splice(index, 1);
+							}
+							var index1 = $.inArray(removeArray[i], kitImg);
+							var index2 = $.inArray(removeArray[i], clearedImgs);
+							if (index1 == -1 && index2 == -1) {
+								kitImg.push(removeArray[i]);
+							}
+						});
+		 		  	} else if(key == "comp1") {
+						$("#arrow7").stop().fadeTo("",1);
+		 		  		$("#node8").stop().fadeTo("",1);
+		 		  		kitImg.push("IntrctnComptdDr");
+		 		  		var index = $.inArray("IntrctnComptdDr", clearedImgs);
+						if (index>=0) {
+							clearedImgs.splice(index, 1);
+						}
+					}
+				},
+				items : {}
+	    	};
+			var index = $.inArray("ApptWaitTimeNotify", deletedImages);
+			var index1 = $.inArray("ApptWaitTimeNotify", kitImg);
+			var index2 = $.inArray("IntrctnComptdDr", clearedImgs);
+			var validateArray = ["AutoCheckin","PersonalizedWelcome","PatSchedularSys"];
+			var count=0;
+			$.each(validateArray, function(i){
+				var index2 = $.inArray(validateArray[i], deletedImages);
+				if (index2>=0) {
+					count++;
+				}
+			});
+			if (index1 >= 0 && index == -1){
+				options.items.Delete = {name: "Delete", icon : "delete"};
+			} 
+			if (index >= 0 && count == 0){
+				options.items.Restore = {name: "Restore", icon : "cut"};
+			}
+			if (index >= 0 && index1 == -1){
+			 	options.items.Clear = {name: "Clear", icon : "cut"};
+			}
+			if (index2 >= 0 && index == -1){
+				options.items.comp1 = {name: "Interaction with Doctor Completed", icon : "cut"};
+			}
+				return options;
+		}
+	});
+		
+	 $.contextMenu({
+		selector : "#DoctorNotify",
+		build: function() {
+			var options = {
+				callback : function(key, options) {
+					if(key == "Clear") {
+						$("#node7").hide();
+						$("#arrow6").hide();
+					  	
+						var removeArray = ["DoctorNotify"];
+						$.each(removeArray, function(i){
+							var index1 = $.inArray(removeArray[i], clearedImgs);
+							if (index1 == -1) {
+								clearedImgs.push(removeArray[i]);
+							}
+							var index = $.inArray(removeArray[i], deletedImages);
+							if (index>=0) {
+								deletedImages.splice(index, 1);
+							}
+						});
+		 		  	} else if(key == "Delete") {
+		 		  		$("#node7").fadeTo("",0.5);
+		 		  		$("#arrow6").fadeTo("",0.5);
+		 		  		
+		 		  		var removeArray = ["DoctorNotify"];
+						$.each(removeArray, function(i){
+							var index1 = $.inArray(removeArray[i], deletedImages);
+							var index2 = $.inArray(removeArray[i], clearedImgs);
+							if (index1 == -1 && index2 == -1) {
+								deletedImages.push(removeArray[i]);
+							}
+							var index = $.inArray(removeArray[i], kitImg);
+							if (index>=0) {
+								kitImg.splice(index, 1);
+							}
+						});
+		 		  	} else if(key == "Restore") {
+		 		  		$("#node7").stop().fadeTo("",1);
+		 		  		$("#arrow6").stop().fadeTo("",1);
+		 		  		var removeArray = ["DoctorNotify"];
+						$.each(removeArray, function(i){
+							var index = $.inArray(removeArray[i], deletedImages);
+							if (index>=0) {
+								deletedImages.splice(index, 1);
+							}
+							var index1 = $.inArray(removeArray[i], kitImg);
+							var index2 = $.inArray(removeArray[i], clearedImgs);
+							if (index1 == -1 && index2 == -1) {
+								kitImg.push(removeArray[i]);
+							}
+						});
+		 		  	}
+				},
+				items : {}
+	    	};
+			var index = $.inArray("DoctorNotify", deletedImages);
+			var index1 = $.inArray("DoctorNotify", kitImg);
+			var validateArray = ["AutoCheckin","PersonalizedWelcome","PatSchedularSys","PatArrivalNotify"];
+			var count=0;
+			$.each(validateArray, function(i){
+				var index2 = $.inArray(validateArray[i], deletedImages);
+				if (index2>=0) {
+					count++;
+				}
+			});
+			if (index1 >= 0 && index == -1){
+				options.items.Delete = {name: "Delete", icon : "delete"};
+			} 
+			if (index >= 0 && count == 0){
+				options.items.Restore = {name: "Restore", icon : "cut"};
+			}
+			if (index >= 0 && index1 == -1){
+			 	options.items.Clear = {name: "Clear", icon : "cut"};
+			}
+				return options;
+		}
+	});
+
+	$.contextMenu({
+		selector : "#IntrctnComptdDr",
+		build: function() {
+			var options = {
+				callback : function(key, options) {
+					if(key == "Clear") {
+						$("#node8").hide();
+						$("#arrow7").hide();
+						
+						var removeArray = ["IntrctnComptdDr"];
+						$.each(removeArray, function(i){
+							var index1 = $.inArray(removeArray[i], clearedImgs);
+							if (index1 == -1) {
+								clearedImgs.push(removeArray[i]);
+							}
+							var index = $.inArray(removeArray[i], deletedImages);
+							if (index>=0) {
+								deletedImages.splice(index, 1);
+							}
+						});
+		 		  	} else if(key == "Delete") {
+		 		  		$("#node8").fadeTo("",0.5);
+		 		  		$("#arrow7").fadeTo("",0.5);
+		 		  		
+		 		  		var removeArray = ["IntrctnComptdDr"];
+						$.each(removeArray, function(i){
+							var index1 = $.inArray(removeArray[i], deletedImages);
+							var index2 = $.inArray(removeArray[i], clearedImgs);
+							if (index1 == -1 && index2 == -1) {
+								deletedImages.push(removeArray[i]);
+							}
+							var index = $.inArray(removeArray[i], kitImg);
+							if (index>=0) {
+								kitImg.splice(index, 1);
+							}
+						});
+		 		  	} else if(key == "Restore") {
+		 		  		$("#node8").stop().fadeTo("",1);
+		 		  		$("#arrow7").stop().fadeTo("",1);
+		 		  		var removeArray = ["IntrctnComptdDr"];
+						$.each(removeArray, function(i){
+							var index = $.inArray(removeArray[i], deletedImages);
+							if (index>=0) {
+								deletedImages.splice(index, 1);
+							}
+							var index1 = $.inArray(removeArray[i], kitImg);
+							var index2 = $.inArray(removeArray[i], clearedImgs);
+							if (index1 == -1 && index2 == -1) {
+								kitImg.push(removeArray[i]);
+							}
+						});
+		 		  	}
+				},
+				items : {}
+			};
+			var index = $.inArray("IntrctnComptdDr", deletedImages);
+			var index1 = $.inArray("IntrctnComptdDr", kitImg);
+			var validateArray = ["AutoCheckin","PersonalizedWelcome","PatSchedularSys","ApptWaitTimeNotify"];
+			var count=0;
+			$.each(validateArray, function(i){
+				var index2 = $.inArray(validateArray[i], deletedImages);
+				if (index2>=0) {
+					count++;
+				}
+			});
+			if (index1 >= 0 && index == -1){
+				options.items.Delete = {name: "Delete", icon : "delete"};
+			} 
+			if (index >= 0 && count == 0){
+				options.items.Restore = {name: "Restore", icon : "cut"};
+			}
+			if (index >= 0 && index1 == -1){
+			 	options.items.Clear = {name: "Clear", icon : "cut"};
+			}
+				return options;
+		}
+	 });
+	 
+	 $.contextMenu({
+		selector : "#PharmacySystem",
+		build: function() {
+			var options = {
+				callback : function(key, options) {
+					if(key == "Clear") {
+						$("#node13").hide();
+						$("#arrow12").hide();
+						$("#node12").hide();
+						$("#arrow11").hide();
+						$("#node11").hide();
+						$("#arrow10").hide();
+						$("#node10").hide();
+						$("#arrow9").hide();
+						$("#node9").hide();
+						$("#arrow8").hide();
+
+						var removeArray = ["PharmacySystem","PntArvlNfyPharmacist","PrescriptionStsNotify","PharmacistNotify","MedicinesReceivd"];
+						$.each(removeArray, function(i){
+							var index1 = $.inArray(removeArray[i], clearedImgs);
+							if (index1 == -1) {
+								clearedImgs.push(removeArray[i]);
+							}
+							var index = $.inArray(removeArray[i], deletedImages);
+							if (index>=0) {
+								deletedImages.splice(index, 1);
+							}
+						});
+			   		} else if(key == "Delete") {
+			   		  if (confirm("Are you sure you want to delete Pharmacy System Notification?") == true) {
+		 		  		$("#node9").fadeTo("",0.5);
+		 		  		$("#arrow8").fadeTo("",0.5);
+		 		  		
+		 		  		var index2 = $.inArray("PntArvlNfyPharmacist", clearedImgs);
+		 		  		if (index2 == -1){
+		 		  			$("#node10").fadeTo("",0.5);
+			 		  		$("#arrow9").fadeTo("",0.5);
+		 		  		}
+		 		  		
+		 		  		var index3 = $.inArray("PrescriptionStsNotify", clearedImgs);
+		 		  		if (index3 == -1){
+		 		  			$("#node11").fadeTo("",0.5);
+			 		  		$("#arrow10").fadeTo("",0.5);
+		 		  		}
+		 		  		
+		 		  		var index4 = $.inArray("PharmacistNotify", clearedImgs);
+		 		  		if (index4 == -1){
+		 		  			$("#node12").fadeTo("",0.5);
+			 		  		$("#arrow11").fadeTo("",0.5);
+		 		  		}
+		 		  		
+		 		  		var index5 = $.inArray("MedicinesReceivd", clearedImgs);
+		 		  		if (index5 == -1){
+		 		  			$("#node13").fadeTo("",0.5);
+			 		  		$("#arrow12").fadeTo("",0.5);
+		 		  		}
+		 		  		
+		 		  		var removeArray = ["PharmacySystem","PntArvlNfyPharmacist","PrescriptionStsNotify","PharmacistNotify","MedicinesReceivd"];
+						$.each(removeArray, function(i){
+							var index1 = $.inArray(removeArray[i], deletedImages);
+							var index2 = $.inArray(removeArray[i], clearedImgs);
+							if (index1 == -1 && index2 == -1) {
+								deletedImages.push(removeArray[i]);
+							}
+							var index = $.inArray(removeArray[i], kitImg);
+							if (index>=0) {
+								kitImg.splice(index, 1);
+							}
+						});
+			   		  } else {
+			   			return false;
+	    			}
+		 		  	} else if(key == "Restore") {
+		 		  		$("#node9").stop().fadeTo("",1);
+		 		  		$("#arrow8").stop().fadeTo("",1);
+		 		  		
+		 		  		var removeArray = ["PharmacySystem"];
+						$.each(removeArray, function(i){
+							var index = $.inArray(removeArray[i], deletedImages);
+							if (index>=0) {
+								deletedImages.splice(index, 1);
+							}
+							var index1 = $.inArray(removeArray[i], kitImg);
+							var index2 = $.inArray(removeArray[i], clearedImgs);
+							if (index1 == -1 && index2 == -1) {
+								kitImg.push(removeArray[i]);
+							}
+						});
+		 		  	} else if (key == "comp1") {
+						$("#arrow9").stop().fadeTo("",1);
+		 		  		$("#node10").stop().fadeTo("",1);
+		 		  		kitImg.push("PntArvlNfyPharmacist");
+		 		  		var index = $.inArray("PntArvlNfyPharmacist", clearedImgs);
+						if (index>=0) {
+							clearedImgs.splice(index, 1);
+						}
+			   		} else if (key == "comp2") {
+						$("#arrow10").stop().fadeTo("",1);
+		 		  		$("#node11").stop().fadeTo("",1);
+		 		  		kitImg.push("PrescriptionStsNotify");
+		 		  		var index = $.inArray("PrescriptionStsNotify", clearedImgs);
+						if (index>=0) {
+							clearedImgs.splice(index, 1);
+						}
+			   		}
+				},
+				items : {}
+	 		};
+			var index = $.inArray("PharmacySystem", deletedImages);
+			var index1 = $.inArray("PharmacySystem", kitImg);
+			var index2 = $.inArray("PntArvlNfyPharmacist", clearedImgs);
+			var index3 = $.inArray("PrescriptionStsNotify", clearedImgs);
+			var validateArray = ["AutoCheckin","PersonalizedWelcome"];
+			var count=0;
+			$.each(validateArray, function(i){
+				var index2 = $.inArray(validateArray[i], deletedImages);
+				if (index2>=0) {
+					count++;
+				}
+			});
+			if (index1 >= 0 && index == -1){
+				options.items.Delete = {name: "Delete", icon : "delete"};
+			}
+			if (index >= 0 && count == 0){
+				options.items.Restore = {name: "Restore", icon : "cut"};
+			}
+			if (index >= 0 && index1 == -1){
+			 	options.items.Clear = {name: "Clear", icon : "cut"};
+			}
+			if(index2 >= 0 && index == -1){
+				options.items.comp1 = {name: "Patient Arrival Notification to Pharmacist", icon : "cut"};
+			}
+			if(index3 >= 0 && index == -1){
+				options.items.comp2 = {name: "Prescription and Status Notification", icon : "cut"};
+			}
+				return options;
+		}
+	 });
+	 
+	 $.contextMenu({
+		selector : "#PntArvlNfyPharmacist",
+		build: function() {
+			var options = {
+				callback : function(key, options) {
+					if(key == "Clear") {
+						$("#node12").hide();
+						$("#arrow11").hide();
+						$("#node10").hide();
+						$("#arrow9").hide();
+					  	
+						var removeArray = ["PntArvlNfyPharmacist","PharmacistNotify"];
+						$.each(removeArray, function(i){
+							var index1 = $.inArray(removeArray[i], clearedImgs);
+							if (index1 == -1) {
+								clearedImgs.push(removeArray[i]);
+							}
+							var index = $.inArray(removeArray[i], deletedImages);
+							if (index>=0) {
+								deletedImages.splice(index, 1);
+							}
+						});
+					}  else if(key == "Delete") {
+		 		  		$("#node10").fadeTo("",0.5);
+		 		  		$("#arrow9").fadeTo("",0.5);
+		 		  		var index2 = $.inArray("PharmacistNotify", clearedImgs);
+		 		  		if (index2 == -1){
+		 		  			$("#node12").fadeTo("",0.5);
+			 		  		$("#arrow11").fadeTo("",0.5);
+		 		  		}
+						
+		 		  		var removeArray = ["PntArvlNfyPharmacist","PharmacistNotify"];
+						$.each(removeArray, function(i){
+							var index1 = $.inArray(removeArray[i], deletedImages);
+							var index2 = $.inArray(removeArray[i], clearedImgs);
+							if (index1 == -1 && index2 == -1) {
+								deletedImages.push(removeArray[i]);
+							}
+							var index = $.inArray(removeArray[i], kitImg);
+							if (index>=0) {
+								kitImg.splice(index, 1);
+							}
+						});
+		 		  	} else if(key == "Restore") {
+		 		  		$("#node10").stop().fadeTo("",1);
+		 		  		$("#arrow9").stop().fadeTo("",1);
+		 	
+		 		  		var removeArray = ["PntArvlNfyPharmacist"];
+						$.each(removeArray, function(i){
+							var index = $.inArray(removeArray[i], deletedImages);
+							if (index>=0) {
+								deletedImages.splice(index, 1);
+							}
+							var index1 = $.inArray(removeArray[i], kitImg);
+							var index2 = $.inArray(removeArray[i], clearedImgs);
+							if (index1 == -1 && index2 == -1) {
+								kitImg.push(removeArray[i]);
+							}
+						});
+		 		  	} else if(key == "comp1") {
+						$("#arrow11").stop().fadeTo("",1);
+		 		  		$("#node12").stop().fadeTo("",1);
+		 		  		kitImg.push("PharmacistNotify");
+		 		  		var index = $.inArray("PharmacistNotify", clearedImgs);
+						if (index>=0) {
+							clearedImgs.splice(index, 1);
+						}
+					}
+				},
+				items : {}
+	 		};
+			var index = $.inArray("PntArvlNfyPharmacist", deletedImages);
+			var index1 = $.inArray("PntArvlNfyPharmacist", kitImg);
+			var index2 = $.inArray("PharmacistNotify", clearedImgs);
+			var validateArray = ["AutoCheckin","PersonalizedWelcome","PharmacySystem"];
+			var count=0;
+			$.each(validateArray, function(i){
+				var index2 = $.inArray(validateArray[i], deletedImages);
+				if (index2>=0) {
+					count++;
+				}
+			});
+			if (index1 >= 0 && index == -1){
+				options.items.Delete = {name: "Delete", icon : "delete"};
+			} 
+			if (index >= 0 && count == 0){
+				options.items.Restore = {name: "Restore", icon : "cut"};
+			}
+			if (index >= 0 && index1 == -1){
+			 	options.items.Clear = {name: "Clear", icon : "cut"};
+			}
+			if(index2 >= 0 && index == -1){
+				options.items.comp1 = {name: "Pharmacist gets Notified", icon : "cut"};
+			}
+				return options;
+		}
+	 });
+	 
+	 $.contextMenu({
+		selector : "#PrescriptionStsNotify",
+		build: function() {
+			var options = {
+				callback : function(key, options) {
+					if(key == "Clear") {
+						$("#node13").hide();
+						$("#arrow12").hide();
+						$("#node11").hide();
+						$("#arrow10").hide();
+					  	
+						var removeArray = ["PrescriptionStsNotify","MedicinesReceivd"];
+						$.each(removeArray, function(i){
+							var index1 = $.inArray(removeArray[i], clearedImgs);
+							if (index1 == -1) {
+								clearedImgs.push(removeArray[i]);
+							}
+							var index = $.inArray(removeArray[i], deletedImages);
+							if (index>=0) {
+								deletedImages.splice(index, 1);
+							}
+						});
+					}  else if(key == "Delete") {
+						$("#node11").fadeTo("",0.5);
+		 		  		$("#arrow10").fadeTo("",0.5);
+		 		  		var index2 = $.inArray("MedicinesReceivd", clearedImgs);
+		 		  		if (index2 == -1){
+		 		  			$("#node13").fadeTo("",0.5);
+		 		  			$("#arrow12").fadeTo("",0.5);
+		 		  		}
+		 		  		
+		 		  		var removeArray = ["PrescriptionStsNotify","MedicinesReceivd"];
+						$.each(removeArray, function(i){
+							var index1 = $.inArray(removeArray[i], deletedImages);
+							var index2 = $.inArray(removeArray[i], clearedImgs);
+							if (index1 == -1 && index2 == -1) {
+								deletedImages.push(removeArray[i]);
+							}
+							var index = $.inArray(removeArray[i], kitImg);
+							if (index>=0) {
+								kitImg.splice(index, 1);
+							}
+						});
+		 		  	} else if(key == "Restore") {
+		 		  		$("#node11").stop().fadeTo("",1);
+		 		  		$("#arrow10").stop().fadeTo("",1);
+		 		  		
+		 		  		var removeArray = ["PrescriptionStsNotify"];
+						$.each(removeArray, function(i){
+							var index = $.inArray(removeArray[i], deletedImages);
+							if (index>=0) {
+								deletedImages.splice(index, 1);
+							}
+							var index1 = $.inArray(removeArray[i], kitImg);
+							var index2 = $.inArray(removeArray[i], clearedImgs);
+							if (index1 == -1 && index2 == -1) {
+								kitImg.push(removeArray[i]);
+							}
+						});
+		 		  	} else if(key == "comp1") {
+		 		  		$("#arrow12").stop().fadeTo("",1);
+		 		  		$("#node13").stop().fadeTo("",1);
+		 		  		kitImg.push("MedicinesReceivd");
+		 		  		var index = $.inArray("MedicinesReceivd", clearedImgs);
+						if (index>=0) {
+							clearedImgs.splice(index, 1);
+						}
+					}
+				},
+				items : {}
+	 		};
+			var index = $.inArray("PrescriptionStsNotify", deletedImages);
+			var index1 = $.inArray("PrescriptionStsNotify", kitImg);
+			var index2 = $.inArray("MedicinesReceivd", clearedImgs);
+			var validateArray = ["AutoCheckin","PersonalizedWelcome","PharmacySystem"];
+			var count=0;
+			$.each(validateArray, function(i){
+				var index2 = $.inArray(validateArray[i], deletedImages);
+				if (index2>=0) {
+					count++;
+				}
+			});
+			if (index1 >= 0 && index == -1){
+				options.items.Delete = {name: "Delete", icon : "delete"};
+			} 
+			if (index >= 0 && count == 0){
+				options.items.Restore = {name: "Restore", icon : "cut"};
+			}
+			if (index >= 0 && index1 == -1){
+			 	options.items.Clear = {name: "Clear", icon : "cut"};
+			} 
+			if(index2 >= 0 && index == -1){
+				options.items.comp1 = {name: "Prescribed Medicines Received", icon : "cut"};
+			}
+				return options;
+		}
+	 });
+	 
+	 $.contextMenu({
+		selector : "#PharmacistNotify",
+		build: function() {
+			var options = {
+				callback : function(key, options) {
+					if(key == "Clear") {
+						$("#node12").hide();
+						$("#arrow11").hide();
+					
+						var removeArray = ["PharmacistNotify"];
+						$.each(removeArray, function(i){
+							var index1 = $.inArray(removeArray[i], clearedImgs);
+							if (index1 == -1) {
+								clearedImgs.push(removeArray[i]);
+							}
+							var index = $.inArray(removeArray[i], deletedImages);
+							if (index>=0) {
+								deletedImages.splice(index, 1);
+							}
+						});
+	 		  		} else if(key == "Delete") {
+	 		  			$("#node12").fadeTo("",0.5);
+	 		  			$("#arrow11").fadeTo("",0.5);
+	 		  		
+	 		  			var removeArray = ["PharmacistNotify"];
+						$.each(removeArray, function(i){
+							var index1 = $.inArray(removeArray[i], deletedImages);
+							if (index1 == -1) {
+								deletedImages.push(removeArray[i]);
+							}							
+							var index = $.inArray(removeArray[i], kitImg);
+							if (index>=0) {
+								kitImg.splice(index, 1);
+							}
+						});
+	 		  		} else if(key == "Restore") {
+		 		  		$("#node12").stop().fadeTo("",1);
+		 		  		$("#arrow11").stop().fadeTo("",1);
+		 		  		var removeArray = ["PharmacistNotify"];
+						$.each(removeArray, function(i){
+							var index = $.inArray(removeArray[i], deletedImages);
+							if (index>=0) {
+								deletedImages.splice(index, 1);
+							}
+							var index1 = $.inArray(removeArray[i], kitImg);
+							var index2 = $.inArray(removeArray[i], clearedImgs);
+							if (index1 == -1 && index2 == -1) {
+								kitImg.push(removeArray[i]);
+							}
+						});
+		 		  	}
+				},
+				items : {}
+	 		};
+			var index = $.inArray("PharmacistNotify", deletedImages);
+			var index1 = $.inArray("PharmacistNotify", kitImg);
+			var validateArray = ["AutoCheckin","PersonalizedWelcome","PharmacySystem","PntArvlNfyPharmacist"];
+			var count=0;
+			$.each(validateArray, function(i){
+				var index2 = $.inArray(validateArray[i], deletedImages);
+				if (index2>=0) {
+					count++;
+				}
+			});
+			if (index1 >= 0 && index == -1){
+				options.items.Delete = {name: "Delete", icon : "delete"};
+			}
+			if (index >= 0 && count == 0){
+				options.items.Restore = {name: "Restore", icon : "cut"};
+			}
+			if (index >= 0 && index1 == -1){
+			 	options.items.Clear = {name: "Clear", icon : "cut"};
+			}
+				return options;
+		}
+	 });
+	 
+	 $.contextMenu({
+		selector : "#MedicinesReceivd",
+		build: function() {
+			var options = {
+				callback : function(key, options) {
+					if(key == "Clear") {
+						$("#node13").hide();
+						$("#arrow12").hide();
+						
+						var removeArray = ["MedicinesReceivd"];
+						$.each(removeArray, function(i){
+							var index1 = $.inArray(removeArray[i], clearedImgs);
+							if (index1 == -1) {
+								clearedImgs.push(removeArray[i]);
+							}
+							var index = $.inArray(removeArray[i], deletedImages);
+							if (index>=0) {
+								deletedImages.splice(index, 1);
+							}
+						});
+		 		  	} else if(key == "Delete") {
+		 		  		$("#node13").fadeTo("",0.5);
+		 		  		$("#arrow12").fadeTo("",0.5);
+		 		  		
+		 		  		var removeArray = ["MedicinesReceivd"];
+						$.each(removeArray, function(i){
+							var index1 = $.inArray(removeArray[i], deletedImages);
+							if (index1 == -1) {
+								deletedImages.push(removeArray[i]);
+							}
+							var index = $.inArray(removeArray[i], kitImg);
+							if (index>=0) {
+								kitImg.splice(index, 1);
+							}
+						});
+		 		  	} else if(key == "Restore") {
+		 		  		$("#node13").stop().fadeTo("",1);
+		 		  		$("#arrow12").stop().fadeTo("",1);
+		 		  		var removeArray = ["MedicinesReceivd"];
+						$.each(removeArray, function(i){
+							var index = $.inArray(removeArray[i], deletedImages);
+							if (index>=0) {
+								deletedImages.splice(index, 1);
+							}
+							var index1 = $.inArray(removeArray[i], kitImg);
+							var index2 = $.inArray(removeArray[i], clearedImgs);
+							if (index1 == -1 && index2 == -1) {
+								kitImg.push(removeArray[i]);
+							}
+						});
+		 		  	} else if(key == "Rename") {
+		 		  		var txt = $(".label13").text();
+		 		        $(".label13").replaceWith("<input class='label13' style='text-align:right;'/>");
+		 		        $(".label13").val(txt);
+		 		        
+		 		       $(document).on("blur", "input.label13", function () {
+		 		          var txt = $(this).val();
+		 		          $(this).replaceWith("<label class='label13'></label>");
+		 		          $(".label13").text(txt);
+		 		      });
+		 		  	}
+				},  
+				items : {}
+	 		};
+			var index = $.inArray("MedicinesReceivd", deletedImages);
+			var index1 = $.inArray("MedicinesReceivd", kitImg);
+			var validateArray = ["AutoCheckin","PersonalizedWelcome","PharmacySystem","PrescriptionStsNotify"];
+			var count=0;
+			$.each(validateArray, function(i){
+				var index2 = $.inArray(validateArray[i], deletedImages);
+				if (index2>=0) {
+					count++;
+				}
+			});
+			if (index1 >= 0 && index == -1){
+				options.items.Delete = {name: "Delete", icon : "delete"};
+				options.items.Rename = {name: "Rename", icon : "cut"};
+			} 
+			if (index >= 0 && count == 0){
+				options.items.Restore = {name: "Restore", icon : "cut"};
+			}
+			if (index >= 0 && index1 == -1){
+			 	options.items.Clear = {name: "Clear", icon : "cut"};
+			}
+				return options;
+	 	}
+	 });
+ }); 
+});
+
+	
+	
+	
+	
+    $(document).ready(function() {
+        $(".trigger").click(function() {
+            $("#rightpanel").toggle();
+            $("#expand").toggle();
+            $('#middleworkflowcontainer').toggleClass("active");
+            return false;
+        });
+
+
+
+
+
+
+
+		});
+    </script>
+</head>
+
+<body>
+    <header>
+        <div class="row clearfix">
+            <div class="col-md-8 nopadding">
+                <div id="cisco_logo_white"></div>
+            </div>
+            <div class="col-md-4 nopadding">
+                <div class="user_details">
+                    <div class="user_image"></div>
+                    <div class="user_name">Welcome <%= username %></div>
+                    <div class="logout"><a href='../logout' id='logout'>Logout</a>
+                    </div>
+                    <div class="settings">Settings</div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Menu</a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+
+                <li class="active">
+                    <a href="/businessworkflow">BUSINESS WORKFLOW</a>
+                </li>
+                
+
+                <li>
+                    <a href="/status">STATUS</a>
+                </li>
+				
+				<li>
+                    <a href="#">REPORTS</a>
+                </li>
+				
+				<li>
+                    <a href="#">ABOUT</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container business">
+        <div class="row clearfix">
+
+            <div class="col-md-2 column" id='rightpanel'>
+
+                <div class="workflows">Workflows <a class='trigger' href="#"> &#9668;</a></div>
+                <div id='collapsePanel' >
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">TEMPLATE</h3>
+                        </div>
+                       <!-- <ul class="panel-body templateContent kitName">
+						</ul>-->
+						<div class="panel-body templateContent row">
+                            <div class="list-group" id='templateContent'></div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">User Created</h3>
+                        </div>
+                        <div class="panel-body row">
+                            <div class="list-group" id='usercreatedtemplates'></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-10 column" id='middleworkflowcontainer'>
+	            <div id='expand' class='col-md-1 column'>
+					<p>Workflows</p>
+					<a class='trigger triggerClose' href="#"> &#9658;</a>
+	            </div>
+	            
+                <div class="col-md-12 column rightcontainer" >
+                 
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title" id='titlec'></h3>
+						</div>
+						<div class="panel-body" id='businessuserworkflowpanel'>
+						
+						<div class="col-md-10 column" id="workflowContainer">
+						
+							<div class="row my-row1 clearfix">
+								<div class="col-md-7 column"></div>
+								
+								<div class="col-md-1 column">
+									<div id="arrow4">
+										<div class="arrow_four">
+											<img src="../images/arrow_45_right.png" />
+										</div>
+									</div>
+									<div id="arrow5">
+										<div class="arrow_five">
+											<img src="../images/arrow_45_right_botton.png" />
+										</div>
+									</div>
+								</div>
+								
+								<div class="col-md-1 column">
+								<div id="node5">
+									<div class="node_five">
+										<div id="PatArrivalNotify" class="circular context-menu-disabled"></div>
+									</div>
+									<div class="node_five_label"></div>
+								</div>
+								</div>
+								
+								<div class="col-md-1 column">
+								<div id="arrow6">
+									<div class="arrow_six">
+										<img src="../images/arrow_right.png" />
+									</div>
+								</div>
+								</div>
+										
+								<div class="col-md-1 column">				
+								<div id="node7">
+									<div class="node_seven">
+										<div id="DoctorNotify" class="circular context-menu-disabled"></div>
+									</div>
+									<div class="node_seven_label"></div>
+								</div>
+								</div>
+							</div>
+							
+							
+							<div class="row my-row3 clearfix">
+								<div class="col-md-5 column"></div>
+								
+								<div class="col-md-1 column">	
+									<div id="arrow3">
+										<div class="arrow_three">
+											<img src="../images/arrow_45_right.png" />
+										</div>
+									</div>
+									<div id="arrow8">
+										<div class="arrow_eight">
+											<img src="../images/arrow_45_right_botton.png" />
+										</div>
+									</div>
+								</div>
+								
+								<div class="col-md-1 column">
+									<div id="node4">
+										<div class="node_four">
+											<div id="PatSchedularSys" class="circular context-menu-disabled"></div>
+										</div>
+										<div class="node_four_label"></div>
+									</div>
+								</div>
+								
+							</div>
+							
+							<div class="row my-row5 clearfix">
+								<div class="col-md-7 column"></div>
+								
+								<div class="col-md-1 column">
+									<div id="arrow51">
+										<div class="arrow_five">
+											<img src="../images/arrow_45_right_botton.png" />
+										</div>
+									</div>
+								</div>
+								
+								<div class="col-md-1 column">
+									<div id="node6">
+										<div class="node_six">
+											<div id="ApptWaitTimeNotify" class="circular context-menu-disabled"></div>
+										</div>
+										<div class="node_six_label"></div>
+									</div>
+								</div>
+											
+								<div class="col-md-1 column">		
+									<div id="arrow7">
+										<div class="arrow_seven">
+											<img src="../images/arrow_right.png" />
+										</div>
+									</div>
+								</div>
+										
+								<div class="col-md-1 column">				
+									<div id="node8">
+										<div class="node_eight">
+											<div id="IntrctnComptdDr" class="circular context-menu-disabled"></div>
+										</div>
+										<div class="node_eight_label"></div>
+									</div>
+								</div>
+							</div>
+							  
+							<div class="row my-row6 clearfix">	
+								
+								<div class="col-md-1 column">
+								<div id="node1">
+									<div class="node_one">
+										<div id="PatientIdentified" class="circular context-menu-disabled"></div>
+									</div>
+									<div class="node_one_label"></div>
+								</div>
+								</div>
+											
+								<div class="col-md-1 column">		
+								<div id="arrow1">
+									<div class="arrow_one">
+										<img src="../images/arrow_right.png" />
+									</div>
+								</div>
+								</div>
+										
+								<div class="col-md-1 column">
+								<div id="node2">
+									<div class="node_two">
+										<div id="AutoCheckin" class="circular context-menu-disabled"></div>
+									</div>
+									<div class="node_two_label"></div>
+								</div>
+								</div>
+										
+								<div class="col-md-1 column">			
+								<div id="arrow2">
+									<div class="arrow_two">
+										<img src="../images/arrow_right.png" />
+									</div>
+								</div>
+								</div>
+										
+								<div class="col-md-1 column">	
+								<div id="node3">
+									<div class="node_three">
+										<div id="PersonalizedWelcome" class="circular context-menu-disabled"></div>
+									</div>
+									<div class="node_three_label"></div>
+								</div>
+								</div>
+								
+							</div>		
+							
+							<div class="row my-row1 clearfix">
+								<div class="col-md-7 column"></div>
+								
+								<div class="col-md-1 column">
+									<div id="arrow9">
+										<div class="arrow_nine">
+											<img src="../images/arrow_45_right.png" />
+										</div>
+									</div>
+									<div id="arrow10">
+										<div class="arrow_ten">
+											<img src="../images/arrow_45_right_botton.png" />
+										</div>
+									</div>
+								</div>
+								
+								<div class="col-md-1 column">
+									<div id="node10">
+										<div class="node_ten">
+											<div id="PntArvlNfyPharmacist" class="circular context-menu-disabled"></div>
+										</div>
+										<div class="node_ten_label"></div>
+									</div>
+								</div>		
+													
+								<div class="col-md-1 column">
+								<div id="arrow11">
+									<div class="arrow_11">
+										<img src="../images/arrow_right.png" />
+									</div>
+								</div>
+								</div>
+										
+								<div class="col-md-1 column">				
+									<div id="node12">
+										<div class="node_12">
+											<div id="PharmacistNotify" class="circular context-menu-disabled"></div>
+										</div>
+										<div class="node_12_label"></div>
+									</div>
+								</div>
+							</div>
+							
+							<div class="row my-row3 clearfix">
+								<div class="col-md-5 column"></div>
+								
+								<div class="col-md-1 column">
+									<div id="arrow51">
+										<div class="arrow_five">
+											<img src="../images/arrow_45_right_botton.png" />
+										</div>
+									</div>
+								</div>
+								
+								<div class="col-md-1 column">
+									<div id="node9">
+										<div class="node_nine">
+											<div id="PharmacySystem" class="circular context-menu-disabled"></div>
+										</div>
+										<div class="node_nine_label"></div>
+									</div>
+								</div>
+							</div>
+							
+							<div class="row my-row5 clearfix">
+								<div class="col-md-7 column"></div>
+								
+								<div class="col-md-1 column">
+									<div id="arrow51">
+										<div class="arrow_five">
+											<img src="../images/arrow_45_right_botton.png" />
+										</div>
+									</div>
+								</div>
+								
+								<div class="col-md-1 column">
+									<div id="node11">
+										<div class="node_11">
+											<div id="PrescriptionStsNotify" class="circular context-menu-disabled"></div>
+										</div>
+										<div class="node_11_label"></div>
+									</div>
+								</div>
+											
+								<div class="col-md-1 column">		
+									<div id="arrow12">
+										<div class="arrow_12">
+											<img src="../images/arrow_right.png" />
+										</div>
+									</div>
+								</div>
+										
+								<div class="col-md-1 column">				
+									<div id="node13">
+										<div class="node_13">
+											<div id="MedicinesReceivd" class="circular context-menu-disabled"></div>
+										</div>
+										<div class="node_13_label"></div>
+									</div>
+								</div>
+							</div>		
+						</div>			
+											
+						<div class="col-md-2 column" id="formContainer">
+							<div class="btn-group">
+								<button type="button" id="createWF"  class="btn btn-default customsave">Create this workflow</button>
+							</div>
+												
+							<div class="btn-group" id='userform'>
+								<form role="form" >
+									<div class="form-group">
+										<label for="workflowname">Workflow Name</label><input type="text" class="form-control" id="kitname" />
+									</div>
+									<div class="form-group">
+										<label for="exampleInputPassword1">Comment</label><textarea id='description' class="form-control" rows="3" cols="43" name='Message'></textarea>
+									</div>
+								</form>
+							</div>
+						</div>
+											
+														
+													</div>
+													<div class="panel-footer" id='conformcontainers'>
+													 <div class="btn-group">
+													  <button type="button" class="btn btn-default customsave"  id="configure">Send for Configuration</button>
+													</div>	
+													 <div class="btn-group">
+													 <button type="button" class="btn btn-default customsave" id="savebutton" >Save</button>
+													 </div>
+													  <div class="btn-group">
+													  <button type="button" class="btn btn-default customsave" id="cancel">Cancel</button>
+													
+													</div>
+												</div>
+										
+			
+                    
+                </div>
+				
+				
+				
+            </div>
+        </div>
+    </div>
+   </div>
+  
+</body>
+</html>
